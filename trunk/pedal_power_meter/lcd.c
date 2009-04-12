@@ -44,6 +44,29 @@ void E_Pulse()
     Delay_mS(50);           /* delay */
     l_pPio->PIO_CODR = E;   /* set E to low */
 }
+
+void LCDSendCommand(unsigned char byte)
+{
+    /* set RS port to 0 -> display set to comand mode */
+    /* set RW port to 0 */
+    l_pPio->PIO_CODR =  (RW | RS);
+    Delay_mS(20000);         //delay for LCD char ~2ms
+
+    l_pPio->PIO_CODR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
+    data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
+    l_pPio->PIO_SODR = (unsigned int) (data << 3) ; /* set data */
+
+    Delay_mS(20000);         //delay for LCD char ~2ms
+    E_Pulse();                   /* high->low to E port (pulse) */
+
+    l_pPio->PIO_CODR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
+    data = (unsigned int) (byte & 0x0f); /* Get the 4 low bits */
+    l_pPio->PIO_SODR = (unsigned int) (data << 3) ; /* set data */
+
+    Delay_mS(20000);         //delay for LCD char ~2ms
+    E_Pulse();                   /* high->low to E port (pulse) */
+}
+
 void LCDInit (void)
 {
     l_pPio->PIO_PER     = (RS | RW | E | DB4 | DB5 | DB6 | DB7);
@@ -69,28 +92,9 @@ void LCDInit (void)
     l_pPio->PIO_CODR      = DB4; /* set D4 port to 0 */
     l_pPio->PIO_SODR      = DB5; /* set D5 port to 1 */
     E_Pulse();                   /* high->low to E port (pulse) */
-}
 
-void LCDSendCommand(unsigned char byte)
-{
-    /* set RS port to 0 -> display set to comand mode */
-    /* set RW port to 0 */
-    l_pPio->PIO_CODR =  (RW | RS);
-    Delay_mS(20000);         //delay for LCD char ~2ms
-
-    l_pPio->PIO_CODR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
-    l_pPio->PIO_SODR = (unsigned int) (data << 3) ; /* set data */
-
-    Delay_mS(20000);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
-
-    l_pPio->PIO_CODR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte & 0x0f); /* Get the 4 low bits */
-    l_pPio->PIO_SODR = (unsigned int) (data << 3) ; /* set data */
-
-    Delay_mS(20000);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
+    LCDSendCommand(DISP_ON);
+    LCDSendCommand(CLR_DISP);       //Clear Display
 }
 
 void LCDSendChar(unsigned char byte)
@@ -115,34 +119,50 @@ void LCDSendChar(unsigned char byte)
     E_Pulse();                   /* high->low to E port (pulse) */
 }
 
-void LCDSendInt(long a)
+void LCDSendInt(long number, unsigned char number_of_digits)
 {
-    int C[20];
+    int C[number_of_digits];
     unsigned char Temp=0, NumLen = 0;
-    if (a < 0)
+
+    if (number < 0)
     {
-        LCDSendChar('-');
-        a = -a;
+        LCDSendChar('0');
+        number = -number;
     }
+
+    number_of_digits--;
     do
     {
         Temp++;
-        C[Temp] = a % 10;
-        a = a/10;
+        C[Temp] = number % 10;
+
+        /* Fill with "space" if digit is a 0 */
+        if (C[Temp] == 0)
+            C[Temp] = 239;
+
+        number = number/10;
     }
-    while (a);
+    while (number_of_digits--);
+
     NumLen = Temp;
-    for (Temp = NumLen; Temp>0; Temp--) LCDSendChar(C[Temp] + 48);
+    for (Temp = NumLen; Temp > 0; Temp--)
+        LCDSendChar(C[Temp] + 48);
 }
 
-void LCDSendFloat(float a)
+void LCDSendFloat(double number, unsigned char number_of_digits, \
+        unsigned char number_of_floats)
 {
-    LCDSendInt ((int) a);
+    LCDSendInt ((int) number, number_of_digits);
     LCDSendChar ('.');
-    a = (int) a % 10;
-    LCDSendChar ((int) a);
-    a = (int) a % 10;
-    LCDSendChar ((int) a);
+
+    number = (number - ((int) number));
+
+    while (number_of_floats--)
+    {
+        number = number * 10;
+        LCDSendChar (((int) number) + 48);
+        number = (number - ((int) number));
+    }
 }
 
 void LCDSendStr(unsigned char *string)
@@ -153,93 +173,3 @@ void LCDSendStr(unsigned char *string)
         string++;
     }
 }
-
-/*
- * Prints a float on LCD like this: "98,7".
- */
-void lcd_print_float_type1 (float value)
-{
-    float temp1, temp2, temp3;
-
-    /* Calculate and send 1st digit, at right side */
-    temp1 = (int) (value / 10);
-    if (temp1)
-        LCDSendChar(((unsigned char) temp1 + 48));
-    else
-        LCDSendChar(32); /* send a space when digit is 0 */
-
-    /* Calculate and send 2nd digit */
-    temp2 = (int) (value - (temp1 * 10));
-    if (temp2)
-        LCDSendChar(((unsigned char) temp2 + 48));
-    else
-        LCDSendChar('0');
-
-    /* Send the "." char */
-    LCDSendChar('.');
-
-    /* Calculate and send the last digit */
-    temp3 = (value - ((temp1 * 10) + temp2));
-    temp3 = (int) (temp3 * 10);
-    if (temp3)
-        LCDSendChar(((unsigned char) temp3 + 48));
-    else
-        LCDSendChar('0');
-}
-
-/*
- * Prints a float on LCD like this: "987,6".
- */
-void lcd_print_float_type2 (double value)
-{
-    double temp1, temp2, temp3, temp4;
-
-    /* Calculate and send 1st digit, at right side */
-    temp1 = (int) (value / 100);
-    if (temp1)
-        LCDSendChar(((unsigned char) temp1 + 48));
-    else
-        LCDSendChar(32); /* send a space when digit is 0 */
-
-    /* Calculate and send 2nd digit */
-    temp2 = (value - (temp1 * 100));
-    temp2 = (int) (temp2 / 10);
-    if (temp2)
-        LCDSendChar(((unsigned char) temp2 + 48));
-    else
-        LCDSendChar(32); /* send a space when digit is 0 */
-
-    /* Calculate and send 3rd digit */
-    temp3 = (int) (value - ((temp1 * 100) + (temp2 * 10)));
-    if (temp3)
-        LCDSendChar(((unsigned char) temp3 + 48));
-    else
-        LCDSendChar('0');
-
-    /* Send the "." char */
-    LCDSendChar('.');
-
-    /* Calculate and send the last digit */
-    temp4 = (value - ((temp1 * 100) + (temp2 * 10) + temp3));
-    temp4 = (int) (temp4 * 10);
-    if (temp4)
-        LCDSendChar(((unsigned char) temp4 + 48));
-    else
-        LCDSendChar('0');
-}
-
-void SmartUp(void)
-{
-  int i;
-  for(i=0; i<40; i++)
-      LCDSendCommand(CUR_RIGHT);
-}
-
-void SmartDown(void)
-{
-  int i;
-  for(i=0; i<40; i++)
-      LCDSendCommand(CUR_LEFT);
-}
-
-

@@ -1,11 +1,4 @@
-# ***************************************************************
-# *     Makefile for Atmel AT91SAM7S256 - ram execution         *
-# *                                                             *
-# *                                                             *
-# * James P Lynch  May 12, 2007                                 *
-# ***************************************************************
-
-NAME   = pedal_power_meter-at91sam7s256
+NAME   = pedal_power_meter
 
 # variables 
 CC      = arm-elf-gcc
@@ -25,7 +18,7 @@ LFLAGS  =  -Map main.map -T linker_script_flash.lds
 CPFLAGS = --output-target=binary
 ODFLAGS	= -x --syms
 
-OBJECTS = crt.o main.o timerisr.o timersetup.o isrsupport.o lowlevelinit.o lcd.o adc.o
+OBJECTS = crt.o main.o timer.o isrsupport.o lowlevelinit.o lcd.o adc.o
 
 
 # make target called by Eclipse (Project -> Clean ...)
@@ -51,17 +44,13 @@ main.o: main.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) main.c
 	
-timerisr.o: timerisr.c
-	@ echo ".compiling"
-	$(CC) $(CFLAGS) timerisr.c
-	
 lowlevelinit.o: lowlevelinit.c
 	@ echo ".compiling"
 	$(CC) $(CFLAGS) lowlevelinit.c
-	
-timersetup.o: timersetup.c
+		
+timer.o: timer.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) timersetup.c
+	$(CC) $(CFLAGS) timer.c
 	
 isrsupport.o: isrsupport.c
 	@ echo ".compiling"
@@ -73,4 +62,4 @@ lcd.o: lcd.c
 
 adc.o: adc.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) adc.c	
+	$(CC) $(CFLAGS) adc.c

@@ -75,7 +75,7 @@
 /* Master Clock */
 /*--------------*/
 
-#define EXT_OC          18432000   // Exetrnal ocilator MAINCK
+#define EXT_OC          18432000   // External ocilator MAINCK
 #define MCK             47923200   // MCK (PLLRC div by 2)
 #define MCKKHz          (MCK/1000) //
 

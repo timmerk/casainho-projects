@@ -17,8 +17,14 @@ void adc_init (void)
     AT91C_BASE_ADC->ADC_MR =
         (AT91C_ADC_SLEEP /* Sleep mode */
         | ((23 << 8) & AT91C_ADC_PRESCAL) /* ADC clock ~= 1MHz */
-        | ((4 << 16) & AT91C_ADC_STARTUP)
-        | ((4 << 24) & AT91C_ADC_SHTIM));
+        | ((4 << 16) & AT91C_ADC_STARTUP) /* Startup time ~= 1us */
+        | ((4 << 24) & AT91C_ADC_SHTIM)); /* Sample and hold time ~= 1us */
+    /* ADC should take no more than 35us to read a value:
+     *      20us for return from idela mode;
+     *      10 * 1us for conversion;
+     *      1us for startup time;
+     *      1us for sample and hold time.
+     */
 }
 
 unsigned short int adc_read (unsigned char channel)

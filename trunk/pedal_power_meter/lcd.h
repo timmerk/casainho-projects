@@ -19,9 +19,9 @@ void LCDSendCommand(unsigned char byte);
 void SmartUp(void);
 void SmartDown(void);
 void LCDSendChar(unsigned char byte);
-void LCDSendInt(long a);
+void LCDSendInt(long number, unsigned char number_of_digits);
 void LCDSendStr(unsigned char *string);
-void LCDSendFloat(float a);
-void lcd_print_float_type1 (float value);
-void lcd_print_float_type2 (double value);
+void LCDSendFloat(double number, unsigned char number_of_digits, \
+        unsigned char number_of_floats);
+
 

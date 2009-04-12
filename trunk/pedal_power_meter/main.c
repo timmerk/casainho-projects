@@ -5,7 +5,6 @@
 
 int main (void)
 {
-    float voltage = 0, current = 0;
     unsigned char str_volts[] = " Volts";
     unsigned char str_amps[] = " Amps";
 
@@ -13,21 +12,19 @@ int main (void)
     interrupts, etc.) */
     LowLevelInit();
 
-    adc_init ();
-
-    /**** LCD ****/
-    LCDInit();                          //LCD Initialization
-    LCDSendCommand(DISP_ON);            //LCD on
-
-    LCDSendCommand(DISP_ON);        //Turn ON Display
-    LCDSendCommand(CLR_DISP);       //Clear Display
-
+    /* Initialize the LCD */
+    LCDInit();
 
     /* Endless blink loop */
     while (1)
     {
         LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
 
+        LCDSendInt (1234, 6);
+        LCDSendCommand(DD_RAM_ADDR2); /* LCD set 2nd row */
+        LCDSendFloat (1234.567, 6, 5);
+
+#if 0
         unsigned int i;
         for (i = 0; i < 2000 ; i++)
         {
@@ -45,6 +42,7 @@ int main (void)
         //lcd_print_float_type2 ((double) ((voltage/2000) * 0.035810811));
         voltage = 0;
         //LCDSendStr ((void *) str_volts);
+#endif
 
 #if 0
         for (i = 0; i < 2000 ; i++)
