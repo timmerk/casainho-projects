@@ -16,28 +16,30 @@ Linker script and memory map
 startup
  *(.startup)
 
-.text           0x00000000      0x3b8
+.text           0x00000000      0x3a8
  *(.text)
  .text          0x00000000       0xd8 crt.o
                 0x00000000                _startup
                 0x00000040                Reset_Handler
- .text          0x000000d8      0x2e0 main.o
-                0x00000160                system_init
-                0x00000114                UNDEF_Routine
-                0x00000100                SWI_Routine
-                0x00000224                timer1_init
-                0x00000214                timer1_int_handler
-                0x000000ec                FIQ_Routine
-                0x000002e4                main
-                0x00000128                feed
-                0x000000d8                IRQ_Routine
+ .text          0x000000d8       0xc4 main.o
+                0x000000d8                main
+ .text          0x0000019c      0x13c system.o
+                0x00000224                system_init
+                0x000001d8                UNDEF_Routine
+                0x000001c4                SWI_Routine
+                0x000001b0                FIQ_Routine
+                0x000001ec                feed
+                0x0000019c                IRQ_Routine
+ .text          0x000002d8       0xd0 timers.o
+                0x000002e8                timer1_init
+                0x000002d8                timer1_int_handler
  *(.rodata)
  *(.rodata*)
  *(.glue_7)
  *(.glue_7t)
-                0x000003b8                _etext = .
+                0x000003a8                _etext = .
 
-.data           0x40000200        0x0 load address 0x000003b8
+.data           0x40000200        0x0 load address 0x000003a8
                 0x40000200                _data = .
  *(.data)
                 0x40000200                _edata = .
@@ -50,28 +52,48 @@ startup
                 0x40000200                _end = .
 LOAD crt.o
 LOAD main.o
+LOAD system.o
+LOAD timers.o
 OUTPUT(main.out elf32-littlearm)
 
-.debug_abbrev   0x00000000       0x5c
- .debug_abbrev  0x00000000       0x5c main.o
+.debug_abbrev   0x00000000       0x99
+ .debug_abbrev  0x00000000       0x47 main.o
+ .debug_abbrev  0x00000047       0x29 system.o
+ .debug_abbrev  0x00000070       0x29 timers.o
 
-.debug_info     0x00000000      0x186
- .debug_info    0x00000000      0x186 main.o
+.debug_info     0x00000000      0x282
+ .debug_info    0x00000000       0xac main.o
+ .debug_info    0x000000ac      0x11b system.o
+ .debug_info    0x000001c7       0xbb timers.o
 
-.debug_line     0x00000000       0x67
- .debug_line    0x00000000       0x67 main.o
+.debug_line     0x00000000       0xc8
+ .debug_line    0x00000000       0x3b main.o
+ .debug_line    0x0000003b       0x4d system.o
+ .debug_line    0x00000088       0x40 timers.o
 
-.debug_frame    0x00000000      0x130
- .debug_frame   0x00000000      0x130 main.o
+.debug_frame    0x00000000      0x150
+ .debug_frame   0x00000000       0x30 main.o
+ .debug_frame   0x00000030       0xd0 system.o
+ .debug_frame   0x00000100       0x50 timers.o
 
 .debug_pubnames
-                0x00000000       0x9d
+                0x00000000       0xc1
  .debug_pubnames
-                0x00000000       0x9d main.o
+                0x00000000       0x1b main.o
+ .debug_pubnames
+                0x0000001b       0x6d system.o
+ .debug_pubnames
+                0x00000088       0x39 timers.o
 
-.debug_aranges  0x00000000       0x20
+.debug_aranges  0x00000000       0x60
  .debug_aranges
                 0x00000000       0x20 main.o
+ .debug_aranges
+                0x00000020       0x20 system.o
+ .debug_aranges
+                0x00000040       0x20 timers.o
 
-.comment        0x00000000       0x12
+.comment        0x00000000       0x36
  .comment       0x00000000       0x12 main.o
+ .comment       0x00000012       0x12 system.o
+ .comment       0x00000024       0x12 timers.o
