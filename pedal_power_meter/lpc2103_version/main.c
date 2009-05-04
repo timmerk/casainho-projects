@@ -23,6 +23,8 @@ int main (void)
     /* Initialize the LCD */
     LCDInit();
 
+    adc_init ();
+
     /* Initialize the Timer0 */
     //timer1_init ();
     //enableIRQ ();
@@ -33,20 +35,13 @@ int main (void)
         //if (tick_update_lcd >= 50)
         //{
 
-        LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
-        LCDSendChar('1');
-        LCDSendChar('2');
-
-
-        //LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
-            //voltage_temp = (double) adc_read(0);
-            /* voltage_temp = (double) 511;
-
+            LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
+            voltage_temp = (double) adc_read(0);
             LCDSendInt (voltage_temp, 4);
             LCDSendChar (' ');
             LCDSendChar (' ');
             LCDSendChar (' ');
-            LCDSendFloat (voltage_temp * k_voltage, 2, 1); */
+            LCDSendFloat (voltage_temp * k_voltage, 2, 1);
 
 
             //LCDSendCommand(DD_RAM_ADDR2);
