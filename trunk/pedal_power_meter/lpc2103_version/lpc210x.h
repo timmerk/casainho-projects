@@ -224,4 +224,9 @@
 #define WDFEED         (*((volatile unsigned char *) 0xE0000008))
 #define WDTV           (*((volatile unsigned long *) 0xE000000C))
 
+/* ADC */
+#define ADCR           (*((volatile unsigned long *) 0xE0034000))
+#define ADGDR          (*((volatile unsigned long *) 0xE0034004))
+#define ADSTAT         (*((volatile unsigned long *) 0xE0034030))
+
 #endif  // __LPC210x_H
