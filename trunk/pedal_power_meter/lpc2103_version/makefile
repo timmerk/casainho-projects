@@ -15,16 +15,16 @@ ODFLAGS	= -x --syms
 
 clean:
 	-rm crt.lst crt.o main.o main.out main.map main.dmp main.bin \
-	system.o timers.o
+	system.o timers.o lcd.o
 
 all: main.out
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.out main.bin
 	$(OD) $(ODFLAGS) main.out > main.dmp
 
-main.out: crt.o main.o system.o timers.o linker_script-flash_memory.cmd 
+main.out: crt.o main.o system.o timers.o lcd.o linker_script-flash_memory.cmd 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o main.out crt.o main.o system.o timers.o
+	$(LD) $(LFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o libgcc.a libc.a
 
 crt.o: crt.s
 	@ echo ".assembling"
@@ -40,4 +40,8 @@ system.o: system.c
 	
 timers.o: timers.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) timers.c			
+	$(CC) $(CFLAGS) timers.c
+	
+lcd.o: lcd.c
+	@ echo ".compiling"
+	$(CC) $(CFLAGS) lcd.c				
