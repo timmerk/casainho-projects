@@ -91,4 +91,9 @@ void system_init (void)
 
     // Setting peripheral Clock (pclk) to System Clock (cclk)
     VPBDIV=0x1;
+
+    /* Disable the power for all pheripherials */
+    PCONP |= ((1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 7) | \
+             (1 << 8) | (1 << 9) | (1 << 10) | (1 << 12) | (1 << 19) | \
+             (1 << 22) | (1 << 23));
 }
