@@ -2,7 +2,7 @@
 <launchConfiguration type="com.zylin.embeddedcdt.idleNative">
 <booleanAttribute key="com.zylin.embeddedcdt.debugger_app_console" value="false"/>
 <stringAttribute key="com.zylin.embeddedcdt.debugger_init_commands" value="target remote localhost:3333"/>
-<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor flash write_image erase ../main.bin 0x0 bin&#13;monitor sleep 500&#10;monitor soft_reset_halt&#10;monitor gdb_breakpoint_override hard&#10;symbol-file main.out&#13;&#10;continue"/>
+<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor flash write_image erase ../main.bin 0x0 bin&#13;monitor sleep 500&#10;monitor soft_reset_halt&#10;monitor sleep 500&#10;monitor gdb_breakpoint_override hard&#10;symbol-file main.out&#10;monitor sleep 500&#13;&#10;continue"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.DEBUG_NAME" value="/usr/local/arm-elf/bin/arm-elf-gdb"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.GDB_INIT" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.mi.core.breakpointsFullPath" value="false"/>
