@@ -34,6 +34,8 @@ void feed(void)
 #define PLOCK 0x400
 void system_init (void)
 {
+    unsigned char i;
+
     //              Setting the Phased Lock Loop (PLL)
     //               ----------------------------------
     //
@@ -93,7 +95,20 @@ void system_init (void)
     VPBDIV=0x1;
 
     /* Disable the power for all pheripherials */
-    PCONP |= ((1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 7) | \
+    PCONP &= ~((1 << 1) | (1 << 2) | (1 << 3) | (1 << 4) | (1 << 7) | \
              (1 << 8) | (1 << 9) | (1 << 10) | (1 << 12) | (1 << 19) | \
              (1 << 22) | (1 << 23));
+
+    /* VIC initialization */
+    VICINTENCLR = 0xFFFF; /* first disable all interrupts at the VIC */
+    VICSOFTINTCLR = 0xFFFF; /* clear soft interrupts */
+    VICINTSEL = 0; /* reset all interrupts as IRQ (not FIQ) */
+
+    for(i=0; i<16; i++) /* reset all vectors in the VIC */
+    {
+        (&VICVECTCNTL0)[i] = 0;
+        (&VICVECTADDR0)[i] = 0;
+    }
+
+    VICDEFVECTADDR = 0; /* set default handler */
 }
