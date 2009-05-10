@@ -1,5 +1,3 @@
-NAME   = pedal_power_meter
-
 CC      = arm-elf-gcc
 LD      = arm-elf-ld -v
 AR      = arm-elf-ar
@@ -7,11 +5,15 @@ AS      = arm-elf-as
 CP      = arm-elf-objcopy
 OD		= arm-elf-objdump
 
-CFLAGS  = -I./ -c -fno-common -O0 -g
+CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
+CFLAGS += -Wpointer-arith -Wswitch
+CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
+CFLAGS  += -mcpu=arm7tdmi -I./ -c -fno-common -O0 -g
 AFLAGS  = -ahls -mapcs-32 -o crt.o
-LFLAGS  =  -Map main.map -T linker_script-flash_memory.cmd
+LDFLAGS  = -Map main.map -T linker_script-flash_memory.cmd
 CPFLAGS = -O binary
 ODFLAGS	= -x --syms
+
 
 clean:
 	-rm crt.lst crt.o main.o main.out main.map main.dmp main.bin \
@@ -25,8 +27,8 @@ all: main.out
 main.out: crt.o main.o system.o timers.o lcd.o adc.o buttons.o isrsupport.o \
 	linker_script-flash_memory.cmd 
 	@ echo "..linking"
-	$(LD) $(LFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o adc.o buttons.o \
-	isrsupport.o libgcc.a libc.a
+	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o adc.o buttons.o \
+	isrsupport.o libgcc.a libc.a libnewlib-lpc.a
 
 crt.o: crt.s
 	@ echo ".assembling"

@@ -26,7 +26,7 @@
 unsigned int data;
 void Delay_mS (unsigned long a) { while (--a!=0); }
 
-void E_Pulse()
+void E_Pulse(void)
 {
     Delay_mS(200);           /* delay */
     IOSET = E;   /* set E to high */

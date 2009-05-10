@@ -13,8 +13,8 @@
 #define		DD_RAM_ADDR    0x00000080
 #define		DD_RAM_ADDR2   0x000000C0
 
-void E_Pulse();
-void LCDInit();
+void E_Pulse(void);
+void LCDInit(void);
 void LCDSendCommand(unsigned char byte);
 void SmartUp(void);
 void SmartDown(void);
