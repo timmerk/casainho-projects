@@ -45,7 +45,7 @@
 #define VICVectCntl7   (*((volatile unsigned long *) 0xFFFFF21C))
 #define VICVectCntl8   (*((volatile unsigned long *) 0xFFFFF220))
 #define VICVectCntl9   (*((volatile unsigned long *) 0xFFFFF224))
-#define VICCNTL0  (*((volatile unsigned long *) 0xFFFFF228))
+#define VICVECTCNTL10  (*((volatile unsigned long *) 0xFFFFF228))
 #define VICVectCntl11  (*((volatile unsigned long *) 0xFFFFF22C))
 #define VICVectCntl12  (*((volatile unsigned long *) 0xFFFFF230))
 #define VICVectCntl13  (*((volatile unsigned long *) 0xFFFFF234))

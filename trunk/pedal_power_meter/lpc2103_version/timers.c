@@ -1,6 +1,6 @@
 #include "lpc210x.h"
 
-//void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
+void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
 void timer1_int_handler (void)
 {
@@ -10,8 +10,11 @@ void timer1_int_handler (void)
 
 void timer1_init (void)
 {
+    /* Timer/Counter 1 power/clock enable */
+    PCONP |= (1 << 2);
+
     /* Initialize VIC */
-    VICCNTL0 = 0x25;
+    VICVECTCNTL0 = 0x25;
     VICVECTADDR0 = (unsigned long) timer1_int_handler; /* Address of the ISR */
     VICINTSEL = 0; /* Timer 1 selected as IRQ */
     VICINTEN = (1 << 5); /* Timer 1 interrupt enabled */
@@ -23,7 +26,7 @@ void timer1_init (void)
 
     /* Match register 0: We want an interrupt every 5 ms. Fclk = 53.2368 Mhz. */
     TIMER1_MR0 = 263157; /* 0,005/(1/53236800) ~= 263157 */
-
+    TIMER1_PR = 1; /* Prescaler = 1 */
     TIMER1_MCR |= 3; /* Reset and interrupt on match */
 
     /* Start timer */
