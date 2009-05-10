@@ -2,6 +2,7 @@
 #include "main.h"
 #include "system.h"
 #include "lcd.h"
+#include "adc.h"
 #include "timers.h"
 #include "buttons.h"
 #include "isrsupport.h"
@@ -38,45 +39,17 @@ int main (void)
 
     while (1)
     {
-        LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
-
-        if (button_is_set(BUTTON_01))
+        if (tick_update_lcd >= 50)
         {
-            LCDSendChar ('1');
-        }
-        else
-        {
-            LCDSendChar ('0');
-        }
-
-        if (button_is_set(BUTTON_02))
-        {
-            LCDSendChar ('2');
-        }
-        else
-        {
-            LCDSendChar ('0');
-        }
-
-
-
-#if 0
-        //if (tick_update_lcd >= 50)
-        //{
+            tick_update_lcd = 0;
 
             LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
             voltage_temp = (double) adc_read(1);
-            //LCDSendInt (voltage_temp, 4);
-
-            LCDSendInt (000110, 6);
-
+            LCDSendInt (current_temp, 4);
             LCDSendChar (' ');
             LCDSendChar (' ');
             LCDSendChar (' ');
-
-            LCDSendFloat (000.102, 3, 3);
-
-            //LCDSendFloat (voltage_temp * k_voltage, 2, 1);
+            LCDSendFloat (voltage_temp * k_voltage, 2, 1);
 
 
             LCDSendCommand(DD_RAM_ADDR2);
@@ -86,9 +59,6 @@ int main (void)
             LCDSendChar (' ');
             LCDSendChar (' ');
             LCDSendFloat (current_temp * k_current, 2, 1);
-
-            //tick_update_lcd = 0;
-        //}
-#endif
+        }
     }
 }

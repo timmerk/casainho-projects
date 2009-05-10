@@ -1,10 +1,5 @@
 #include "lpc210x.h"
 
-void IRQ_Routine (void)   __attribute__ ((interrupt("IRQ")));
-void FIQ_Routine (void)   __attribute__ ((interrupt("FIQ")));
-void SWI_Routine (void)   __attribute__ ((interrupt("SWI")));
-void UNDEF_Routine (void) __attribute__ ((interrupt("UNDEF")));
-
 void IRQ_Routine (void)
 {
     while (1) ;
