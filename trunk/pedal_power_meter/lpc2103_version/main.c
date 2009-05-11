@@ -45,11 +45,11 @@ int main (void)
 
             LCDSendCommand(DD_RAM_ADDR); /* LCD set first row */
             voltage_temp = (double) adc_read(1);
-            LCDSendInt (current_temp, 4);
+            LCDSendInt (voltage_temp, 4);
             LCDSendChar (' ');
             LCDSendChar (' ');
             LCDSendChar (' ');
-            LCDSendFloat (voltage_temp * k_voltage, 2, 1);
+            //LCDSendFloat (voltage_temp * k_voltage, 2, 1);
 
 
             LCDSendCommand(DD_RAM_ADDR2);
@@ -58,7 +58,7 @@ int main (void)
             LCDSendChar (' ');
             LCDSendChar (' ');
             LCDSendChar (' ');
-            LCDSendFloat (current_temp * k_current, 2, 1);
+            //LCDSendFloat (current_temp * k_current, 2, 1);
         }
     }
 }

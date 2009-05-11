@@ -141,15 +141,8 @@ void LCDSendChar(unsigned char byte)
 
 void LCDSendInt(long number, unsigned char number_of_digits)
 {
-    int C[number_of_digits];
-    unsigned char Temp = 0, NumLen = 0, temp1;
-    static unsigned char first_number = 0;
-
-    if (number < 0)
-    {
-        LCDSendChar('0');
-        number = -number;
-    }
+    volatile int C[17];
+    volatile unsigned char Temp = 0, NumLen = 0, temp1, first_digit_non_zero = 0;
 
     number_of_digits--;
     temp1 = number_of_digits;
@@ -158,15 +151,10 @@ void LCDSendInt(long number, unsigned char number_of_digits)
         Temp++;
         C[Temp] = number % 10;
 
-        if (C[Temp] != 0)
-        {
-            first_number = 1; /* Signal when the first value != 0 appear */
-        }
-
         /* Decide to fill with "space" if digit is a 0 or fill with "0" */
         if (C[Temp] == 0)
         {
-            if ((number_of_digits == 1) || (first_number != 1))
+            if ((number_of_digits == temp1) || (number != 0))
                 C[Temp] = 0; /* Print a "0" on right side of numbers and on
                                 last one  */
 

@@ -228,5 +228,7 @@
 #define ADCR           (*((volatile unsigned long *) 0xE0034000))
 #define ADGDR          (*((volatile unsigned long *) 0xE0034004))
 #define ADSTAT         (*((volatile unsigned long *) 0xE0034030))
+#define ADDR0          (*((volatile unsigned long *) 0xE0034010))
+#define ADDR1          (*((volatile unsigned long *) 0xE0034014))
 
 #endif  // __LPC210x_H
