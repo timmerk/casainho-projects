@@ -9,7 +9,7 @@ CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
 CFLAGS += -Wpointer-arith -Wswitch
 CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
 CFLAGS  += -mcpu=arm7tdmi -I./ -c -fno-common -O0 -g
-AFLAGS  = -ahls -mapcs-32 -o crt.o
+AFLAGS  = -ahls -mapcs-32 -g -o crt.o
 LDFLAGS  = -Map main.map -T linker_script-flash_memory.cmd
 CPFLAGS = -O binary
 ODFLAGS	= -x --syms
