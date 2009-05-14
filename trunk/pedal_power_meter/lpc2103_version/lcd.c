@@ -28,9 +28,9 @@ void Delay_mS (unsigned long a) { while (--a!=0); }
 
 void E_Pulse(void)
 {
-    Delay_mS(200);           /* delay */
+    Delay_mS(100);           /* delay */
     IOSET = E;   /* set E to high */
-    Delay_mS(200);           /* delay */
+    Delay_mS(100);           /* delay */
     IOCLR = E;   /* set E to low */
 }
 
@@ -39,7 +39,7 @@ void LCDSendCommand(unsigned char byte)
     /* set RS port to 0 -> display set to comand mode */
     /* set RW port to 0 */
     IOCLR =  (RW | RS);
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
 
     IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
     data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
@@ -53,7 +53,7 @@ void LCDSendCommand(unsigned char byte)
     if (data & 8)
         IOSET = DB7;
 
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
     E_Pulse();                   /* high->low to E port (pulse) */
 
     IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
@@ -68,7 +68,7 @@ void LCDSendCommand(unsigned char byte)
     if (data & 8)
         IOSET = DB7;
 
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
     E_Pulse();                   /* high->low to E port (pulse) */
 }
 
@@ -79,19 +79,19 @@ void LCDInit (void)
 
     /* clear RS, E, RW */
     IOCLR      = (RS | E | RW);
-    Delay_mS(900000);     //delay ~50ms
+    Delay_mS(500000);     //delay ~50ms
 
     IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
     E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(200000);     //delay ~10ms
+    Delay_mS(100000);     //delay ~10ms
 
     IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
     E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(200000);     //delay ~10ms
+    Delay_mS(100000);     //delay ~10ms
 
     IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
     E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(200000);                      //delay ~10ms
+    Delay_mS(100000);                      //delay ~10ms
 
     IOCLR      = DB4; /* set D4 port to 0 */
     IOSET      = DB5; /* set D5 port to 1 */
@@ -106,7 +106,7 @@ void LCDSendChar(unsigned char byte)
     /* set RS port to 1 -> display set to data mode */
     IOSET = RS;
     IOCLR = RW; /* set RW port to 0 */
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
 
     IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
     data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
@@ -120,7 +120,7 @@ void LCDSendChar(unsigned char byte)
     if (data & 8)
         IOSET = DB7;
 
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
     E_Pulse();                   /* high->low to E port (pulse) */
 
     IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
@@ -135,7 +135,7 @@ void LCDSendChar(unsigned char byte)
     if (data & 8)
         IOSET = DB7;
 
-    Delay_mS(40000);         //delay for LCD char ~2ms
+    Delay_mS(20000);         //delay for LCD char ~2ms
     E_Pulse();                   /* high->low to E port (pulse) */
 }
 

@@ -2,7 +2,7 @@
 #include "adc.h"
 
 extern volatile double voltage, current, wattage, wattage_hour;
-extern long int tick_update_lcd;
+extern short int tick_update_lcd, nr_adc_reads;
 
 void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
@@ -37,6 +37,9 @@ void timer1_int_handler (void)
      * accumulate the wattage relative to each piece of time -- integrate.
      */
     wattage_hour += (wattage_temp / 17950903.5114864);
+
+    /* Keep the track of the number of ADC reads until we use them */
+    nr_adc_reads++;
 
 
     /* Clear the interrupt flag */
