@@ -1,0 +1,70 @@
+# EESchema Netlist Version 1.1 created  Seg 18 Mai 2009 21:45:49 WEST
+(
+ ( /4A0ED1CB SIL-3 K1 CONN_3
+  ( 1 N-000002 )
+  ( 2 N-000005 )
+  ( 3 GND )
+ )
+ ( /4A0E9DC1 SIL-2 P1 CONN_2
+  ( 1 GND )
+  ( 2 N-000004 )
+ )
+ ( /4A1153AF SIL-2 P2 CONN_2
+  ( 1 N-000003 )
+  ( 2 GND )
+ )
+ ( /4A0E9D86 SM2512 R1 R01
+  ( 1 N-000003 )
+  ( 2 N-000004 )
+ )
+ ( /4A0E9D9F SM2512 R2 R01
+  ( 1 N-000003 )
+  ( 2 N-000004 )
+ )
+ ( /4A0EA5DA SM0805 R3 3K3
+  ( 1 GND )
+  ( 2 N-000002 )
+ )
+ ( /4A0EC766 SM0805 R4 68K
+  ( 1 N-000005 )
+  ( 2 N-000003 )
+ )
+ ( /4A0EA648 SM0805 R5 6K8
+  ( 1 GND )
+  ( 2 N-000005 )
+ )
+ ( /4A0EA4BF ZXCT1009 U1 ZXCT1009
+  ( 1 N-000002 )
+  ( 2 N-000004 )
+  ( 3 N-000003 )
+ )
+)
+*
+{ Allowed footprints by component:
+$component R1
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R2
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R3
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R4
+ R?
+ SM0603
+ SM0805
+$endlist
+$component R5
+ R?
+ SM0603
+ SM0805
+$endlist
+$endfootprintlist
+}

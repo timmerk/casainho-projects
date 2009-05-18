@@ -1,0 +1,9 @@
+EESchema-DOCLIB  Version 2.0  Date: 16/5/2009-14:27:34
+#
+$CMP ZXCT1009
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+#End Doc Library
