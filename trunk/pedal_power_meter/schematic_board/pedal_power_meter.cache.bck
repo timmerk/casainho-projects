@@ -1,0 +1,24 @@
+EESchema-DOCLIB  Version 2.0  16/5/2009-18:31:37
+#
+$CMP CONN_2
+D Symbole general de connecteur
+K CONN
+$ENDCMP
+#
+$CMP CONN_3
+D Symbole general de connecteur
+K CONN
+$ENDCMP
+#
+$CMP R
+D Resistance
+K R DEV
+$ENDCMP
+#
+$CMP ZXCT1009
+D Linear Regulator +5V
+K POWER REGUL
+F regulator/lm78*.*
+$ENDCMP
+#
+#End Doc Library

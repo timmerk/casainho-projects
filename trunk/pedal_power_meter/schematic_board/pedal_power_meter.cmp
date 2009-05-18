@@ -1,0 +1,66 @@
+Cmp-Mod V01 Created by CVpcb (20090216-final) date = Seg 18 Mai 2009 21:45:49 WEST
+
+BeginCmp
+TimeStamp = /4A0ED1CB;
+Reference = K1;
+ValeurCmp = CONN_3;
+IdModule  = SIL-3;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0E9DC1;
+Reference = P1;
+ValeurCmp = CONN_2;
+IdModule  = SIL-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A1153AF;
+Reference = P2;
+ValeurCmp = CONN_2;
+IdModule  = SIL-2;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0E9D86;
+Reference = R1;
+ValeurCmp = R01;
+IdModule  = SM2512;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0E9D9F;
+Reference = R2;
+ValeurCmp = R01;
+IdModule  = SM2512;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0EA5DA;
+Reference = R3;
+ValeurCmp = 3K3;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0EC766;
+Reference = R4;
+ValeurCmp = 68K;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0EA648;
+Reference = R5;
+ValeurCmp = 6K8;
+IdModule  = SM0805;
+EndCmp
+
+BeginCmp
+TimeStamp = /4A0EA4BF;
+Reference = U1;
+ValeurCmp = ZXCT1009;
+IdModule  = ZXCT1009;
+EndCmp
+
+EndListe
