@@ -7,6 +7,10 @@
 #include "buttons.h"
 #include "isrsupport.h"
 
+/* Global variables */
+double voltage, current, wattage, wattage_hour;
+short tick_update_lcd, nr_adc_reads;
+
 int main (void)
 {
     unsigned char
@@ -16,7 +20,7 @@ int main (void)
                             button_state = 0;
 
     unsigned cpsr_temp;
-    volatile double voltage_temp, current_temp;
+    volatile double voltage_temp, current_temp, wattage_temp;
     unsigned short int nr_adc_reads_temp;
 
     /* Initialize variables */
@@ -58,17 +62,33 @@ int main (void)
             if (!button_is_set(BUTTON_01))
                 button_state = 0;
 
-            if (tick_update_lcd > 20) /* Execute on every 20 * 5ms */
+            if (tick_update_lcd > 50) /* Execute on every 50 * 5ms */
             {
+                /* Disable the IRQ for avoid change on global variables used on
+                * Timer1 IRQ handler code */
+                cpsr_temp = disableIRQ ();
+                wattage_temp = wattage;
+                wattage = 0;
+                voltage = 0;
+                current = 0;
+                nr_adc_reads_temp = nr_adc_reads;
+                nr_adc_reads = 0;
+                tick_update_lcd = 1;
+                /* Restore the IRQ */
+                restoreIRQ (cpsr_temp);
+
                 LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
                 LCDSendChar (' ');
-                LCDSendFloat (10, 2,1);
+                LCDSendFloat ((wattage_temp/nr_adc_reads_temp), 3, 1);
                 LCDSendChar (' ');
                 LCDSendChar ('W');
                 LCDSendChar ('a');
                 LCDSendChar ('t');
                 LCDSendChar ('t');
                 LCDSendChar ('s');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
                 LCDSendChar (' ');
 
                 LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
@@ -81,6 +101,10 @@ int main (void)
                 LCDSendChar ('o');
                 LCDSendChar ('u');
                 LCDSendChar ('r');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
             }
 
             break;
@@ -96,7 +120,7 @@ int main (void)
             if (!button_is_set(BUTTON_01))
                 button_state = 0;
 
-            if (tick_update_lcd > 20) /* Execute on every 20 * 5ms */
+            if (tick_update_lcd > 50) /* Execute on every 50 * 5ms */
             {
                 /* Disable the IRQ for avoid change on global variables used on
                  * Timer1 IRQ handler code */

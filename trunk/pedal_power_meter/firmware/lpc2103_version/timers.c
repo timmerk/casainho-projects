@@ -1,5 +1,6 @@
 #include "lpc210x.h"
 #include "adc.h"
+#include "main.h"
 
 extern volatile double voltage, current, wattage, wattage_hour;
 extern short int tick_update_lcd, nr_adc_reads;
@@ -8,9 +9,10 @@ void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
 void timer1_int_handler (void)
 {
-    volatile short int   voltage_temp,
-                current_temp,
-                wattage_temp;
+    volatile short int  voltage_temp,
+                        current_temp;
+
+    volatile double     wattage_temp;
 
     /* Here we increment the various ticks */
     tick_update_lcd++; /* increment LCD tick */
@@ -28,15 +30,9 @@ void timer1_int_handler (void)
 
     /* Calculate the wattage and accumulate, using the current and
      *  voltage values */
-    wattage_temp = voltage_temp * current_temp;
+    wattage_temp = (double) (((double) (voltage_temp * K_VOLTAGE)) * \
+                   ((double) (current_temp * K_CURRENT)));
     wattage += wattage_temp;
-
-    /* Calculate, integrate, the wattage per hour.
-     *
-     * There are 17950903,5114864 Timer0 interrupt in one hour, so we should
-     * accumulate the wattage relative to each piece of time -- integrate.
-     */
-    wattage_hour += (wattage_temp / 17950903.5114864);
 
     /* Keep the track of the number of ADC reads until we use them */
     nr_adc_reads++;
