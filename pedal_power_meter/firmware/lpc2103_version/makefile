@@ -4,6 +4,7 @@ AR      = arm-elf-ar
 AS      = arm-elf-as
 CP      = arm-elf-objcopy
 OD		= arm-elf-objdump
+SIZE		= arm-elf-size
 
 CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
 CFLAGS += -Wpointer-arith -Wswitch
@@ -29,6 +30,7 @@ main.out: crt.o main.o system.o timers.o lcd.o adc.o buttons.o isrsupport.o \
 	@ echo "..linking"
 	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o adc.o buttons.o \
 	isrsupport.o libgcc.a libc.a libnewlib-lpc.a
+	$(SIZE) main.out
 
 crt.o: crt.s
 	@ echo ".assembling"

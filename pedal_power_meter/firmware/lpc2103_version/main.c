@@ -14,7 +14,7 @@ short tick_update_lcd, nr_adc_reads;
 int main (void)
 {
     unsigned char
-                            menu = MENU_SHOW_VOLTAGE_CURRENT;
+                            menu = MENU_SHOW_POWER;
 
     static unsigned char
                             button_state = 0;
@@ -113,7 +113,7 @@ int main (void)
 
             if (button_is_set(BUTTON_01) && !button_state)
             {
-                menu = MENU_SHOW_POWER;
+                menu = MENU_SHOW_DEBUG;
                 button_state = 1;
             }
 
@@ -136,7 +136,6 @@ int main (void)
                 restoreIRQ (cpsr_temp);
 
                 LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
-                LCDSendInt ((voltage_temp/nr_adc_reads_temp), 4);
                 LCDSendChar (' ');
                 LCDSendFloat ((voltage_temp/nr_adc_reads_temp) *K_VOLTAGE, 2,1);
                 LCDSendChar (' ');
@@ -146,9 +145,9 @@ int main (void)
                 LCDSendChar ('t');
                 LCDSendChar ('s');
                 LCDSendChar (' ');
+                LCDSendChar (' ');
 
                 LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                LCDSendInt ((current_temp/nr_adc_reads_temp), 4);
                 LCDSendChar (' ');
                 LCDSendFloat ((current_temp/nr_adc_reads_temp) *K_CURRENT, 2,1);
                 LCDSendChar (' ');
@@ -158,12 +157,53 @@ int main (void)
                 LCDSendChar ('s');
                 LCDSendChar (' ');
                 LCDSendChar (' ');
+                LCDSendChar (' ');
             }
+
+            break;
+
+            case MENU_SHOW_DEBUG:
+
+                    disableIRQ ();
+                    LCDSendCommand (CLR_DISP);
+
+                    while (1)
+                    {
+                        LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
+                        LCDSendChar (' ');
+                        voltage = adc_read(2);
+                        LCDSendInt (voltage, 4);
+
+                        LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
+                        LCDSendChar (' ');
+                        current = adc_read(6);
+                        LCDSendInt (current, 4);
+
+                        if (button_is_set(BUTTON_01) && !button_state)
+                        {
+                            menu = MENU_SHOW_POWER;
+                            button_state = 1;
+                            voltage = 0;
+                            current = 0;
+                            restoreIRQ (cpsr_temp);
+                            break;
+                            break;
+                        }
+
+                        if (!button_is_set(BUTTON_01))
+                            button_state = 0;
+                    }
 
             break;
 
             default:
             break;
         }
+
+    /* Go to idle mode to save power. System leaves idle mode on interrupt, so,
+     * at each 5ms interrupt from Timer 1.
+     */
+    /* UNCOMENT IN THE END - NOT POSSIBLE TO DEBUG WITH IDLE MODE */
+    //system_go_idle ();
     }
 }

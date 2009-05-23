@@ -38,12 +38,13 @@ void system_init (void)
     //
     // We'd like the LPC2106 to run at 53.2368 Mhz (has to be an even multiple of crystal)
     //
-    // According to the Philips LPC2106 manual:   M = cclk / Fosc   where:  M    = PLL multiplier (bits 0-4 of PLLCFG)
+    // According to the Philips LPC2103 manual:   M = cclk / Fosc   where:  M    = PLL multiplier (bits 0-4 of PLLCFG)
     //                                                                      cclk = 53236800 hz
     //                                                                      Fosc = 14745600 hz
     //
     // Solving: M = 53236800 / 14745600 = 3.6103515625
-    //          M = 4 (round up)
+    // M = 4 (round up) --> real cclk =
+    //                          = processor clock = 14745600 * 4 = 58982400 Hz.
     //
     //          Note: M - 1 must be entered into bits 0-4 of PLLCFG (assign 3 to these bits)
     //
@@ -54,10 +55,10 @@ void system_init (void)
     //                                                                          cclk = 53236800 hz
     //                                                                          P = PLL divisor (bits 5-6 of PLLCFG)
     //
-    // Solving: Fcco = 53236800 * 2 * P
+    // Solving: Fcco = 58982400 * 2 * P
     //          P = 2  (trial value)
-    //          Fcco = 53236800 * 2 * 2
-    //          Fcc0 = 212947200 hz    (good choice for P since it's within the 156 mhz to 320 mhz range
+    //          Fcco = 58982400 * 2 * 2
+    //          Fcc0 = 235929600 hz    (good choice for P since it's within the 156 mhz to 320 mhz range
     //
     // From Table 19 (page 48) of Philips LPC2106 manual    P = 2, PLLCFG bits 5-6 = 1  (assign 1 to these bits)
     //
@@ -106,4 +107,14 @@ void system_init (void)
     }
 
     VICDEFVECTADDR = 0; /* set default handler */
+}
+
+void system_go_idle (void)
+{
+/* Idle mode - when 1, this bit causes the processor clock to be stopped,
+ * while on-chip peripherals remain active. Any enabled interrupt from a
+ * peripheral or an external interrupt source will cause the processor to
+ * resume execution.
+ */
+    PCON = 1;
 }

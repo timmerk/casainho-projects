@@ -20,12 +20,12 @@ void timer1_int_handler (void)
 
     /* We read voltage and current at each 5ms, we do it here */
     /* Read voltage and accumulate it to the last values. It should take no
-     * more than 35us(??) for read a value. */
-    voltage_temp = adc_read(1);
+     * more than 2,5us for read a value. */
+    voltage_temp = adc_read(2);
     voltage += voltage_temp;
 
     /* Read current and accumulate it to the last values */
-    current_temp = adc_read(0);
+    current_temp = adc_read(6);
     current += current_temp;
 
     /* Calculate the wattage and accumulate, using the current and
@@ -54,8 +54,8 @@ void timer1_init (void)
     TIMER1_PR = 0; /* Prescaler register: Clear prescaler */
     TIMER1_PC = 0; /* Prescaler counter register: Clear prescaler counter */
 
-    /* Match register 0: We want an interrupt every 5 ms. Fclk = 53.2368 Mhz. */
-    TIMER1_MR0 = 263157; /* 0,005/(1/53236800) ~= 263157 */
+    /* Match register 0: We want an interrupt every 5 ms. Fclk = 58.982400Hz. */
+    TIMER1_MR0 = 266184; /* 0,005/(1/53236800) ~= 266184 */
     TIMER1_MCR = 3; /* Reset and interrupt on match */
 
     /* Initialize VIC */
