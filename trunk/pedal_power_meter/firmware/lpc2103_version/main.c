@@ -8,28 +8,37 @@
 #include "isrsupport.h"
 
 /* Global variables */
-double voltage, current, wattage, wattage_hour;
-short tick_update_lcd, nr_adc_reads;
+volatile double              wattage, wattage_hour;
+
+volatile long int            wattage_hour_number_increments,
+                    voltage,
+                    current,
+                    tick_update_lcd, nr_adc_reads;
 
 int main (void)
 {
-    unsigned char
-                            menu = MENU_SHOW_POWER;
+    unsigned char           menu = MENU_SHOW_POWER;
 
-    static unsigned char
-                            button_state = 0;
+    static unsigned char    button_state = 0;
 
-    unsigned cpsr_temp;
-    volatile double voltage_temp, current_temp, wattage_temp;
-    unsigned short int nr_adc_reads_temp;
+    unsigned                cpsr_temp;
+    volatile double         voltage_temp,
+                            current_temp,
+                            wattage_hour_temp,
+                            wattage_temp;
+
+    unsigned short int      nr_adc_reads_temp;
+
+    long int                wattage_hour_number_increments_temp;
 
     /* Initialize variables */
-    voltage             = 0;
-    current             = 0;
-    wattage             = 0;
-    wattage_hour        = 0;
-    tick_update_lcd     = 1;
-    nr_adc_reads        = 0;
+    voltage                             = 0;
+    current                             = 0;
+    wattage                             = 0;
+    wattage_hour                        = 0;
+    wattage_hour_number_increments      = 0;
+    tick_update_lcd                     = 0;
+    nr_adc_reads                        = 0;
 
 	/* Initialize the system */
     system_init ();
@@ -69,11 +78,14 @@ int main (void)
                 cpsr_temp = disableIRQ ();
                 wattage_temp = wattage;
                 wattage = 0;
+                wattage_hour_temp = wattage_hour;
+                wattage_hour_number_increments_temp = \
+                                                wattage_hour_number_increments;
                 voltage = 0;
                 current = 0;
                 nr_adc_reads_temp = nr_adc_reads;
                 nr_adc_reads = 0;
-                tick_update_lcd = 1;
+                tick_update_lcd = 0;
                 /* Restore the IRQ */
                 restoreIRQ (cpsr_temp);
 
@@ -93,18 +105,12 @@ int main (void)
 
                 LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
                 LCDSendChar (' ');
-                LCDSendFloat (20, 2,1);
+                LCDSendFloat (wattage_hour_temp, 3, 7);
+
                 LCDSendChar (' ');
                 LCDSendChar ('W');
                 LCDSendChar ('/');
                 LCDSendChar ('h');
-                LCDSendChar ('o');
-                LCDSendChar ('u');
-                LCDSendChar ('r');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
             }
 
             break;
@@ -131,7 +137,7 @@ int main (void)
                 current = 0;
                 nr_adc_reads_temp = nr_adc_reads;
                 nr_adc_reads = 0;
-                tick_update_lcd = 1;
+                tick_update_lcd = 0;
                 /* Restore the IRQ */
                 restoreIRQ (cpsr_temp);
 
@@ -146,6 +152,9 @@ int main (void)
                 LCDSendChar ('s');
                 LCDSendChar (' ');
                 LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
 
                 LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
                 LCDSendChar (' ');
@@ -155,6 +164,9 @@ int main (void)
                 LCDSendChar ('m');
                 LCDSendChar ('p');
                 LCDSendChar ('s');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
+                LCDSendChar (' ');
                 LCDSendChar (' ');
                 LCDSendChar (' ');
                 LCDSendChar (' ');
@@ -171,13 +183,18 @@ int main (void)
                     {
                         LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
                         LCDSendChar (' ');
-                        voltage = adc_read(2);
-                        LCDSendInt (voltage, 4);
+                        int i;
+                        for (i = 0; i < 5000; i++)
+                            voltage += adc_read(2);
+                        LCDSendInt (voltage/5000, 4);
+                        voltage = 0;
 
                         LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
                         LCDSendChar (' ');
-                        current = adc_read(6);
-                        LCDSendInt (current, 4);
+                        for (i = 0; i < 5000; i++)
+                            current += adc_read(6);
+                        LCDSendInt (current/5000, 4);
+                        current = 0;
 
                         if (button_is_set(BUTTON_01) && !button_state)
                         {

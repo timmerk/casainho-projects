@@ -2,8 +2,12 @@
 #include "adc.h"
 #include "main.h"
 
-extern volatile double voltage, current, wattage, wattage_hour;
-extern short int tick_update_lcd, nr_adc_reads;
+extern volatile double              wattage, wattage_hour;
+
+extern volatile long int            wattage_hour_number_increments,
+                            voltage,
+                            current,
+                            tick_update_lcd, nr_adc_reads;
 
 void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
@@ -34,6 +38,12 @@ void timer1_int_handler (void)
                    ((double) (current_temp * K_CURRENT)));
     wattage += wattage_temp;
 
+    /* Integrate the wattage to have the wattage/hour value */
+    wattage_hour += wattage * WATTAGE_HOUR_DT;
+
+    /* Keep the track of the number of wattage/hour increments */
+    wattage_hour_number_increments++;
+
     /* Keep the track of the number of ADC reads until we use them */
     nr_adc_reads++;
 
@@ -54,8 +64,9 @@ void timer1_init (void)
     TIMER1_PR = 0; /* Prescaler register: Clear prescaler */
     TIMER1_PC = 0; /* Prescaler counter register: Clear prescaler counter */
 
-    /* Match register 0: We want an interrupt every 5 ms. Fclk = 58.982400Hz. */
-    TIMER1_MR0 = 266184; /* 0,005/(1/53236800) ~= 266184 */
+    /* Match register 0: We want an interrupt every 5 ms. Fclk = 58982400Hz. */
+    TIMER1_MR0 = 294912; /* 0,005/(1/58982400) ~= 294912 (verified the 5ms using
+    the oscilloscope on 29.05.2009)*/
     TIMER1_MCR = 3; /* Reset and interrupt on match */
 
     /* Initialize VIC */

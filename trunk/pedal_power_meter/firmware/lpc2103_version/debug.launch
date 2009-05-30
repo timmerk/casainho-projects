@@ -2,7 +2,7 @@
 <launchConfiguration type="com.zylin.embeddedcdt.idleNative">
 <booleanAttribute key="com.zylin.embeddedcdt.debugger_app_console" value="false"/>
 <stringAttribute key="com.zylin.embeddedcdt.debugger_init_commands" value="target remote localhost:3333"/>
-<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor flash write_image erase ../main.bin 0x0 bin&#10;monitor sleep 100&#10;monitor reset halt&#10;monitor sleep 500&#10;monitor mww 0xE01FC040 0x01&#10;monitor gdb_breakpoint_override hard&#10;symbol-file main.out&#13;&#10;continue"/>
+<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor flash write_image erase ../main.bin 0x0 bin&#10;monitor sleep 100&#10;monitor reset halt&#10;monitor sleep 50&#10;monitor mww 0xE01FC040 0x01&#10;monitor gdb_breakpoint_override hard&#10;symbol-file main.out&#13;&#10;continue"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.DEBUG_NAME" value="/usr/local/arm-elf/bin/arm-elf-gdb"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.GDB_INIT" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.mi.core.breakpointsFullPath" value="false"/>
@@ -15,8 +15,8 @@
 <booleanAttribute key="org.eclipse.cdt.launch.DEBUGGER_STOP_AT_MAIN" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_REGISTER_BOOKKEEPING" value="false"/>
 <booleanAttribute key="org.eclipse.cdt.launch.ENABLE_VARIABLE_BOOKKEEPING" value="false"/>
-<stringAttribute key="org.eclipse.cdt.launch.FORMAT" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&lt;contentList&gt;&lt;content id=&quot;button_counter-main-(format)&quot; val=&quot;1&quot;/&gt;&lt;content id=&quot;lr-(format)&quot; val=&quot;4&quot;/&gt;&lt;content id=&quot;cpsr-(format)&quot; val=&quot;2&quot;/&gt;&lt;/contentList&gt;"/>
-<stringAttribute key="org.eclipse.cdt.launch.GLOBAL_VARIABLES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;globalVariableList&gt;&#10;&lt;globalVariable name=&quot;voltage&quot; path=&quot;&quot;/&gt;&#10;&lt;globalVariable name=&quot;current&quot; path=&quot;&quot;/&gt;&#10;&lt;globalVariable name=&quot;tick_update_lcd&quot; path=&quot;&quot;/&gt;&#10;&lt;globalVariable name=&quot;nr_adc_reads&quot; path=&quot;&quot;/&gt;&#10;&lt;/globalVariableList&gt;&#10;"/>
+<stringAttribute key="org.eclipse.cdt.launch.FORMAT" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&lt;contentList&gt;&lt;content id=&quot;cpsr-(format)&quot; val=&quot;2&quot;/&gt;&lt;content id=&quot;lr-(format)&quot; val=&quot;4&quot;/&gt;&lt;content id=&quot;button_counter-main-(format)&quot; val=&quot;1&quot;/&gt;&lt;/contentList&gt;"/>
+<stringAttribute key="org.eclipse.cdt.launch.GLOBAL_VARIABLES" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;globalVariableList/&gt;&#10;"/>
 <stringAttribute key="org.eclipse.cdt.launch.MEMORY_BLOCKS" value="&lt;?xml version=&quot;1.0&quot; encoding=&quot;UTF-8&quot; standalone=&quot;no&quot;?&gt;&#10;&lt;memoryBlockExpressionList/&gt;&#10;"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROGRAM_NAME" value="/home/cas/Documentos/casainho-projects/trunk/pedal_power_meter/lpc2103_version/main.out"/>
 <stringAttribute key="org.eclipse.cdt.launch.PROJECT_ATTR" value="pedal_power_meter"/>

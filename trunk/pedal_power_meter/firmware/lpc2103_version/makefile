@@ -24,13 +24,13 @@ all: main.out
 	@ echo "...copying"
 	$(CP) $(CPFLAGS) main.out main.bin
 	$(OD) $(ODFLAGS) main.out > main.dmp
+	$(SIZE) main.out
 
 main.out: crt.o main.o system.o timers.o lcd.o adc.o buttons.o isrsupport.o \
 	linker_script-flash_memory.cmd 
 	@ echo "..linking"
 	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o adc.o buttons.o \
 	isrsupport.o libgcc.a libc.a libnewlib-lpc.a
-	$(SIZE) main.out
 
 crt.o: crt.s
 	@ echo ".assembling"
