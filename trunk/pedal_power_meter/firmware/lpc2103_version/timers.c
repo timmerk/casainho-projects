@@ -2,10 +2,9 @@
 #include "adc.h"
 #include "main.h"
 
-extern volatile double              wattage, wattage_hour;
+extern volatile double      wattage, wattage_hour_user, wattage_hour_system;
 
-extern volatile long int            wattage_hour_number_increments,
-                            voltage,
+extern volatile long int    voltage,
                             current,
                             tick_update_lcd, nr_adc_reads;
 
@@ -25,12 +24,15 @@ void timer1_int_handler (void)
     /* We read voltage and current at each 5ms, we do it here */
     /* Read voltage and accumulate it to the last values. It should take no
      * more than 2,5us for read a value. */
-    voltage_temp = adc_read(2);
+    voltage_temp = adc_read (6);
     voltage += voltage_temp;
 
     /* Read current and accumulate it to the last values */
-    current_temp = adc_read(6);
+    current_temp = adc_read (2);
     current += current_temp;
+
+    /* Keep the track of the number of ADC reads until we use them */
+    nr_adc_reads++;
 
     /* Calculate the wattage and accumulate, using the current and
      *  voltage values */
@@ -38,14 +40,11 @@ void timer1_int_handler (void)
                    ((double) (current_temp * K_CURRENT)));
     wattage += wattage_temp;
 
-    /* Integrate the wattage to have the wattage/hour value */
-    wattage_hour += wattage * WATTAGE_HOUR_DT;
+    /* Integrate the wattage "user" to have the wattage/hour "user" value */
+    wattage_hour_user += wattage * WATTAGE_HOUR_DT;
 
-    /* Keep the track of the number of wattage/hour increments */
-    wattage_hour_number_increments++;
-
-    /* Keep the track of the number of ADC reads until we use them */
-    nr_adc_reads++;
+    /* Integrate the wattage "user" to have the wattage/hour "user" value */
+    wattage_hour_system += wattage * WATTAGE_HOUR_DT;
 
 
     /* Clear the interrupt flag */

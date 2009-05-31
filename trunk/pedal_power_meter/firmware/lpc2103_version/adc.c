@@ -2,8 +2,8 @@
 
 /* ADC pins connections:
  * -ADC ------------------------|-connected to-----
- *  1  - AIN2                   | Voltage relative to input voltage
- *  2  - AIN6                   | Voltage relative to input current
+ *  1  - AIN6                   | Voltage relative to input voltage
+ *  2  - AIN2                   | Voltage relative to input current
  */
 
 void adc_init (void)
@@ -23,7 +23,7 @@ unsigned short int adc_read (unsigned char channel)
     ADCR = ((12 << 8) | (1 << 21) | (1 << 24) | (1 << channel));
 
     /* Wait for finish the conversion */
-    while (!(ADSTAT & (1 << channel))) ;
+    while (!(ADGDR & (1 << 31))) ;
 
     /* Return the value (10 bits) */
     return ((ADGDR >> 6) & 0x3ff);
