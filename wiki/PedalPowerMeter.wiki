@@ -1,5 +1,4 @@
 #summary An electrical energy meter for a system that generates the energy using people cycling
-#labels Featured
 
 = Introduction =
 
@@ -33,22 +32,43 @@ The Olimex lpc-h2103 board were used. I also made the very simple board that hol
 
 The system reads the voltage and current at every 5ms. A Timer interrupt is used for count that every 5ms.
 
+The instantaneous power and cumulative power in watts hour are calculated using the voltage and current values, finally that values are sent to the LCD.
+
+Two buttons are used for advance on menus and reset the cumulative wattage hour value.
+
 = Some pictures =
+*First menu* - this shows the instantaneous power on the first line and the cumulative power in watts hour on second line. This is the first screen after power the system on. Click on button 1 to go on the second menu.
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_01.jpg
 
+*Second menu* - this shows the total cumulative power in watts hour on second line. Click on button 1 to go on the first menu.
+
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_02.jpg
+
+*Reset the total power in watts hour* - while on first menu, click on button 2 for at least 3 seconds for reset the value.
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_03.jpg
 
+*Go to advanced menus* - while on second menu, click on button 2 for at least 10 seconds for going on advanced menus.
+
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_04.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_05.jpg
+*First advanced menu* - shows the voltage and current.
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_06.jpg
 
+*Second advanced menu* - shows the ADC values readings.
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_05.jpg
+
+*Leaving advanced menus* - while on first advanced menu, click on button 2 for at least 10 seconds for leaving on advanced menus.
+
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_07.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-01-500x.jpg
+*The internals* - a lot of wires :-)
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-01-500x.jpg ([http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-01-500x.jpg Click here for a high quality version])
+
+*Zoom on the board that holds the current sensor circuit and voltage reading circuit*
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-02.jpg
