@@ -1,0 +1,54 @@
+#summary An electrical energy meter for a system that generates the energy using people cycling
+#labels Featured
+
+= Introduction =
+
+This system measures the DC current and the DC voltage, calculates the instant power (in Watts) and the total generated power in KWh.
+
+The system should be used with an electrical generator attached to a bicycle and people should pedal to generate the energy.
+
+Electrical characteristics:
+  * Vin max: 18 volts;
+  * Iin max: 18 amps;
+  * system starts measuring at about 0,1 volts and at about 0,4 amps.
+ 
+= Hardware =
+
+For measuring the voltage, a simple voltage divisor resistor is used. The output value is linear and is about 3,3V at Vin = 20V. See the [http://code.google.com/p/casainho-projects/source/browse/#svn/trunk/pedal_power_meter/schematic_board schematic and component values on SVN].
+
+For measure the current, the ZXCT1009 sensor where used. The max current should be about 20A and the initial values are not linear. The first value of current is at about 0,4A.
+
+The voltages values relative to voltage and current are read using and ADC of an ARM7 microcontroller.
+I started using the AT91SAM7S256 but since I did burn the ADC inputs of that IC, I changed to a more cheap one ARM7 microcontroller (but less powerful), the LPC2103.
+
+The values of current and voltage are used to calculate the power by the ARM7 LPC2103 and the values are sent to an alphanumeric LCD module. The alphanumeric LCD module is that cheap one that everyone uses with the HD44780 controller, of 16x2 chars.
+
+Two buttons are used to let users interact with the system, letting them reset the cumulative value in wattage hour. They can also go to a menu where total wattage hour is shown. Also there is possible to access two on two advanced menus where voltage, current and ADC value readings are shown.
+
+The Olimex lpc-h2103 board were used. I also made the very simple board that holds the ZXCT1009 current sensor and voltage divider (to measure the voltage). I just wired all together, plus I used 2 push buttons with pullups resistors and simple RC filters for debounce. I used four NiMh AAA batteries directly to source the LCD module plus the Olimex lpc-h2103 board.
+
+= Firmware =
+
+[http://code.google.com/p/casainho-projects/source/browse/#svn/trunk/pedal_power_meter/firmware/lpc2103_version%3Fstate%3Dclosed Firmware is available on SVN].
+
+The system reads the voltage and current at every 5ms. A Timer interrupt is used for count that every 5ms.
+
+= Some pictures =
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_01.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_02.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_03.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_04.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_05.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_06.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_07.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-01-500x.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090608-prototype-02.jpg
