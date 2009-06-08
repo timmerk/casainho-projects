@@ -1,4 +1,5 @@
 #summary An electrical energy meter for a system that generates the energy using people cycling
+#labels Featured
 
 = Introduction =
 
