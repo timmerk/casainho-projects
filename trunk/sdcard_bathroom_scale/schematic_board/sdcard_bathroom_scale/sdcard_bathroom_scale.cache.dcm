@@ -1,0 +1,28 @@
+EESchema-DOCLIB  Version 2.0  Qua 10 Jun 2009 10:40:21 WEST
+#
+$CMP C
+D Condensateur non polarise
+$ENDCMP
+#
+$CMP CONN_14
+D Symbole general de connexion
+K CONN
+$ENDCMP
+#
+$CMP CONN_17
+D Symbole general de connexion
+K CONN
+$ENDCMP
+#
+$CMP LM358
+D Dual Op amp (low power)
+K ampliop
+F ns/lm158.pdf
+$ENDCMP
+#
+$CMP R
+D Resistance
+K R DEV
+$ENDCMP
+#
+#End Doc Library
