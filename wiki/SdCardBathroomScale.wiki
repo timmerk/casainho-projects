@@ -1,4 +1,5 @@
 #summary Digital bathroom scale which logs weight and data on SD Card
+#labels Featured
 
 = Introduction =
 
