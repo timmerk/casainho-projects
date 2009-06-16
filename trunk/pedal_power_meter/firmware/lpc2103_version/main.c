@@ -1,3 +1,14 @@
+/*
+ * Pedal Power Meter
+ *
+ * Copyright (C) Jorge Pinto aka Casainho, 2009.
+ *
+ *   casainho [at] gmail [dot] com
+ *     www.casainho.net
+ *
+ * Released under the GPL Licence, Version 3
+ */
+
 #include "lpc210x.h"
 #include "main.h"
 #include "system.h"
@@ -41,7 +52,7 @@ int main (void)
     system_init ();
 
     /* Initialize the LCD */
-    LCDInit();
+    lcd_init ();
 
     /* Initialize the ADC */
     adc_init ();
@@ -85,31 +96,31 @@ int main (void)
                 /* Restore the IRQ */
                 restoreIRQ (cpsr_temp);
 
-                LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
-                LCDSendChar (' ');
-                LCDSendFloat ((wattage_temp/nr_adc_reads_temp), 3, 1);
-                LCDSendChar (' ');
-                LCDSendChar ('W');
-                LCDSendChar ('a');
-                LCDSendChar ('t');
-                LCDSendChar ('t');
-                LCDSendChar ('s');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                lcd_send_char (' ');
+                lcd_send_float ((wattage_temp/nr_adc_reads_temp), 3, 1);
+                lcd_send_char (' ');
+                lcd_send_char ('W');
+                lcd_send_char ('a');
+                lcd_send_char ('t');
+                lcd_send_char ('t');
+                lcd_send_char ('s');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
 
-                LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                LCDSendChar (' ');
-                LCDSendFloat (wattage_hour_temp, 3, 3);
-                LCDSendChar (' ');
-                LCDSendChar ('W');
-                LCDSendChar ('/');
-                LCDSendChar ('h');
-                LCDSendChar ('o');
-                LCDSendChar ('u');
-                LCDSendChar ('r');
-                LCDSendChar (' ');
+                lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                lcd_send_char (' ');
+                lcd_send_float (wattage_hour_temp, 3, 3);
+                lcd_send_char (' ');
+                lcd_send_char ('W');
+                lcd_send_char ('/');
+                lcd_send_char ('h');
+                lcd_send_char ('o');
+                lcd_send_char ('u');
+                lcd_send_char ('r');
+                lcd_send_char (' ');
 
                 /* Verify if we need to reset the wattage_hour_user */
                 if (button_is_set(BUTTON_02))
@@ -118,45 +129,45 @@ int main (void)
                     {
                         while (button_is_set(BUTTON_02))
                         {
-                            LCDSendCommand (DD_RAM_ADDR);/* LCD set first row */
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar ('W');
-                            LCDSendChar ('a');
-                            LCDSendChar ('t');
-                            LCDSendChar ('t');
-                            LCDSendChar ('s');
-                            LCDSendChar (' ');
-                            LCDSendChar ('h');
-                            LCDSendChar ('o');
-                            LCDSendChar ('u');
-                            LCDSendChar ('r');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR);
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char ('W');
+                            lcd_send_char ('a');
+                            lcd_send_char ('t');
+                            lcd_send_char ('t');
+                            lcd_send_char ('s');
+                            lcd_send_char (' ');
+                            lcd_send_char ('h');
+                            lcd_send_char ('o');
+                            lcd_send_char ('u');
+                            lcd_send_char ('r');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
 
-                            LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar ('r');
-                            LCDSendChar ('e');
-                            LCDSendChar ('s');
-                            LCDSendChar ('e');
-                            LCDSendChar ('t');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR2);
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char ('r');
+                            lcd_send_char ('e');
+                            lcd_send_char ('s');
+                            lcd_send_char ('e');
+                            lcd_send_char ('t');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
                         }
 
-                        /* Disable the IRQ for avoid change on global variables used on
-                        * Timer1 IRQ handler code */
+                 /* Disable the IRQ for avoid change on global variables used on
+                  * Timer1 IRQ handler code */
                         cpsr_temp = disableIRQ ();
                         wattage_hour_user = 0;
                         tick_update_lcd = 0;
@@ -198,35 +209,35 @@ int main (void)
                 /* Restore the IRQ */
                 restoreIRQ (cpsr_temp);
 
-                LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar ('T');
-                LCDSendChar ('o');
-                LCDSendChar ('t');
-                LCDSendChar ('a');
-                LCDSendChar ('l');
-                LCDSendChar (' ');
-                LCDSendChar ('p');
-                LCDSendChar ('o');
-                LCDSendChar ('w');
-                LCDSendChar ('e');
-                LCDSendChar ('r');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char ('T');
+                lcd_send_char ('o');
+                lcd_send_char ('t');
+                lcd_send_char ('a');
+                lcd_send_char ('l');
+                lcd_send_char (' ');
+                lcd_send_char ('p');
+                lcd_send_char ('o');
+                lcd_send_char ('w');
+                lcd_send_char ('e');
+                lcd_send_char ('r');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
 
-                LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                LCDSendChar (' ');
-                LCDSendFloat (wattage_hour_temp, 4, 3);
+                lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                lcd_send_char (' ');
+                lcd_send_float (wattage_hour_temp, 4, 3);
 
-                LCDSendChar (' ');
-                LCDSendChar ('W');
-                LCDSendChar ('/');
-                LCDSendChar ('h');
-                LCDSendChar ('o');
-                LCDSendChar ('u');
-                LCDSendChar ('r');
+                lcd_send_char (' ');
+                lcd_send_char ('W');
+                lcd_send_char ('/');
+                lcd_send_char ('h');
+                lcd_send_char ('o');
+                lcd_send_char ('u');
+                lcd_send_char ('r');
 
                 /* Verify if we need to go on the advanced menus */
                 if (button_is_set(BUTTON_02))
@@ -235,41 +246,41 @@ int main (void)
                     {
                         while (button_is_set(BUTTON_02))
                         {
-                            LCDSendCommand (DD_RAM_ADDR);/* LCD set first row */
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar ('G');
-                            LCDSendChar ('o');
-                            LCDSendChar ('i');
-                            LCDSendChar ('n');
-                            LCDSendChar ('g');
-                            LCDSendChar (' ');
-                            LCDSendChar ('t');
-                            LCDSendChar ('o');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR);
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char ('G');
+                            lcd_send_char ('o');
+                            lcd_send_char ('i');
+                            lcd_send_char ('n');
+                            lcd_send_char ('g');
+                            lcd_send_char (' ');
+                            lcd_send_char ('t');
+                            lcd_send_char ('o');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
 
-                            LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                            LCDSendChar (' ');
-                            LCDSendChar ('a');
-                            LCDSendChar ('d');
-                            LCDSendChar ('v');
-                            LCDSendChar ('a');
-                            LCDSendChar ('n');
-                            LCDSendChar ('c');
-                            LCDSendChar ('e');
-                            LCDSendChar ('d');
-                            LCDSendChar (' ');
-                            LCDSendChar ('m');
-                            LCDSendChar ('e');
-                            LCDSendChar ('n');
-                            LCDSendChar ('u');
-                            LCDSendChar ('s');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                            lcd_send_char (' ');
+                            lcd_send_char ('a');
+                            lcd_send_char ('d');
+                            lcd_send_char ('v');
+                            lcd_send_char ('a');
+                            lcd_send_char ('n');
+                            lcd_send_char ('c');
+                            lcd_send_char ('e');
+                            lcd_send_char ('d');
+                            lcd_send_char (' ');
+                            lcd_send_char ('m');
+                            lcd_send_char ('e');
+                            lcd_send_char ('n');
+                            lcd_send_char ('u');
+                            lcd_send_char ('s');
+                            lcd_send_char (' ');
                         }
 
                         menu = MENU_SHOW_VOLTAGE_CURRENT;
@@ -308,35 +319,64 @@ int main (void)
                 /* Restore the IRQ */
                 restoreIRQ (cpsr_temp);
 
-                LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendFloat ((voltage_temp/nr_adc_reads_temp) *K_VOLTAGE, 2,1);
-                LCDSendChar (' ');
-                LCDSendChar ('V');
-                LCDSendChar ('o');
-                LCDSendChar ('l');
-                LCDSendChar ('t');
-                LCDSendChar ('s');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                //lcd_send_float ((((voltage_temp/nr_adc_reads_temp) * \
+                                                K_VOLTAGE) + M_VOLTAGE), 2,1);
 
-                LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendFloat ((current_temp/nr_adc_reads_temp) *K_CURRENT, 2,1);
-                LCDSendChar (' ');
-                LCDSendChar ('A');
-                LCDSendChar ('m');
-                LCDSendChar ('p');
-                LCDSendChar ('s');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
-                LCDSendChar (' ');
+                lcd_send_float ((((611) * \
+                                                K_VOLTAGE) + M_VOLTAGE), 2,1);
+
+                lcd_send_char (' ');
+                lcd_send_char ('V');
+                lcd_send_char ('o');
+                lcd_send_char ('l');
+                lcd_send_char ('t');
+                lcd_send_char ('s');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+
+                lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+          /* First 3 values from ADC_current should not be used since they are
+           *  very non linear.
+           */
+                current_temp = (current_temp/nr_adc_reads_temp);
+current_temp = 75;
+                if (current_temp < 3)
+                {
+                    lcd_send_float (0, 2, 1);
+                }
+
+                if (current_temp >= 3 && current_temp < 60)
+                {
+                    current_temp = \
+                   ((-0.000004 * current_temp * current_temp * current_temp) + \
+                   (0.0005 * current_temp * current_temp) - \
+                   (0.0028 * current_temp) + 0.356);
+                    lcd_send_float (current_temp, 2, 1);
+                }
+
+                if (current_temp >= 60)
+                {
+                    lcd_send_float (((current_temp * K_CURRENT) + \
+                            M_CURRENT),2,1);
+                }
+
+                lcd_send_char (' ');
+                lcd_send_char ('A');
+                lcd_send_char ('m');
+                lcd_send_char ('p');
+                lcd_send_char ('s');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
+                lcd_send_char (' ');
 
                 /* Verify if we need to go on the normal menus */
                 if (button_is_set(BUTTON_02))
@@ -345,41 +385,41 @@ int main (void)
                     {
                         while (button_is_set(BUTTON_02))
                         {
-                            LCDSendCommand (DD_RAM_ADDR);/* LCD set first row */
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar ('L');
-                            LCDSendChar ('e');
-                            LCDSendChar ('a');
-                            LCDSendChar ('v');
-                            LCDSendChar ('i');
-                            LCDSendChar ('n');
-                            LCDSendChar ('g');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR);
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char ('L');
+                            lcd_send_char ('e');
+                            lcd_send_char ('a');
+                            lcd_send_char ('v');
+                            lcd_send_char ('i');
+                            lcd_send_char ('n');
+                            lcd_send_char ('g');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
+                            lcd_send_char (' ');
 
-                            LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                            LCDSendChar (' ');
-                            LCDSendChar ('a');
-                            LCDSendChar ('d');
-                            LCDSendChar ('v');
-                            LCDSendChar ('a');
-                            LCDSendChar ('n');
-                            LCDSendChar ('c');
-                            LCDSendChar ('e');
-                            LCDSendChar ('d');
-                            LCDSendChar (' ');
-                            LCDSendChar ('m');
-                            LCDSendChar ('e');
-                            LCDSendChar ('n');
-                            LCDSendChar ('u');
-                            LCDSendChar ('s');
-                            LCDSendChar (' ');
+                            lcd_send_command (DD_RAM_ADDR2);
+                            lcd_send_char (' ');
+                            lcd_send_char ('a');
+                            lcd_send_char ('d');
+                            lcd_send_char ('v');
+                            lcd_send_char ('a');
+                            lcd_send_char ('n');
+                            lcd_send_char ('c');
+                            lcd_send_char ('e');
+                            lcd_send_char ('d');
+                            lcd_send_char (' ');
+                            lcd_send_char ('m');
+                            lcd_send_char ('e');
+                            lcd_send_char ('n');
+                            lcd_send_char ('u');
+                            lcd_send_char ('s');
+                            lcd_send_char (' ');
                         }
 
                         menu = MENU_SHOW_USER_POWER;
@@ -394,45 +434,44 @@ int main (void)
             case MENU_SHOW_ADC_READINGS:
 
             disableIRQ ();
-            LCDSendCommand (CLR_DISP);
+            lcd_send_command (CLR_DISP);
 
             while (1)
             {
-                LCDSendCommand (DD_RAM_ADDR); /* LCD set first row */
-                LCDSendChar ('A');
-                LCDSendChar ('D');
-                LCDSendChar ('C');
-                LCDSendChar (' ');
-                LCDSendChar ('v');
-                LCDSendChar ('o');
-                LCDSendChar ('l');
-                LCDSendChar ('t');
-                LCDSendChar ('a');
-                LCDSendChar ('g');
-                LCDSendChar ('e');
-                LCDSendChar (':');
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                lcd_send_char ('A');
+                lcd_send_char ('D');
+                lcd_send_char ('C');
+                lcd_send_char (' ');
+                lcd_send_char ('v');
+                lcd_send_char ('o');
+                lcd_send_char ('l');
+                lcd_send_char ('t');
+                lcd_send_char ('a');
+                lcd_send_char ('g');
+                lcd_send_char ('e');
+                lcd_send_char (':');
                 int i;
                 for (i = 0; i < 5000; i++)
                     voltage += adc_read (6);
-                LCDSendInt (voltage/5000, 4);
+                lcd_send_int (voltage/5000, 4);
                 voltage = 0;
-
-                LCDSendCommand (DD_RAM_ADDR2); /* LCD set 2nd row */
-                LCDSendChar ('A');
-                LCDSendChar ('D');
-                LCDSendChar ('C');
-                LCDSendChar (' ');
-                LCDSendChar ('c');
-                LCDSendChar ('u');
-                LCDSendChar ('r');
-                LCDSendChar ('r');
-                LCDSendChar ('e');
-                LCDSendChar ('n');
-                LCDSendChar ('t');
-                LCDSendChar (':');
+                lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                lcd_send_char ('A');
+                lcd_send_char ('D');
+                lcd_send_char ('C');
+                lcd_send_char (' ');
+                lcd_send_char ('c');
+                lcd_send_char ('u');
+                lcd_send_char ('r');
+                lcd_send_char ('r');
+                lcd_send_char ('e');
+                lcd_send_char ('n');
+                lcd_send_char ('t');
+                lcd_send_char (':');
                 for (i = 0; i < 5000; i++)
                     current += adc_read (2);
-                LCDSendInt (current/5000, 4);
+                lcd_send_int (current/5000, 4);
                 current = 0;
 
                 if (button_is_set(BUTTON_01) && !button_state)
@@ -461,6 +500,6 @@ int main (void)
      * at each 5ms interrupt from Timer 1.
      */
     /* UNCOMENT IN THE END - NOT POSSIBLE TO DEBUG WITH IDLE MODE */
-    //system_go_idle ();
+    system_go_idle ();
     }
 }

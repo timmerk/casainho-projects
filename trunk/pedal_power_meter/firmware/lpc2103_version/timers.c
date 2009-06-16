@@ -1,3 +1,14 @@
+/*
+ * Pedal Power Meter
+ *
+ * Copyright (C) Jorge Pinto aka Casainho, 2009.
+ *
+ *   casainho [at] gmail [dot] com
+ *     www.casainho.net
+ *
+ * Released under the GPL Licence, Version 3
+ */
+
 #include "lpc210x.h"
 #include "adc.h"
 #include "main.h"
@@ -15,7 +26,8 @@ void timer1_int_handler (void)
     volatile short int  voltage_temp,
                         current_temp;
 
-    volatile double     wattage_temp;
+    volatile double     wattage_temp,
+                        current_temp1;
 
     /* Here we increment the various ticks */
     tick_update_lcd++; /* increment LCD tick */
@@ -25,27 +37,58 @@ void timer1_int_handler (void)
     /* Read voltage and accumulate it to the last values. It should take no
      * more than 2,5us for read a value. */
     voltage_temp = adc_read (6);
+voltage_temp = 611;
     voltage += voltage_temp;
 
     /* Read current and accumulate it to the last values */
     current_temp = adc_read (2);
+current_temp = 75;
     current += current_temp;
 
     /* Keep the track of the number of ADC reads until we use them */
     nr_adc_reads++;
 
     /* Calculate the wattage and accumulate, using the current and
-     *  voltage values */
-    wattage_temp = (double) (((double) (voltage_temp * K_VOLTAGE)) * \
-                   ((double) (current_temp * K_CURRENT)));
+     *  voltage values.
+     */
+    /* First 3 values from ADC_current should not be used since they are
+     * very non linear.
+     */
+    if (current_temp < 3)
+    {
+        current_temp1 = 0;
+    }
+
+    if (current_temp >= 3 && current_temp < 60)
+    {
+        current_temp1 = current_temp;
+        current_temp1 = \
+        ((-0.000004 * current_temp1 * current_temp1 * current_temp1) + \
+        (0.0005 * current_temp1 * current_temp1) - \
+        (0.0028 * current_temp1) + 0.356);
+    }
+
+    if (current_temp >= 60)
+    {
+        current_temp1 = current_temp;
+        current_temp1 = (((current_temp1 * K_CURRENT) + M_CURRENT),2,1);
+    }
+
+
+    wattage_temp = (double) (((double) ((voltage_temp * K_VOLTAGE) \
+           + M_VOLTAGE)) * current_temp1);
+
     wattage += wattage_temp;
 
-    /* Integrate the wattage "user" to have the wattage/hour "user" value */
-    wattage_hour_user += wattage * WATTAGE_HOUR_DT;
+    /* Only integrate if there is some wattage value */
+    if (wattage_temp > 0)
+    {
+        /* Integrate the wattage "user" to have the wattage/hour "user" value */
+        wattage_hour_user += wattage * WATTAGE_HOUR_DT;
 
-    /* Integrate the wattage "user" to have the wattage/hour "user" value */
-    wattage_hour_system += wattage * WATTAGE_HOUR_DT;
-
+        /* Integrate the wattage "user" to have the wattage/hour "user" value */
+        wattage_hour_system += wattage * WATTAGE_HOUR_DT;
+    }
 
     /* Clear the interrupt flag */
     TIMER1_IR = 1;

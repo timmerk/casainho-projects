@@ -1,3 +1,13 @@
+/*
+             Pedal Power Meter
+     Copyright (C) Jorge Pinto aka Casainho, 2009.
+
+  casainho [at] gmail [dot] com
+      www.casainho.net
+
+ Released under the GPL Licence, Version 3
+*/
+
 #include "lcd.h"
 #include "lpc210x.h"
 
@@ -24,174 +34,179 @@
 #define DB7     (1 << 13)
 
 unsigned int data;
-void Delay_mS (unsigned long a) { while (--a!=0); }
-
-void E_Pulse(void)
+void delay_ms(unsigned long a)
 {
-    Delay_mS(LCD_CTRL_K_DLY);           /* delay */
-    IOSET = E;   /* set E to high */
-    Delay_mS(LCD_CTRL_K_DLY);           /* delay */
-    IOCLR = E;   /* set E to low */
+	while (--a != 0)
+		;
 }
 
-void LCDSendCommand(unsigned char byte)
+void e_pulse(void)
 {
-    /* set RS port to 0 -> display set to comand mode */
-    /* set RW port to 0 */
-    IOCLR =  (RW | RS);
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
-
-    IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
-    /* set data */
-    if (data & 1)
-        IOSET = DB4;
-    if (data & 2)
-        IOSET = DB5;
-    if (data & 4)
-        IOSET = DB6;
-    if (data & 8)
-        IOSET = DB7;
-
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
-
-    IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte & 0x0f); /* Get the 4 low bits */
-    /* set data */
-    if (data & 1)
-        IOSET = DB4;
-    if (data & 2)
-        IOSET = DB5;
-    if (data & 4)
-        IOSET = DB6;
-    if (data & 8)
-        IOSET = DB7;
-
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
+	delay_ms(LCD_CTRL_K_DLY); /* delay */
+	IOSET = E; /* set E to high */
+	delay_ms(LCD_CTRL_K_DLY); /* delay */
+	IOCLR = E; /* set E to low */
 }
 
-void LCDInit (void)
+void lcd_send_command (unsigned char byte)
 {
-    /* Define all lines as outputs */
-    IODIR = (RS | RW | E | DB4 | DB5 | DB6 | DB7);
+	/* set RS port to 0 -> display set to comand mode */
+	/* set RW port to 0 */
+	IOCLR = (RW| RS);
+	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
 
-    /* clear RS, E, RW */
-    IOCLR      = (RS | E | RW);
-    Delay_mS(5000*LCD_CTRL_K_DLY);     //delay ~50ms
+	IOCLR = (DB4 | DB5 | DB6 | DB7); /* clear D4-D7 */
+	data = (unsigned int) (byte >> 4); /* get the 4 high bits */
+	/* set data */
+	if (data & 1)
+		IOSET = DB4;
+	if (data & 2)
+		IOSET = DB5;
+	if (data & 4)
+		IOSET = DB6;
+	if (data & 8)
+		IOSET = DB7;
 
-    IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
-    E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(1000*LCD_CTRL_K_DLY);     //delay ~10ms
+	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
+	e_pulse(); /* high->low to E port (pulse) */
 
-    IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
-    E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(1000*LCD_CTRL_K_DLY);     //delay ~10ms
+	IOCLR = (DB4 | DB5 | DB6 | DB7); /* clear D4-D7 */
+	data = (unsigned int) (byte & 0x0f); /* Get the 4 low bits */
+	/* set data */
+	if (data & 1)
+		IOSET = DB4;
+	if (data & 2)
+		IOSET = DB5;
+	if (data & 4)
+		IOSET = DB6;
+	if (data & 8)
+		IOSET = DB7;
 
-    IOSET      = (DB4 | DB5); //set D4 and D5 port to 1
-    E_Pulse();                   /* high->low to E port (pulse) */
-    Delay_mS(1000*LCD_CTRL_K_DLY);                      //delay ~10ms
-
-    IOCLR      = DB4; /* set D4 port to 0 */
-    IOSET      = DB5; /* set D5 port to 1 */
-    E_Pulse();                   /* high->low to E port (pulse) */
-
-    LCDSendCommand(DISP_ON);
-    LCDSendCommand(CLR_DISP);       //Clear Display
+	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
+	e_pulse(); /* high->low to E port (pulse) */
 }
 
-void LCDSendChar(unsigned char byte)
+void lcd_init (void)
 {
-    /* set RS port to 1 -> display set to data mode */
-    IOSET = RS;
-    IOCLR = RW; /* set RW port to 0 */
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
+	/* Define all lines as outputs */
+	IODIR = (RS| RW | E | DB4 | DB5 | DB6 | DB7);
 
-    IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte >> 4); /* Get the 4 high bits */
-    /* set data */
-    if (data & 1)
-        IOSET = DB4;
-    if (data & 2)
-        IOSET = DB5;
-    if (data & 4)
-        IOSET = DB6;
-    if (data & 8)
-        IOSET = DB7;
+	/* clear RS, E, RW */
+	IOCLR = (RS | E | RW);
+	delay_ms(5000*LCD_CTRL_K_DLY); /* delay ~50ms */
 
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
+	IOSET = (DB4 | DB5);
+	e_pulse(); /* high->low to E port (pulse) */
+	delay_ms(1000*LCD_CTRL_K_DLY); //delay ~10ms
 
-    IOCLR = (DB4 | DB5 | DB6 | DB7); //clear D4-D7
-    data = (unsigned int) (byte & 0x0f); /* Get the 4 low bits */
-    /* set data */
-    if (data & 1)
-        IOSET = DB4;
-    if (data & 2)
-        IOSET = DB5;
-    if (data & 4)
-        IOSET = DB6;
-    if (data & 8)
-        IOSET = DB7;
+	IOSET = (DB4 | DB5);
+	e_pulse();
+	delay_ms(1000*LCD_CTRL_K_DLY); /* delay ~10ms */
 
-    Delay_mS(200*LCD_CTRL_K_DLY);         //delay for LCD char ~2ms
-    E_Pulse();                   /* high->low to E port (pulse) */
+	IOSET = (DB4 | DB5);
+	e_pulse();
+	delay_ms(1000*LCD_CTRL_K_DLY); /* delay ~10ms */
+
+	IOCLR = DB4;
+	IOSET = DB5;
+	e_pulse();
+
+	lcd_send_command(DISP_ON);
+	lcd_send_command(CLR_DISP);
 }
 
-void LCDSendInt(long number, unsigned char number_of_digits)
+void lcd_send_char (unsigned char byte)
 {
-    volatile int C[17];
-    volatile unsigned char Temp = 0, NumLen = 0, temp1, first_digit_non_zero = 0;
+	/* set RS port to 1 -> display set to data mode */
+	IOSET = RS;
+	IOCLR = RW; /* set RW port to 0 */
+	delay_ms(200 * LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
 
-    number_of_digits--;
-    temp1 = number_of_digits;
-    do
-    {
-        Temp++;
-        C[Temp] = number % 10;
+	IOCLR = (DB4| DB5 | DB6 | DB7); /* clear D4-D7 */
+	data = (unsigned int) (byte >> 4); /* get the 4 high bits */
+	/* set data */
+	if (data & 1)
+		IOSET = DB4;
+	if (data & 2)
+		IOSET = DB5;
+	if (data & 4)
+		IOSET = DB6;
+	if (data & 8)
+		IOSET = DB7;
 
-        /* Decide to fill with "space" if digit is a 0 or fill with "0" */
-        if (C[Temp] == 0)
-        {
-            if ((number_of_digits == temp1) || (number != 0))
-                C[Temp] = 0; /* Print a "0" on right side of numbers and on
-                                last one  */
+	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
+	e_pulse(); /* high->low to E port (pulse) */
 
-            else
-                C[Temp] = 239; /* Space char */
-        }
+	IOCLR = (DB4 | DB5 | DB6 | DB7); /* clear D4-D7 */
+	data = (unsigned int) (byte & 0x0f); /* get the 4 low bits */
+	/* set data */
+	if (data & 1)
+		IOSET = DB4;
+	if (data & 2)
+		IOSET = DB5;
+	if (data & 4)
+		IOSET = DB6;
+	if (data & 8)
+		IOSET = DB7;
 
-        number = number/10;
-    }
-    while (number_of_digits--);
-
-    NumLen = Temp;
-    for (Temp = NumLen; Temp > 0; Temp--)
-        LCDSendChar(C[Temp] + 48);
+	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
+	e_pulse(); /* high->low to E port (pulse) */
 }
 
-void LCDSendFloat(double number, unsigned char number_of_digits, \
-        unsigned char number_of_floats)
+void lcd_send_int (long number, unsigned char number_of_digits)
 {
-    LCDSendInt ((int) number, number_of_digits);
-    LCDSendChar ('.');
+	volatile int C[17];
+	volatile unsigned char 	Temp = 0,
+							NumLen = 0,
+							temp1,
+							first_digit_non_zero = 0;
 
-    number = (number - ((int) number));
+	number_of_digits--;
+	temp1 = number_of_digits;
+	do {
+		Temp++;
+		C[Temp] = number % 10;
 
-    while (number_of_floats--)
-    {
-        number = number * 10;
-        LCDSendChar (((int) number) + 48);
-        number = (number - ((int) number));
-    }
+		/* Decide to fill with "space" if digit is a 0 or fill with "0" */
+		if (C[Temp] == 0)
+		{
+			if ((number_of_digits == temp1) || (number != 0))
+				C[Temp] = 0; /* Print a "0" on right side of numbers and on
+				 last one  */
+
+			else
+				C[Temp] = 239; /* Space char */
+		}
+
+		number = number / 10;
+	} while (number_of_digits--);
+
+	NumLen = Temp;
+	for (Temp = NumLen; Temp > 0; Temp--)
+		lcd_send_char (C[Temp] + 48);
 }
 
-void LCDSendStr(unsigned char *string)
+void lcd_send_float (double number, unsigned char number_of_digits, \
+		unsigned char number_of_floats)
 {
-    while (*string != 0)
-    {
-        LCDSendChar(*string);
-        string++;
-    }
+	lcd_send_int ((int) number, number_of_digits);
+	lcd_send_char ('.');
+
+	number = (number - ((int) number));
+
+	while (number_of_floats--)
+	{
+		number = number * 10;
+		lcd_send_char (((int) number) + 48);
+		number = (number - ((int) number));
+	}
+}
+
+void lcd_send_string (unsigned char *string)
+{
+	while (*string != 0)
+	{
+		lcd_send_char (*string);
+		string++;
+	}
 }
