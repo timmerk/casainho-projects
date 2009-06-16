@@ -1,3 +1,14 @@
+/*
+             Pedal Power Meter
+     Copyright (C) Jorge Pinto aka Casainho, 2009.
+
+  casainho [at] gmail [dot] com
+      www.casainho.net
+
+ Released under the GPL Licence, Version 3
+*/
+
+
 #define		CLR_DISP	   0x00000001
 #define		DISP_ON		   0x0000000C
 #define		DISP_OFF	   0x00000008
@@ -13,18 +24,18 @@
 #define		DD_RAM_ADDR    0x00000080
 #define		DD_RAM_ADDR2   0x000000C0
 
-#define LCD_CTRL_K_DLY 20 /* Delay constant for use with LCD communications */
+/* Delay constant for use with LCD communications */
+#define 	LCD_CTRL_K_DLY 20
 
-
-void E_Pulse(void);
-void LCDInit(void);
-void LCDSendCommand(unsigned char byte);
-void SmartUp(void);
-void SmartDown(void);
-void LCDSendChar(unsigned char byte);
-void LCDSendInt(long number, unsigned char number_of_digits);
-void LCDSendStr(unsigned char *string);
-void LCDSendFloat(double number, unsigned char number_of_digits, \
+void e_pulse (void);
+void lcd_init (void);
+void lcd_send_command (unsigned char byte);
+void lcd_smartup (void);
+void lcd_smartdown(void);
+void lcd_send_char (unsigned char byte);
+void lcd_send_int (long number, unsigned char number_of_digits);
+void lcd_send_str (unsigned char *string);
+void lcd_send_float (double number, unsigned char number_of_digits, \
         unsigned char number_of_floats);
 
 
