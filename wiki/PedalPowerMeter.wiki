@@ -5,12 +5,22 @@
 
 This system measures the DC current and the DC voltage, calculates the instant power (in Watts) and the total generated power in KWh.
 
-The system should be used with an electrical generator attached to a bicycle and people should pedal to generate the energy.
+The system should be used with an electrical generator attached to a bicycle and people should pedal to generate the energy. Images of a pedal power system (without the energy meter):
+
+[http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/andancas_2008-pedal_power-01.jpg]
+
+[http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/andancas_2008-pedal_power-02.jpg]
+
+Picture of the pedal power meter prototype:
+
+[http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/pedal_power_meter-prototye-20090619-01.jpg]
+
+Video showing the working prototype [http://blip.tv/file/get/Jpcasainho-pedal_power_meterprototye20090619156.ogg here].
 
 Electrical characteristics:
   * Vin max: 18 volts;
   * Iin max: 18 amps;
-  * system starts measuring at about 0,1 volts and at about 0,4 amps.
+  * system starts measuring at about 0,1 volts and at about 0,3 amps.
  
 = Hardware =
 
@@ -58,9 +68,13 @@ http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_06.jpg
 
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/pedal_power_meter-prototye-20090619-06.jpg
+
 *Second advanced menu* - shows the ADC values readings.
 
 http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/20090607-menu_05.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/pedal_power_meter/images/pedal_power_meter-prototye-20090619-07.jpg
 
 *Leaving advanced menus* - while on first advanced menu, click on button 2 for at least 10 seconds for leaving on advanced menus.
 
