@@ -17,6 +17,8 @@ Picture of the pedal power meter prototype:
 
 Video showing the working prototype [http://blip.tv/file/get/Jpcasainho-pedal_power_meterprototye20090619156.ogg here].
 
+More pictures are available on [http://code.google.com/p/casainho-projects/source/browse/#svn/trunk/pedal_power_meter/images SVN].
+
 Electrical characteristics:
   * Vin max: 18 volts;
   * Iin max: 18 amps;
