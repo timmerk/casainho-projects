@@ -9,12 +9,12 @@ Source code plus pictures of current work can be found on [http://code.google.co
 
 = Details =
 == The scale ==
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-1.BMP
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-07.BMP
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-07.jpg
 
 == The prototype ==
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-8.BMP
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg
 
 == Digital Scale LCD signals ==
 
