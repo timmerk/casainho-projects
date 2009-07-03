@@ -19,11 +19,14 @@
 #include "isrsupport.h"
 
 /* Global variables */
-volatile double             wattage, wattage_hour_user, wattage_hour_system;
+double              wattage = 0,
+                    wattage_hour_user = 0,
+                    wattage_hour_system = 0;
 
-volatile long int           voltage,
-                            current,
-                            tick_update_lcd, nr_adc_reads;
+long int            voltage = 0,
+                    current = 0,
+                    tick_update_lcd = 0,
+                    nr_adc_reads = 0;
 
 int main (void)
 {
@@ -32,7 +35,7 @@ int main (void)
     static unsigned char    button_state = 0, counter_button = 0;
 
     unsigned                cpsr_temp;
-    volatile double         voltage_temp,
+    double                  voltage_temp,
                             current_temp,
                             wattage_hour_temp,
                             wattage_temp;
@@ -323,10 +326,7 @@ int main (void)
                 lcd_send_char (' ');
                 lcd_send_char (' ');
                 lcd_send_char (' ');
-                //lcd_send_float ((((voltage_temp/nr_adc_reads_temp) * \
-                                                K_VOLTAGE) + M_VOLTAGE), 2,1);
-
-                lcd_send_float ((((611) * \
+                lcd_send_float ((((voltage_temp/nr_adc_reads_temp) * \
                                                 K_VOLTAGE) + M_VOLTAGE), 2,1);
 
                 lcd_send_char (' ');
@@ -347,7 +347,6 @@ int main (void)
            *  very non linear.
            */
                 current_temp = (current_temp/nr_adc_reads_temp);
-current_temp = 75;
                 if (current_temp < 3)
                 {
                     lcd_send_float (0, 2, 1);
