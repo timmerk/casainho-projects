@@ -33,7 +33,7 @@
 
 /* y = K_VOLTAGE * Vin + M_VOLTAGE */
 #define K_VOLTAGE 0.0204
-#define M_VOLTAGE 0.07
+#define M_VOLTAGE 0.06
 
 
 /* Values I did measure with a ampmeter:
@@ -70,15 +70,15 @@
  */
 
 /* y = K_CURRENT * Iin + M_CURRENT */
-#define K_CURRENT 0.0192
+#define K_CURRENT 0.01865
 #define M_CURRENT 0.024
 
 
-/* Timer1 interrupt happens at 0,004512939453125 seconds. One hour have about
- * 797706,248309440086557 wattage measures and increments. The dt for
- * integration is: 1/797706,248309440086557 ~= 0,000001253594293.
+/* Timer1 interrupt happens at 0,005 seconds. One hour have
+ * 720000 wattage measures and increments. The dt for
+ * integration is: 1/720000 ~= 0,000001388888888888888888888889.
  */
-#define WATTAGE_HOUR_DT 0.000001253594293
+#define WATTAGE_HOUR_DT 0.000001388888888888888888888889
 
 
 #define MENU_SHOW_USER_POWER 0

@@ -158,8 +158,7 @@ void lcd_send_int (long number, unsigned char number_of_digits)
 	volatile int C[17];
 	volatile unsigned char 	Temp = 0,
 							NumLen = 0,
-							temp1,
-							first_digit_non_zero = 0;
+							temp1;
 
 	number_of_digits--;
 	temp1 = number_of_digits;

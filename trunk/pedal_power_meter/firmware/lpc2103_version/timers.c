@@ -13,21 +13,25 @@
 #include "adc.h"
 #include "main.h"
 
-extern volatile double      wattage, wattage_hour_user, wattage_hour_system;
+extern double       wattage,
+                    wattage_hour_user,
+                    wattage_hour_system;
 
-extern volatile long int    voltage,
-                            current,
-                            tick_update_lcd, nr_adc_reads;
+extern long int     voltage,
+                    current,
+                    tick_update_lcd,
+                    nr_adc_reads;
 
 void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
 void timer1_int_handler (void)
 {
-    volatile short int  voltage_temp,
-                        current_temp;
+    short int   voltage_temp,
+                current_temp;
 
-    volatile double     wattage_temp,
-                        current_temp1;
+    double      wattage_temp,
+                current_temp1,
+                voltage_temp1;
 
     /* Here we increment the various ticks */
     tick_update_lcd++; /* increment LCD tick */
@@ -37,12 +41,10 @@ void timer1_int_handler (void)
     /* Read voltage and accumulate it to the last values. It should take no
      * more than 2,5us for read a value. */
     voltage_temp = adc_read (6);
-voltage_temp = 611;
     voltage += voltage_temp;
 
     /* Read current and accumulate it to the last values */
     current_temp = adc_read (2);
-current_temp = 75;
     current += current_temp;
 
     /* Keep the track of the number of ADC reads until we use them */
@@ -62,32 +64,31 @@ current_temp = 75;
     if (current_temp >= 3 && current_temp < 60)
     {
         current_temp1 = current_temp;
-        current_temp1 = \
-        ((-0.000004 * current_temp1 * current_temp1 * current_temp1) + \
-        (0.0005 * current_temp1 * current_temp1) - \
-        (0.0028 * current_temp1) + 0.356);
+        current_temp1 = (double) \
+       ((double) (-0.000004 * current_temp1 * current_temp1 * current_temp1) + \
+        ((double) (0.0005 * current_temp1 * current_temp1)) - \
+        ((double) (0.0028 * current_temp1) + 0.356));
     }
 
     if (current_temp >= 60)
     {
         current_temp1 = current_temp;
-        current_temp1 = (((current_temp1 * K_CURRENT) + M_CURRENT),2,1);
+        current_temp1 = (double) ((double) (current_temp1 * K_CURRENT) \
+                + M_CURRENT);
     }
 
-
-    wattage_temp = (double) (((double) ((voltage_temp * K_VOLTAGE) \
-           + M_VOLTAGE)) * current_temp1);
+    voltage_temp1 = (double) ((double) (voltage_temp * K_VOLTAGE) + M_VOLTAGE);
+    wattage_temp = (double) (voltage_temp1 * current_temp1);
 
     wattage += wattage_temp;
-
     /* Only integrate if there is some wattage value */
     if (wattage_temp > 0)
     {
         /* Integrate the wattage "user" to have the wattage/hour "user" value */
-        wattage_hour_user += wattage * WATTAGE_HOUR_DT;
+        wattage_hour_user += wattage_temp * WATTAGE_HOUR_DT;
 
         /* Integrate the wattage "user" to have the wattage/hour "user" value */
-        wattage_hour_system += wattage * WATTAGE_HOUR_DT;
+        wattage_hour_system += wattage_temp * WATTAGE_HOUR_DT;
     }
 
     /* Clear the interrupt flag */
