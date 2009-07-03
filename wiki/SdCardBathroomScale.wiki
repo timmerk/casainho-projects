@@ -1,11 +1,26 @@
-#summary Digital bathroom scale which logs weight and data on SD Card
+#summary Digital bathroom scale which logs weight and data on SD Card]
 #labels Featured
 
 = Introduction =
 
-On this project I will hack a digital bathroom scale, for log my weight variations over time, on a memory SD Card. I want write the information on a comma separated values (CSV) file so then I can build a graph using OpenOffice .
+On this project I will hack a digital bathroom scale, for log my weight variations over time, on a memory SD Card. I want write the information on a comma separated values (CSV) file so then I can build a graph using OpenOffice.
+
+Source code plus pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
 = Details =
+== The scale ==
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-1.BMP
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-07.BMP
+
+== The prototype ==
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-8.BMP
+
+== Digital Scale LCD signals ==
+
+Here is one image of a backplane signal plus 2 segment signals:
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-11.BMP
+
 == Pin connections to the LPC2103 ==
 {{{
 Scale LCD input
