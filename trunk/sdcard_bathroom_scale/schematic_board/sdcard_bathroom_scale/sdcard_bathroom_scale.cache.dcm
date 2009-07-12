@@ -1,8 +1,4 @@
-EESchema-DOCLIB  Version 2.0  Qua 10 Jun 2009 10:40:21 WEST
-#
-$CMP C
-D Condensateur non polarise
-$ENDCMP
+EESchema-DOCLIB  Version 2.0  Seg 06 Jul 2009 08:35:01 WEST
 #
 $CMP CONN_14
 D Symbole general de connexion
