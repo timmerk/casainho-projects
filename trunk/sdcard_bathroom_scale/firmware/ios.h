@@ -1,5 +1,5 @@
 /*
- * Pedal Power Meter
+ * SDCard Bathroom Scale
  *
  * Copyright (C) Jorge Pinto aka Casainho, 2009.
  *
@@ -44,6 +44,44 @@
 //#define LCD_PIN_12 15 /* problem */
 #define LCD_PIN_13 16
 
+/* LCD input signals */
+/*
+ *              0.0 kg
+              _   _
+             | | | |
+              -   -
+             | | | |
+              - . -  kg
+
+          bp a:   1 1 1 . 1 1 1 . 1 0 0 . 1 0 0
+
+          bp b:   1 1 1 . 1 1 1 . 0 1 0 . 0 1 0
+
+          bp c:   1 1 1 . 0 1 1 . 1 0 0 . 0 0 0
+
+               a          y a b
+             f   b        f g c
+               g          z e d
+             e   c
+               d
+ */
+
+#define mask_1st_digit_bpa 1536
+#define mask_1st_digit_bpb 3584
+#define mask_1st_digit_bpc mask_1st_digit_bpa
+#define mask_2nd_digit_bpa 192
+#define mask_2nd_digit_bpb 448
+#define mask_2nd_digit_bpc mask_2nd_digit_bpa
+#define mask_3rd_digit_bpa 24 /* 0b000000011000 */
+#define mask_3rd_digit_bpb 56 /* 0b000000111000 */
+#define mask_3rd_digit_bpc mask_3rd_digit_bpa /* 0b000000011000 */
+#define mask_4th_digit_bpa 3
+#define mask_4th_digit_bpb 7
+#define mask_4th_digit_bpc mask_4th_digit_bpa
+
 void ios_init (void);
 unsigned char io_is_set (unsigned char io_number);
 unsigned long int get_ios (void);
+double get_weight (unsigned long int back_plane_a,
+        unsigned long int back_plane_b,
+        unsigned long int back_plane_c);
