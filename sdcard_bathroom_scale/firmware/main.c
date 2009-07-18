@@ -18,11 +18,15 @@
 #include "isrsupport.h"
 
 /* Global variables */
+unsigned long int           back_plane_a,
+                            back_plane_b,
+                            back_plane_c;
 
 int main (void)
 {
     /* Initialize variables */
-    unsigned long int temp = 0;
+    volatile unsigned char temp_char = 0;
+    volatile float temp_float = 0;
 
 	/* Initialize the system */
     system_init ();
@@ -32,95 +36,41 @@ int main (void)
 
     /* Initialize the LCD */
     lcd_init ();
-#if 0
-    /* Initialize the Timer0 */
+
+    /* Initialize the Timer1 */
+
     timer1_init ();
     enableIRQ ();
-#endif
+
     while (1)
     {
         if (io_is_set(LCD_PIN_13))
         {
-            temp = get_ios ();
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+            /* Acquire the signals from the LCD input */
+            back_plane_c = get_ios ();
             while (io_is_set(LCD_PIN_13)) ;
 
-            if ((temp >> LCD_PIN_01) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
+            timer1_register (1750);
+            while (timer1_run) ;
+            back_plane_b = get_ios ();
 
-            if ((temp >> LCD_PIN_02) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
+            timer1_register (3500);
+            while (timer1_run) ;
+            back_plane_a = get_ios ();
 
-            if ((temp >> LCD_PIN_03) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_04) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_05) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_06) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_07) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_08) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_09) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_10) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_11) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
-            if ((temp >> LCD_PIN_12) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
-
+            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+            temp_float = get_weight (back_plane_a, back_plane_b, back_plane_c);
+            lcd_send_float (temp_float, 3, 1);
             lcd_send_char (' ');
-            lcd_send_char (' ');
-            if ((temp >> LCD_PIN_13) & 1)
-                lcd_send_char ('1');
-            else
-                lcd_send_char ('0');
+            lcd_send_char ('K');
+            lcd_send_char ('g');
         }
-
+#if 0
         else
         {
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            for (temp = 0; temp < 14; temp++)
-                lcd_send_command (CUR_RIGHT);
-
-            lcd_send_char ('0');
+            lcd_send_command (CLR_DISP);
         }
+#endif
     }
 
     /* Go to idle mode to save power. System leaves idle mode on interrupt. */
