@@ -27,6 +27,7 @@ int main (void)
     /* Initialize variables */
     volatile unsigned char temp_char = 0;
     volatile float temp_float = 0;
+    unsigned char state = 0;
 
 	/* Initialize the system */
     system_init ();
@@ -64,13 +65,25 @@ int main (void)
             lcd_send_char (' ');
             lcd_send_char ('K');
             lcd_send_char ('g');
+
+            state = 0;
         }
-#if 0
+
         else
         {
-            lcd_send_command (CLR_DISP);
+            switch (state)
+            {
+                case 0:
+                timer1_register (100000);
+                state = 1;
+                break;
+
+                case 1:
+                if (!timer1_run)
+                    lcd_send_command (CLR_DISP);
+                break;
+            }
         }
-#endif
     }
 
     /* Go to idle mode to save power. System leaves idle mode on interrupt. */
