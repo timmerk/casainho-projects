@@ -16,7 +16,7 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/s
 == The prototype ==
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg
 
-[http://a2.video3.blip.tv/0110000929915/Jpcasainho-sdcad_weight_scale20090718ogm635.ogg Video showing the last advances] -- now the system can show the weight as if it is the original scale.
+[http://blip.tv/file/get/Jpcasainho-sdcad_weight_scale20090718ogm635.ogg Video showing the last advances] -- now the system can show the weight as if it is the original scale.
 
 == Digital Scale LCD signals ==
 
