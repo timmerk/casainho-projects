@@ -16,8 +16,8 @@
  *  1  - GND                    | GND
  *  2  - Vcc                    | Vcc ~= + 5 volts
  *  3  - Contrast               | 0,91V
- *  4  - _RS                    | P0.17
- *  5  - _R/W                   | P0.18
+ *  4  - _RS                    | P0.3
+ *  5  - _R/W                   | P0.2
  *  6  - E                      | P0.19
  *  11 - DB4                    | P0.20
  *  12 - DB5                    | P0.21
@@ -25,10 +25,10 @@
  *  14 - DB7                    | P0.23
  */
 
-#define RS      (1 << 17)
-#define RW      (1 << 18)
-#define E       (1 << 19)
-#define DB4     (1 << 20)
+#define RS      (1 << 3)
+#define RW      (1 << 2)
+#define E       (1 << 17)
+#define DB4     (1 << 18)
 #define DB5     (1 << 21)
 #define DB6     (1 << 22)
 #define DB7     (1 << 23)

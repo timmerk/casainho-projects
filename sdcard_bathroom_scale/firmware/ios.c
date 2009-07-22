@@ -22,8 +22,6 @@ void ios_init (void)
 
 unsigned char io_is_set (unsigned char io_number)
 {
-    /* The IO to where ??? are attatched have a pullup resistor so logic
-     * is inverse */
     if ((IOPIN >> io_number) & 1)
         return 1;
 
