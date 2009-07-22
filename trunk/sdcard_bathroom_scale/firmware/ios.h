@@ -38,10 +38,8 @@
 #define LCD_PIN_08 11
 #define LCD_PIN_09 12
 #define LCD_PIN_10 13
-#define LCD_PIN_11 4
-#define LCD_PIN_12 5
-//#define LCD_PIN_11 14 /* problem */
-//#define LCD_PIN_12 15 /* problem */
+#define LCD_PIN_11 19
+#define LCD_PIN_12 20
 #define LCD_PIN_13 16
 
 /* LCD input signals */

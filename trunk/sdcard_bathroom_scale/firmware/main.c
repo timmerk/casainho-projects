@@ -61,6 +61,10 @@ int main (void)
 
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
             temp_float = get_weight (back_plane_a, back_plane_b, back_plane_c);
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
             lcd_send_float (temp_float, 3, 1);
             lcd_send_char (' ');
             lcd_send_char ('K');

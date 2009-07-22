@@ -58,4 +58,12 @@ isrsupport.o: isrsupport.c
 
 ios.o: ios.c
 	@ echo ".compiling"
-	$(CC) $(CFLAGS) ios.c										
+	$(CC) $(CFLAGS) ios.c
+	
+#fatfs/ff.o: fatfs/ff.c
+#	@ echo ".compiling"
+#	$(CC) $(CFLAGS) fatfs/ff.c
+	
+#fatfs/diskio.o: fatfs/mmc.c
+#	@ echo ".compiling"
+#	$(CC) $(CFLAGS) fatfs/mmc.c											
