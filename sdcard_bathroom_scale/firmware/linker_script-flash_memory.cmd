@@ -33,7 +33,7 @@ ENTRY(_startup)
 /* specify the LPC2103 memory areas  */
 MEMORY 
 {
-    flash           : ORIGIN = 0,          LENGTH = 32K /* FLASH ROM                                */  
+    flash           : ORIGIN = 0,          LENGTH = 32K  /* FLASH ROM                                */  
     ram_isp_low(A)      : ORIGIN = 0x40000040, LENGTH = 224 /* variables used by Philips ISP bootloader */       
     ram             : ORIGIN = 0x40000120, LENGTH = 7872    /* free RAM area                */
     ram_isp_high(A)     : ORIGIN = 0x40001FE0, LENGTH = 32  /* variables used by Philips ISP bootloader */

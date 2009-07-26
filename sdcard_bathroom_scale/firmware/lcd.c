@@ -1,12 +1,13 @@
 /*
-             Pedal Power Meter
-     Copyright (C) Jorge Pinto aka Casainho, 2009.
-
-  casainho [at] gmail [dot] com
-      www.casainho.net
-
- Released under the GPL Licence, Version 3
-*/
+ * SDCard Bathroom Scale
+ *
+ * Copyright (C) Jorge Pinto aka Casainho, 2009.
+ *
+ *   casainho [at] gmail [dot] com
+ *     www.casainho.net
+ *
+ * Released under the GPL Licence, Version 3
+ */
 
 #include "lcd.h"
 #include "lpc210x.h"
@@ -18,8 +19,8 @@
  *  3  - Contrast               | 0,91V
  *  4  - _RS                    | P0.3
  *  5  - _R/W                   | P0.2
- *  6  - E                      | P0.19
- *  11 - DB4                    | P0.20
+ *  6  - E                      | P0.17
+ *  11 - DB4                    | P0.28
  *  12 - DB5                    | P0.21
  *  13 - DB6                    | P0.22
  *  14 - DB7                    | P0.23
@@ -89,7 +90,7 @@ void lcd_send_command (unsigned char byte)
 void lcd_init (void)
 {
 	/* Define all lines as outputs */
-	IODIR = (RS| RW | E | DB4 | DB5 | DB6 | DB7);
+	IODIR = (RS | RW | E | DB4 | DB5 | DB6 | DB7);
 
 	/* clear RS, E, RW */
 	IOCLR = (RS | E | RW);
@@ -201,7 +202,7 @@ void lcd_send_float (double number, unsigned char number_of_digits, \
 	}
 }
 
-void lcd_send_string (unsigned char *string)
+void lcd_send_string (const char *string)
 {
 	while (*string != 0)
 	{
@@ -209,3 +210,4 @@ void lcd_send_string (unsigned char *string)
 		string++;
 	}
 }
+

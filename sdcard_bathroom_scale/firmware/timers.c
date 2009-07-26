@@ -11,15 +11,46 @@
 
 #include "lpc210x.h"
 
+extern void disk_timerproc (void);
 extern unsigned char timer1_run;
 
 void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
+void timer0_int_handler (void)   __attribute__ ((interrupt("IRQ")));
+
+void timer0_init (void)
+{
+    /* Initialize VIC */
+    VICINTSEL &= ~(1 << 4); /* Timer 0 selected as IRQ */
+    VICINTEN |= (1 << 4); /* Timer 0 interrupt enabled */
+    VICVECTCNTL0 = 0x25;
+    VICVECTADDR0 = (unsigned long) timer0_int_handler; /* Address of the ISR */
+}
+
+void timer0_register (long int value_us)
+{
+    /* Timer/Counter 0 power/clock enable */
+    PCONP |= (1 << 1);
+
+    /* Initialize Timer 0 */
+    TIMER0_TCR = 0;
+    TIMER0_TC = 0; /* Counter register: Clear counter */
+    TIMER0_PR = 1000; /* Prescaler register value: 1000 */
+    TIMER0_PC = 0; /* Prescaler counter register: Clear prescaler counter */
+
+    /* Match register 0:
+     * Fclk = 58982400Hz; 10ms => 0,001/((1*1000)/58982400); 10ms => ~ 590 */
+    TIMER0_MR0 = 590;
+    TIMER0_MCR = 3; /* Reset and interrupt on match */
+
+    /* Start timer */
+    TIMER0_TCR = 1;
+}
 
 void timer1_init (void)
 {
     /* Initialize VIC */
-    VICINTSEL = 0; /* Timer 1 selected as IRQ */
-    VICINTEN = 0x20; /* Timer 1 interrupt enabled */
+    VICINTSEL &= ~(1 << 5); /* Timer 1 selected as IRQ */
+    VICINTEN |= (1 << 5); /* Timer 1 interrupt enabled */
     VICVECTCNTL0 = 0x25;
     VICVECTADDR0 = (unsigned long) timer1_int_handler; /* Address of the ISR */
 }
@@ -63,4 +94,14 @@ void timer1_int_handler (void)
 
     timer1_run = 0;
     timer1_stop ();
+}
+
+void timer0_int_handler (void)
+{
+    /* Clear the interrupt flag */
+    //TIMER0_IR = 1;
+    //VICVECTADDR = 0xff;
+
+    /* Call MMC/SD Card drivers "Device Timer Interrupt Procedure" */
+    //disk_timerproc ();
 }

@@ -1,12 +1,13 @@
 /*
-             Pedal Power Meter
-     Copyright (C) Jorge Pinto aka Casainho, 2009.
-
-  casainho [at] gmail [dot] com
-      www.casainho.net
-
- Released under the GPL Licence, Version 3
-*/
+ * SDCard Bathroom Scale
+ *
+ * Copyright (C) Jorge Pinto aka Casainho, 2009.
+ *
+ *   casainho [at] gmail [dot] com
+ *     www.casainho.net
+ *
+ * Released under the GPL Licence, Version 3
+ */
 
 
 #define		CLR_DISP	   0x00000001
@@ -37,5 +38,6 @@ void lcd_send_int (long number, unsigned char number_of_digits);
 void lcd_send_str (unsigned char *string);
 void lcd_send_float (double number, unsigned char number_of_digits, \
         unsigned char number_of_floats);
+void lcd_send_string (const char *string);
 
 

@@ -1,5 +1,5 @@
 /*
- * Pedal Power Meter
+ * SDCard Bathroom Scale
  *
  * Copyright (C) Jorge Pinto aka Casainho, 2009.
  *

@@ -9,10 +9,10 @@
  * Released under the GPL Licence, Version 3
  */
 
-unsigned char timer1_run = 0;
+#include "lcd.h"
 
-void timer0_init (void);
-void timer0_register (long int value_us);
-void timer1_init (void);
-void timer1_register (long int value_us);
-void timer1_stop (void);
+void die (const char *string)
+{
+    lcd_send_string (string);
+    for (;;) ;
+}
