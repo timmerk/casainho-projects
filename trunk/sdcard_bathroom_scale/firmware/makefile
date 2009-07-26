@@ -9,7 +9,7 @@ SIZE		= arm-elf-size
 CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
 CFLAGS += -Wpointer-arith -Wswitch
 CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
-CFLAGS  += -mcpu=arm7tdmi -I./ -c -fno-common -O0 -g
+CFLAGS  += -mcpu=arm7tdmi -I./ -c -fno-common -O1 -g
 AFLAGS  = -ahls -mapcs-32 -g -o crt.o
 LDFLAGS  = -Map main.map -T linker_script-flash_memory.cmd
 CPFLAGS = -O binary
@@ -18,7 +18,7 @@ ODFLAGS	= -x --syms
 
 clean:
 	-rm crt.lst crt.o main.o main.out main.map main.dmp main.bin \
-	system.o timers.o lcd.o isrsupport.o ios.o
+	system.o timers.o lcd.o isrsupport.o ios.o spi.o fatfs/mmc.o ff.o err.o
 
 all: main.out
 	@ echo "...copying"
@@ -26,44 +26,41 @@ all: main.out
 	$(OD) $(ODFLAGS) main.out > main.dmp
 	$(SIZE) main.out
 
-main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o ios.o \
-	linker_script-flash_memory.cmd 
+main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o ios.o spi.o ff.o \
+	fatfs/mmc.o err.o linker_script-flash_memory.cmd
 	@ echo "..linking"
-	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o ios.o \
-	isrsupport.o libgcc.a libc.a libnewlib-lpc.a
+	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o ios.o spi.o \
+	fatfs/mmc.o ff.o err.o isrsupport.o libgcc.a libc.a libnewlib-lpc.a
 
 crt.o: crt.s
-	@ echo ".assembling"
 	$(AS) $(AFLAGS) crt.s > crt.lst
 
 main.o: main.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) main.c
 	
 system.o: system.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) system.c
 	
 timers.o: timers.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) timers.c
 	
 lcd.o: lcd.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) lcd.c
 	
 isrsupport.o: isrsupport.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) isrsupport.c
 
 ios.o: ios.c
-	@ echo ".compiling"
 	$(CC) $(CFLAGS) ios.c
 	
-#fatfs/ff.o: fatfs/ff.c
-#	@ echo ".compiling"
-#	$(CC) $(CFLAGS) fatfs/ff.c
+spi.o: spi.c
+	$(CC) $(CFLAGS) spi.c
 	
-#fatfs/diskio.o: fatfs/mmc.c
-#	@ echo ".compiling"
-#	$(CC) $(CFLAGS) fatfs/mmc.c											
+fatfs/mmc: fatfs/mmc.c
+	$(CC) $(CFLAGS) fatfs/mmc.c
+	
+ff.o: fatfs/ff.c
+	$(CC) $(CFLAGS) fatfs/ff.c
+	
+err.o: err.c
+	$(CC) $(CFLAGS) err.c
