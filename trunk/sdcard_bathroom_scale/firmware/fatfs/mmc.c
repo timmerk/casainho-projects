@@ -5,12 +5,10 @@
 /* are platform dependent.                                               */
 /*-----------------------------------------------------------------------*/
 
-
 #include "../lpc210x.h"
 #include "../spi.h"
 #include "diskio.h"
 #include "err.h"
-
 
 /* Definitions for MMC/SDC command */
 #define CMD0	(0x40+0)	/* GO_IDLE_STATE */
@@ -55,7 +53,6 @@ BYTE Timer1, Timer2;	/* 100Hz decrement timer */
 static
 BYTE CardType;			/* Card type flags */
 
-
 /*-----------------------------------------------------------------------*/
 /* Transmit a byte to MMC via SPI  (Platform dependent)                  */
 /*-----------------------------------------------------------------------*/
@@ -65,14 +62,11 @@ static void xmit_spi (BYTE dat)
     spi_transfer_byte (dat);
 }
 
-
-
 /*-----------------------------------------------------------------------*/
 /* Receive a byte from MMC via SPI  (Platform dependent)                 */
 /*-----------------------------------------------------------------------*/
 
-static
-BYTE rcvr_spi (void)
+static BYTE rcvr_spi (void)
 {
 	return (spi_transfer_byte (0xff));
 }
@@ -82,7 +76,6 @@ static void rcvr_spi_m (BYTE *dst)
 {
     *dst = (spi_transfer_byte (0xff));
 }
-
 
 /*-----------------------------------------------------------------------*/
 /* Wait for card ready                                                   */
@@ -104,7 +97,6 @@ BYTE wait_ready (void)
 }
 
 
-
 /*-----------------------------------------------------------------------*/
 /* Deselect the card and release SPI bus                                 */
 /*-----------------------------------------------------------------------*/
@@ -115,8 +107,6 @@ void release_spi (void)
 	DESELECT();
 	rcvr_spi();
 }
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Power Control  (Platform dependent)                                   */
@@ -154,7 +144,6 @@ BOOL rcvr_datablock (
 {
 	BYTE token;
 
-
 	Timer1 = 20;
 	do {							/* Wait for data packet in timeout of 200ms */
 		token = rcvr_spi();
@@ -180,8 +169,7 @@ BOOL rcvr_datablock (
 /*-----------------------------------------------------------------------*/
 
 #if _READONLY == 0
-static
-BOOL xmit_datablock (
+static BOOL xmit_datablock (
 	const BYTE *buff,	/* 512 byte data block to be transmitted */
 	BYTE token			/* Data/Stop token */
 )
@@ -210,13 +198,11 @@ BOOL xmit_datablock (
 #endif /* _READONLY */
 
 
-
 /*-----------------------------------------------------------------------*/
 /* Send a command packet to MMC                                          */
 /*-----------------------------------------------------------------------*/
 
-static
-BYTE send_cmd (
+static BYTE send_cmd (
 	BYTE cmd,		/* Command byte */
 	DWORD arg		/* Argument */
 )
@@ -256,8 +242,6 @@ BYTE send_cmd (
 	return res;			/* Return with the response value */
 }
 
-
-
 /*--------------------------------------------------------------------------
 
    Public Functions
@@ -275,11 +259,6 @@ DSTATUS disk_initialize (
 {
 	BYTE n, cmd, ty, ocr[4];
 
-
-	if (drv) return STA_NOINIT;			/* Supports only single drive */
-	if (Stat & STA_NODISK) return Stat;	/* No card in the socket */
-
-	power_on();							/* Force socket power on */
 	FCLK_SLOW();
 	for (n = 10; n; n--) rcvr_spi();	/* 80 dummy clocks */
 
@@ -314,6 +293,7 @@ DSTATUS disk_initialize (
 		FCLK_FAST();
 	} else {			/* Initialization failed */
 		power_off();
+		die ("disk init fail");
 	}
 
 	return Stat;
@@ -346,9 +326,6 @@ DRESULT disk_read (
 	BYTE count			/* Sector count (1..255) */
 )
 {
-	if (drv || !count) return RES_PARERR;
-	if (Stat & STA_NOINIT) return RES_NOTRDY;
-
 	if (!(CardType & CT_BLOCK)) sector *= 512;	/* Convert to byte address if needed */
 
 	if (count == 1) {	/* Single block read */
@@ -369,8 +346,6 @@ DRESULT disk_read (
 
 	return count ? RES_ERROR : RES_OK;
 }
-
-
 
 /*-----------------------------------------------------------------------*/
 /* Write Sector(s)                                                       */
@@ -558,4 +533,3 @@ void disk_timerproc (void)
 
     Stat = s;
 }
-
