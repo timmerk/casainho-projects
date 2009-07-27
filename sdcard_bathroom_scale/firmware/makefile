@@ -6,10 +6,15 @@ CP      = arm-elf-objcopy
 OD		= arm-elf-objdump
 SIZE		= arm-elf-size
 
+THUMB    =
+THUMB_IW =
+
 CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
 CFLAGS += -Wpointer-arith -Wswitch
-CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused
-CFLAGS  += -mcpu=arm7tdmi -I./ -c -fno-common -O1 -g
+CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused 
+CFLAGS  += -mcpu=arm7tdmi $(THUMB_IW) -I./ -c -fno-common -g
+O0 = -O0
+OS = -Os
 AFLAGS  = -ahls -mapcs-32 -g -o crt.o
 LDFLAGS  = -Map main.map -T linker_script-flash_memory.cmd
 CPFLAGS = -O binary
@@ -30,37 +35,37 @@ main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o ios.o spi.o ff.o \
 	fatfs/mmc.o err.o linker_script-flash_memory.cmd
 	@ echo "..linking"
 	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o ios.o spi.o \
-	fatfs/mmc.o ff.o err.o isrsupport.o libgcc.a libc.a libnewlib-lpc.a
+	fatfs/mmc.o ff.o err.o isrsupport.o libgcc.a
 
 crt.o: crt.s
 	$(AS) $(AFLAGS) crt.s > crt.lst
 
 main.o: main.c
-	$(CC) $(CFLAGS) main.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) main.c
 	
 system.o: system.c
-	$(CC) $(CFLAGS) system.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) system.c
 	
 timers.o: timers.c
 	$(CC) $(CFLAGS) timers.c
 	
 lcd.o: lcd.c
-	$(CC) $(CFLAGS) lcd.c
+	$(CC) $(THUMB) $(CFLAGS) lcd.c
 	
 isrsupport.o: isrsupport.c
-	$(CC) $(CFLAGS) isrsupport.c
+	$(CC) $(CFLAGS) $(OS) isrsupport.c
 
 ios.o: ios.c
-	$(CC) $(CFLAGS) ios.c
+	$(CC) $(THUMB) $(CFLAGS) ios.c
 	
 spi.o: spi.c
-	$(CC) $(CFLAGS) spi.c
+	$(CC) $(THUMB) $(CFLAGS) spi.c
 	
 fatfs/mmc: fatfs/mmc.c
-	$(CC) $(CFLAGS) fatfs/mmc.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/mmc.c
 	
 ff.o: fatfs/ff.c
-	$(CC) $(CFLAGS) fatfs/ff.c
-	
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/ff.c
+
 err.o: err.c
-	$(CC) $(CFLAGS) err.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) err.c

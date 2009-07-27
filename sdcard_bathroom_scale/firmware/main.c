@@ -10,7 +10,6 @@
  */
 
 #include "lpc210x.h"
-#include "main.h"
 #include "system.h"
 #include "isrsupport.h"
 #include "lcd.h"
@@ -26,9 +25,11 @@
 #endif
 
 /* Global variables */
-unsigned long int           back_plane_a,
-                            back_plane_b,
-                            back_plane_c;
+volatile unsigned long int           back_plane_a,
+                                     back_plane_b,
+                                     back_plane_c;
+
+volatile unsigned short int timer1_counter = 0;
 
 /*---------------------------------------------------------*/
 /* User Provided RTC Function for FatFs module             */
@@ -53,7 +54,6 @@ unsigned long get_fattime ()
 int main (void)
 {
     /* Initialize variables */
-    volatile unsigned char temp_char = 0;
     volatile float weight = 0;
     unsigned char state = 0;
 
@@ -73,13 +73,11 @@ int main (void)
 
     spi_init ();
 
-    /* Initialize the Timers */
-    timer0_init ();
-    //timer1_init ();
+    /* Initialize the Timer1 */
+    timer1_init ();
     enableIRQ ();
 
-
-    while (1)
+    for (;;)
     {
         if (io_is_set(LCD_PIN_13))
         {
@@ -87,12 +85,12 @@ int main (void)
             back_plane_c = get_ios ();
             while (io_is_set(LCD_PIN_13)) ;
 
-            timer1_register (1750);
-            while (timer1_run) ;
+            timer1_counter = 18;
+            while (timer1_counter) ;
             back_plane_b = get_ios ();
 
-            timer1_register (3500);
-            while (timer1_run) ;
+            timer1_counter = 35;
+            while (timer1_counter) ;
             back_plane_a = get_ios ();
 
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
@@ -114,12 +112,12 @@ int main (void)
             switch (state)
             {
                 case 0:
-                timer1_register (50000);
+                timer1_counter = 500;
                 state = 1;
                 break;
 
                 case 1:
-                if (!timer1_run)
+                if (!timer1_counter)
                 {
                    /* If weight are higher than 40kg, store it on the SD Card */
                     if (weight > 40)
@@ -138,11 +136,26 @@ int main (void)
                         res = f_lseek(&file, file.fsize);
 
                         /* Write the weight value at end of file with a CSV */
-                        f_printf(&file, "%d", (int) weight);
-                        f_printf(&file, "%c", ';');
+                        res = f_printf(&file, "%d", (int) weight);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        res = f_printf(&file, "%c", '.');
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d",
+                                ((int) ((weight - ((int) weight)) * 10)));
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        res = f_printf(&file, "%c", ',\r');
+                        if (res == EOF)
+                            die ("Err f_printf");
 
                         /* Close the file */
-                        f_close(&file);
+                        res = f_close(&file);
                         if (res)
                             die ("Err close file");
 
@@ -150,12 +163,17 @@ int main (void)
                         res = f_mount(0, NULL);
                         if (res)
                             die ("Err unmount fs");
+
+                        lcd_send_command (DD_RAM_ADDR2); /* LCD set first row */
+                        lcd_send_string ("  Weight saved  ");
+                        weight = 0;
+                        timer1_counter = 20000; /* wait 2 seconds */
+                        while (timer1_counter) ;
+                        break;
                     }
 
-
-                    lcd_send_string ("Weight saved");
-                    timer1_register (2500000); /* wait 2,5 seconds */
-                    while (timer1_run) ;
+                    timer1_counter = 100;
+                    while (timer1_counter) ;
                     lcd_send_command (CLR_DISP);
                 }
                 break;
