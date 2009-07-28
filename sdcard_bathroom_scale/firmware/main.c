@@ -19,6 +19,7 @@
 #include "./fatfs/diskio.h"
 #include "./fatfs/ff.h"
 #include "err.h"
+#include "rtc.h"
 
 #ifndef NULL
 #define NULL    0
@@ -61,6 +62,7 @@ int main (void)
     FIL file;       /* file object */
     FRESULT res;    /* FatFs function common result code */
 
+    RTC rtc;
 
 	/* Initialize the system */
     system_init ();
@@ -76,6 +78,58 @@ int main (void)
     /* Initialize the Timer1 */
     timer1_init ();
     enableIRQ ();
+
+    /*
+     * Verify if time.txt file exist so system should update
+     * RTC time with that info on the file.
+     *
+     * The time.txt file should have a string with the following format
+     * (without square brackets):
+     * [year][month][month day][week day][hour][minutes][seconds]
+     * Example:
+     * [2009][08][01][6][12][00][00]; string "200908016120000".
+     */
+
+    /* Register a work area for logical drive 0 */
+    res = f_mount(0, &fs);
+    if (res)
+        die ("Err mount fs");
+
+    /* Open time.txt file */
+    res = f_open(&file, "time.txt", FA_OPEN_EXISTING | FA_READ);
+    if (!res) /* File time.txt exist, update system time now */
+    {
+        char string [15];
+        /* Get the data from file */
+        f_gets (&string[0], 15 + 1, &file);
+
+        /* Setup RTC with the new value */
+        rtc.sec = (((string[13] - 48) * 10) + (string[14] - 48));
+        rtc.min = (((string[11] - 48) * 10) + (string[12] - 48));
+        rtc.hour = (((string[9] - 48) * 10) + (string[10] - 48));
+        rtc.wday = (string[8] - 48);
+        rtc.mday = (((string[6] - 48) * 10) + (string[7] - 48));
+        rtc.month = (((string[4] - 48) * 10) + (string[5] - 48));
+        rtc.year = (((string[0] - 48) * 1000) + ((string[1] - 48) * 100) +
+                    ((string[2] - 48) * 10) + (string[3] - 48));
+        rtc_settime (&rtc);
+
+        res = f_unlink ("time.txt");
+        if (res)
+        {
+            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+            lcd_send_string ("Err delete file");
+            timer1_counter = 20000;
+            while (timer1_counter) ;
+        }
+
+        lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+        lcd_send_string ("Date changed");
+        timer1_counter = 50000;
+        while (timer1_counter) ;
+    }
+
+    lcd_send_command (CLR_DISP);
 
     for (;;)
     {
@@ -109,6 +163,30 @@ int main (void)
 
         else
         {
+#if 0
+            /*
+             * Print current time on 2nd line of the LCD.
+             */
+            rtc_gettime (&rtc);
+            lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char ((rtc.hour / 10) + 48);
+            lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
+            lcd_send_char (':');
+            lcd_send_char ((rtc.min / 10) + 48);
+            lcd_send_char ((rtc.min - ((rtc.min / 10) * 10)) + 48);
+            lcd_send_char (':');
+            lcd_send_char ((rtc.sec / 10) + 48);
+            lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+#endif
+
             switch (state)
             {
                 case 0:
@@ -122,11 +200,6 @@ int main (void)
                    /* If weight are higher than 40kg, store it on the SD Card */
                     if (weight > 40)
                     {
-                        /* Register a work area for logical drive 0 */
-                        res = f_mount(0, &fs);
-                        if (res)
-                            die ("Err mount fs");
-
                         /* Open source file */
                         res = f_open(&file, "weight.csv", FA_OPEN_ALWAYS | FA_WRITE);
                         if (res)
@@ -171,12 +244,7 @@ int main (void)
                         while (timer1_counter) ;
                         break;
                     }
-
-                    timer1_counter = 100;
-                    while (timer1_counter) ;
-                    lcd_send_command (CLR_DISP);
                 }
-                break;
             }
         }
     }
