@@ -13,6 +13,7 @@
 
 extern void disk_timerproc (void);
 extern unsigned short int timer1_counter;
+extern volatile unsigned char new_time;
 
 void timer1_int_handler (void)   __attribute__ ((interrupt("IRQ")));
 
@@ -45,7 +46,7 @@ void timer1_init (void)
 /* This interrupt handler happens every 100us */
 void timer1_int_handler (void)
 {
-    static char counter = 0;
+    static char counter = 0, counter1 = 0;
 
     /* Clear the interrupt flag */
     TIMER1_IR = 1;
@@ -59,5 +60,10 @@ void timer1_int_handler (void)
         counter = 0;
         disk_timerproc (); /* Call every 10ms */
 
+        if (++counter1 > 100)
+        {
+            counter1 = 0;
+            new_time = 1; /* Every one second, display time on LCD */
+        }
     }
 }

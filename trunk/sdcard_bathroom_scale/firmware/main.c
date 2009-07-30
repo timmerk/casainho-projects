@@ -31,6 +31,7 @@ volatile unsigned long int           back_plane_a,
                                      back_plane_c;
 
 volatile unsigned short int timer1_counter = 0;
+volatile unsigned char new_time = 0;
 
 /*---------------------------------------------------------*/
 /* User Provided RTC Function for FatFs module             */
@@ -163,38 +164,35 @@ int main (void)
 
         else
         {
-#if 0
-            /*
-             * Print current time on 2nd line of the LCD.
-             */
-            rtc_gettime (&rtc);
-            lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char ((rtc.hour / 10) + 48);
-            lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
-            lcd_send_char (':');
-            lcd_send_char ((rtc.min / 10) + 48);
-            lcd_send_char ((rtc.min - ((rtc.min / 10) * 10)) + 48);
-            lcd_send_char (':');
-            lcd_send_char ((rtc.sec / 10) + 48);
-            lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-#endif
-
             switch (state)
             {
                 case 0:
-                timer1_counter = 500;
+                timer1_counter = 5000;
                 state = 1;
-                break;
 
                 case 1:
+                if (new_time)
+                {
+                    new_time = 0;
+                    /*
+                     * Print current time on 2nd line of the LCD.
+                     */
+                    rtc_gettime (&rtc);
+                    lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                    lcd_send_char (' ');
+                    lcd_send_char (' ');
+                    lcd_send_char (' ');
+                    lcd_send_char (' ');
+                    lcd_send_char ((rtc.hour / 10) + 48);
+                    lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
+                    lcd_send_char (':');
+                    lcd_send_char ((rtc.min / 10) + 48);
+                    lcd_send_char ((rtc.min - ((rtc.min / 10) * 10)) + 48);
+                    lcd_send_char (':');
+                    lcd_send_char ((rtc.sec / 10) + 48);
+                    lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
+                }
+
                 if (!timer1_counter)
                 {
                    /* If weight are higher than 40kg, store it on the SD Card */
@@ -209,11 +207,67 @@ int main (void)
                         res = f_lseek(&file, file.fsize);
 
                         /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d-", (int) rtc.mday);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d-", (int) rtc.month);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d ", (int) rtc.year);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        if (rtc.hour < 10)
+                        {
+                            /* Write the weight value at end of file with a CSV */
+                            res = f_printf(&file, "0");
+                            if (res == EOF)
+                                die ("Err f_printf");
+                        }
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d:", (int) rtc.hour);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        if (rtc.min < 10)
+                        {
+                            /* Write the weight value at end of file with a CSV */
+                            res = f_printf(&file, "0");
+                            if (res == EOF)
+                                die ("Err f_printf");
+                        }
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d:", (int) rtc.min);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        if (rtc.sec < 10)
+                        {
+                            /* Write the weight value at end of file with a CSV */
+                            res = f_printf(&file, "0");
+                            if (res == EOF)
+                                die ("Err f_printf");
+                        }
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%d,", (int) rtc.sec);
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        /* Write the weight value at end of file with a CSV */
+                        res = f_printf(&file, "%c", '"');
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d", (int) weight);
                         if (res == EOF)
                             die ("Err f_printf");
 
-                        res = f_printf(&file, "%c", '.');
+                        res = f_printf(&file, "%c", ',');
                         if (res == EOF)
                             die ("Err f_printf");
 
@@ -223,7 +277,11 @@ int main (void)
                         if (res == EOF)
                             die ("Err f_printf");
 
-                        res = f_printf(&file, "%c", ',\r');
+                        res = f_printf(&file, "%c", '"');
+                        if (res == EOF)
+                            die ("Err f_printf");
+
+                        res = f_printf(&file, "%c", '\r');
                         if (res == EOF)
                             die ("Err f_printf");
 
@@ -242,9 +300,15 @@ int main (void)
                         weight = 0;
                         timer1_counter = 20000; /* wait 2 seconds */
                         while (timer1_counter) ;
-                        break;
                     }
+
+                    state = 3;
+                    lcd_send_command (CLR_DISP);
                 }
+                break;
+
+                case 3:
+                break;
             }
         }
     }
