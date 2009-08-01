@@ -46,7 +46,10 @@ void timer1_init (void)
 /* This interrupt handler happens every 100us */
 void timer1_int_handler (void)
 {
-    static char counter = 0, counter1 = 0;
+    static char counter = 0,
+                counter1 = 0,
+                counter2 = 0,
+                turn_on_scale = 0;
 
     /* Clear the interrupt flag */
     TIMER1_IR = 1;
@@ -64,6 +67,15 @@ void timer1_int_handler (void)
         {
             counter1 = 0;
             new_time = 1; /* Every one second, display time on LCD */
+
+            if (++counter2 > 5 && !turn_on_scale) /* After 6 seconds... */
+            {
+                turn_on_scale = 1; /* Do not run this code again */
+
+                IODIR |= (1 << 26); /* Power control switch io pin as input */
+                IOSET = (1 << 26); /* Turn on power for scale (the other
+                switch controlled by hardware should be on until this time) */
+            }
         }
     }
 }

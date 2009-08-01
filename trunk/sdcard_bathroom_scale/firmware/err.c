@@ -11,8 +11,15 @@
 
 #include "lcd.h"
 
+void debug (const char *string)
+{
+    lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+    lcd_send_string (string);
+}
+
 void die (const char *string)
 {
+    lcd_send_command (CLR_DISP); /* LCD set first row */
     lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
     lcd_send_string (string);
     for (;;) ;
