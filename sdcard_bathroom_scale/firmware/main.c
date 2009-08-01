@@ -94,7 +94,7 @@ int main (void)
     /* Register a work area for logical drive 0 */
     res = f_mount(0, &fs);
     if (res)
-        die ("Err mount fs");
+        debug ("Err mount fs");
 
     /* Open time.txt file */
     res = f_open(&file, "time.txt", FA_OPEN_EXISTING | FA_READ);
@@ -195,21 +195,33 @@ int main (void)
 
                 if (!timer1_counter)
                 {
-                   /* If weight are higher than 40kg, store it on the SD Card */
+                   /* If weight are higher than 40kg... */
                     if (weight > 40)
                     {
                         /* Open source file */
                         res = f_open(&file, "weight.csv", FA_OPEN_ALWAYS | FA_WRITE);
                         if (res)
-                            die ("Err create file");
+                            debug ("Err create file");
+#if 0
+                        /* Find on file the place where last weight value is */
+                        char
+                        unsigned long file_pointer = (file.fsize - 3);
+                        do
+                        {
+                            res = f_lseek(&file, file_pointer++);
+                                debug ("Err file seek");
 
+                            f_read (&file, )
+                        while ()
+#endif
                         /* Move to end of the file to append data */
                         res = f_lseek(&file, file.fsize);
+                            debug ("Err file seek");
 
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d-", (int) rtc.mday);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d-", (int) rtc.month);
@@ -219,81 +231,81 @@ int main (void)
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d ", (int) rtc.year);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         if (rtc.hour < 10)
                         {
                             /* Write the weight value at end of file with a CSV */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                die ("Err f_printf");
+                                debug ("Err f_printf");
                         }
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d:", (int) rtc.hour);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         if (rtc.min < 10)
                         {
                             /* Write the weight value at end of file with a CSV */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                die ("Err f_printf");
+                                debug ("Err f_printf");
                         }
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d:", (int) rtc.min);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         if (rtc.sec < 10)
                         {
                             /* Write the weight value at end of file with a CSV */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                die ("Err f_printf");
+                                debug ("Err f_printf");
                         }
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d,", (int) rtc.sec);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%c", '"');
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d", (int) weight);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         res = f_printf(&file, "%c", ',');
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         /* Write the weight value at end of file with a CSV */
                         res = f_printf(&file, "%d",
                                 ((int) ((weight - ((int) weight)) * 10)));
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         res = f_printf(&file, "%c", '"');
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         res = f_printf(&file, "%c", '\r');
                         if (res == EOF)
-                            die ("Err f_printf");
+                            debug ("Err f_printf");
 
                         /* Close the file */
                         res = f_close(&file);
                         if (res)
-                            die ("Err close file");
+                            debug ("Err close file");
 
                         /* Unregister a work area before discard it */
                         res = f_mount(0, NULL);
                         if (res)
-                            die ("Err unmount fs");
+                            debug ("Err unmount fs");
 
                         lcd_send_command (DD_RAM_ADDR2); /* LCD set first row */
                         lcd_send_string ("  Weight saved  ");
@@ -302,21 +314,27 @@ int main (void)
                         while (timer1_counter) ;
                     }
 
-                    state = 3;
                     lcd_send_command (CLR_DISP);
-                }
-                break;
+                    lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                    lcd_send_string ("turning off");
 
-                case 3:
+                    timer1_counter = 20000; /* wait 2 seconds */
+                    while (timer1_counter) ;
+
+                    /* Power control switch io pin as input */
+                    IODIR |= (1 << 26);
+                    IOCLR = (1 << 26); /* Turning off the power for scale */
+                    for (;;) ;/* Hang here but system should shut off himself */
+                }
                 break;
             }
         }
     }
 
-    /* Go to idle mode to save power. System leaves idle mode on interrupt. */
-    /* UNCOMENT IN THE END - NOT POSSIBLE TO DEBUG WITH IDLE MODE */
+        /* Go to idle mode to save power. System leaves idle mode on interrupt. */
+        /* UNCOMENT IN THE END - NOT POSSIBLE TO DEBUG WITH IDLE MODE */
 #if 0
-    system_go_idle ();
+        system_go_idle ();
     }
 #endif
 }

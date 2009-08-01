@@ -90,7 +90,7 @@ void lcd_send_command (unsigned char byte)
 void lcd_init (void)
 {
 	/* Define all lines as outputs */
-	IODIR = (RS | RW | E | DB4 | DB5 | DB6 | DB7);
+	IODIR |= (RS | RW | E | DB4 | DB5 | DB6 | DB7);
 
 	/* clear RS, E, RW */
 	IOCLR = (RS | E | RW);
