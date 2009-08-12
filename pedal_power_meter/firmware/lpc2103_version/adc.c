@@ -13,7 +13,7 @@
 
 /* ADC pins connections:
  * -ADC ------------------------|-connected to-----
- *  1  - AIN6                   | Voltage relative to input voltage
+ *  1  - AIN7                   | Voltage relative to input voltage
  *  2  - AIN2                   | Voltage relative to input current
  */
 
@@ -22,8 +22,8 @@ void adc_init (void)
     /* Enable the ADC pheripherial power */
     PCONP |= (1 << 12);
 
-    /* Select P0.24 and P0.25 to be used for ADC */
-    PINSEL1 |= ((1 << 16) | (1 << 17) | (1 << 18) | (1 << 19));
+    /* Select P0.26 and P0.25 to be used for ADC */
+    PINSEL1 |= ((1 << 20) | (1 << 21) | (1 << 18) | (1 << 19));
 }
 
 unsigned short int adc_read (unsigned char channel)

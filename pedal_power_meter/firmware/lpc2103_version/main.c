@@ -21,7 +21,8 @@
 /* Global variables */
 double              wattage = 0,
                     wattage_hour_user = 0,
-                    wattage_hour_system = 0;
+                    wattage_hour_system = 0,
+                    user_time_wattage = 0;
 
 long int            voltage = 0,
                     current = 0,
@@ -30,7 +31,7 @@ long int            voltage = 0,
 
 int main (void)
 {
-    unsigned char           menu = MENU_SHOW_USER_POWER;
+    unsigned char           menu = MENU_SHOW_USER_TIME;
 
     static unsigned char    button_state = 0, counter_button = 0;
 
@@ -50,6 +51,7 @@ int main (void)
     wattage_hour_system                 = 0;
     tick_update_lcd                     = 0;
     nr_adc_reads                        = 0;
+    user_time_wattage                   = 0;
 
 	/* Initialize the system */
     system_init ();
@@ -67,10 +69,136 @@ int main (void)
     timer1_init ();
     enableIRQ ();
 
-    while (1)
+    for (;;)
     {
         switch (menu)
         {
+        case MENU_SHOW_USER_TIME:
+
+        if (button_is_set(BUTTON_01) && !button_state)
+        {
+            menu = MENU_SHOW_USER_POWER;
+            button_state = 1;
+            counter_button = 0;
+        }
+
+        if (!button_is_set(BUTTON_01))
+            button_state = 0;
+
+        if (tick_update_lcd >= 50) /* Execute on every 50 * 5ms */
+        {
+            /* Disable the IRQ for avoid change on global variables used on
+            * Timer1 IRQ handler code */
+            cpsr_temp = disableIRQ ();
+            wattage = 0;
+            voltage = 0;
+            current = 0;
+            nr_adc_reads = 0;
+            wattage_temp = user_time_wattage;
+            tick_update_lcd = 0;
+            /* Restore the IRQ */
+            restoreIRQ (cpsr_temp);
+
+            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+            lcd_send_char (' ');
+            lcd_send_char ('A');
+            lcd_send_char ('v');
+            lcd_send_char ('a');
+            lcd_send_char ('i');
+            lcd_send_char ('l');
+            lcd_send_char ('a');
+            lcd_send_char ('b');
+            lcd_send_char ('l');
+            lcd_send_char ('e');
+            lcd_send_char (' ');
+            lcd_send_char ('t');
+            lcd_send_char ('i');
+            lcd_send_char ('m');
+            lcd_send_char ('e');
+            lcd_send_char (' ');
+
+            lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+
+            /* (watts per hour * 60) ==> watts per minute.
+             * Load uses 30 watts so: ((watts per hour * 60) / 30) <=>
+             *                         (watts per hour * 2).
+             */
+            double temp1, temp2;
+            temp1 = ((long) (wattage_temp * 2));
+            temp2 = ((double) (((double) (wattage_temp * 2)) - (double) temp1));
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_int (temp1, 3);
+            lcd_send_char ('m');
+            lcd_send_char (' ');
+            lcd_send_int (((long) (temp2 * 60)), 2);
+            lcd_send_char ('s');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+            lcd_send_char (' ');
+
+            /* Verify if we need to reset the "usage time available" */
+            if (button_is_set(BUTTON_02))
+            {
+                if (++counter_button >= 4)
+                {
+                    while (button_is_set(BUTTON_02))
+                    {
+                        lcd_send_command (DD_RAM_ADDR);
+                        lcd_send_char (' ');
+                        lcd_send_char ('A');
+                        lcd_send_char ('v');
+                        lcd_send_char ('a');
+                        lcd_send_char ('i');
+                        lcd_send_char ('l');
+                        lcd_send_char ('a');
+                        lcd_send_char ('b');
+                        lcd_send_char ('l');
+                        lcd_send_char ('e');
+                        lcd_send_char (' ');
+                        lcd_send_char ('t');
+                        lcd_send_char ('i');
+                        lcd_send_char ('m');
+                        lcd_send_char ('e');
+                        lcd_send_char (' ');
+
+                        lcd_send_command (DD_RAM_ADDR2);
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char ('r');
+                        lcd_send_char ('e');
+                        lcd_send_char ('s');
+                        lcd_send_char ('e');
+                        lcd_send_char ('t');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                        lcd_send_char (' ');
+                    }
+
+             /* Disable the IRQ for avoid change on global variables used on
+              * Timer1 IRQ handler code */
+                    cpsr_temp = disableIRQ ();
+                    user_time_wattage = 0;
+                    tick_update_lcd = 0;
+                    /* Restore the IRQ */
+                    restoreIRQ (cpsr_temp);
+
+                    counter_button = 0;
+                }
+            }
+        }
+
+        break;
+
             case MENU_SHOW_USER_POWER:
 
             if (button_is_set(BUTTON_01) && !button_state)
@@ -188,7 +316,7 @@ int main (void)
 
             if (button_is_set(BUTTON_01) && !button_state)
             {
-                menu = MENU_SHOW_USER_POWER;
+                menu = MENU_SHOW_USER_TIME;
                 button_state = 1;
                 counter_button = 0;
             }
@@ -421,7 +549,7 @@ int main (void)
                             lcd_send_char (' ');
                         }
 
-                        menu = MENU_SHOW_USER_POWER;
+                        menu = MENU_SHOW_USER_TIME;
 
                         counter_button = 0;
                     }
@@ -469,7 +597,7 @@ int main (void)
                 lcd_send_char ('t');
                 lcd_send_char (':');
                 for (i = 0; i < 5000; i++)
-                    current += adc_read (2);
+                    current += adc_read (7);
                 lcd_send_int (current/5000, 4);
                 current = 0;
 

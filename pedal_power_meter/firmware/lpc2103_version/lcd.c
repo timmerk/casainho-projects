@@ -52,7 +52,7 @@ void lcd_send_command (unsigned char byte)
 {
 	/* set RS port to 0 -> display set to comand mode */
 	/* set RW port to 0 */
-	IOCLR = (RW| RS);
+	IOCLR = (RW | RS);
 	delay_ms(200*LCD_CTRL_K_DLY); /* delay for LCD char ~2ms */
 
 	IOCLR = (DB4 | DB5 | DB6 | DB7); /* clear D4-D7 */
@@ -155,8 +155,8 @@ void lcd_send_char (unsigned char byte)
 
 void lcd_send_int (long number, unsigned char number_of_digits)
 {
-	volatile int C[17];
-	volatile unsigned char 	Temp = 0,
+	volatile unsigned char 	C[17],
+                            Temp = 0,
 							NumLen = 0,
 							temp1;
 
@@ -164,7 +164,7 @@ void lcd_send_int (long number, unsigned char number_of_digits)
 	temp1 = number_of_digits;
 	do {
 		Temp++;
-		C[Temp] = number % 10;
+		C[Temp] = (char) (((long) number) % ((long) 10));
 
 		/* Decide to fill with "space" if digit is a 0 or fill with "0" */
 		if (C[Temp] == 0)
@@ -174,7 +174,7 @@ void lcd_send_int (long number, unsigned char number_of_digits)
 				 last one  */
 
 			else
-				C[Temp] = 239; /* Space char */
+				C[Temp] = 32; /* Space char */
 		}
 
 		number = number / 10;
@@ -182,22 +182,30 @@ void lcd_send_int (long number, unsigned char number_of_digits)
 
 	NumLen = Temp;
 	for (Temp = NumLen; Temp > 0; Temp--)
-		lcd_send_char (C[Temp] + 48);
+	{
+	    if(C[Temp] >= 0 && C[Temp] < 10)
+		{
+		    lcd_send_char (C[Temp] + 48);
+		}
+
+	    else
+	        lcd_send_char (32);
+	}
 }
 
 void lcd_send_float (double number, unsigned char number_of_digits, \
 		unsigned char number_of_floats)
 {
-	lcd_send_int ((int) number, number_of_digits);
+	lcd_send_int ((long) number, number_of_digits);
 	lcd_send_char ('.');
 
-	number = (number - ((int) number));
+	number = (number - ((long) number));
 
 	while (number_of_floats--)
 	{
 		number = number * 10;
-		lcd_send_char (((int) number) + 48);
-		number = (number - ((int) number));
+		lcd_send_char (((long) number) + 48);
+		number = (number - ((long) number));
 	}
 }
 
