@@ -162,7 +162,6 @@ double get_weight (unsigned long int back_plane_a,
 {
     double weight_value = 0;
     volatile unsigned long int temp = 0;
-    char temp_char = 0;
 
     /* Put all the bits on a sequencial order */
     back_plane_a = format_back_plane (back_plane_a);

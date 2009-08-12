@@ -25,6 +25,9 @@
 #define NULL    0
 #endif
 
+#define ON 1
+#define OFF 0
+
 /* Global variables */
 volatile unsigned long int           back_plane_a,
                                      back_plane_b,
@@ -53,10 +56,27 @@ unsigned long get_fattime ()
             | ((unsigned long) 0 >> 1);
 }
 
+void power_switch (unsigned char state)
+{
+    if (state)
+    {
+        IODIR |= (1 << 26); /* Power control switch io pin as input */
+        IOSET = (1 << 26); /* Turn on power for scale (the other
+        switch controlled by hardware should be on until this time) */
+    }
+
+    else
+    {
+        IODIR |= (1 << 26);
+        IOCLR = (1 << 26); /* Turning off the power for scale */
+    }
+}
+
 int main (void)
 {
     /* Initialize variables */
-    volatile float weight = 0;
+    volatile float weight = 0,
+                   last_weight = 0;
     unsigned char state = 0;
 
     FATFS fs;       /* Work area (file system object) for logical drive */
@@ -70,6 +90,10 @@ int main (void)
 
     /* Initialize the IOs */
     ios_init ();
+
+    /* Turn the power switch ON. Power should be ON on this stage because the
+     * other hardware switch should be ON for at least 4 seconds. */
+    power_switch (ON);
 
     /* Initialize the LCD */
     lcd_init ();
@@ -119,7 +143,7 @@ int main (void)
         if (res)
         {
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            lcd_send_string ("Err delete file");
+            debug ("Err delete file");
             timer1_counter = 20000;
             while (timer1_counter) ;
         }
@@ -129,8 +153,6 @@ int main (void)
         timer1_counter = 50000;
         while (timer1_counter) ;
     }
-
-    lcd_send_command (CLR_DISP);
 
     for (;;)
     {
@@ -150,14 +172,9 @@ int main (void)
 
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
             weight = get_weight (back_plane_a, back_plane_b, back_plane_c);
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
-            lcd_send_char (' ');
+            lcd_send_string ("    ");
             lcd_send_float (weight, 3, 1);
-            lcd_send_char (' ');
-            lcd_send_char ('K');
-            lcd_send_char ('g');
+            lcd_send_string (" Kg    ");
 
             state = 0;
         }
@@ -179,10 +196,7 @@ int main (void)
                      */
                     rtc_gettime (&rtc);
                     lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
-                    lcd_send_char (' ');
-                    lcd_send_char (' ');
-                    lcd_send_char (' ');
-                    lcd_send_char (' ');
+                    lcd_send_string ("    ");
                     lcd_send_char ((rtc.hour / 10) + 48);
                     lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
                     lcd_send_char (':');
@@ -191,6 +205,7 @@ int main (void)
                     lcd_send_char (':');
                     lcd_send_char ((rtc.sec / 10) + 48);
                     lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
+                    lcd_send_string ("    ");
                 }
 
                 if (!timer1_counter)
@@ -198,132 +213,228 @@ int main (void)
                    /* If weight are higher than 40kg... */
                     if (weight > 40)
                     {
+                        char error = 0;
                         /* Open source file */
-                        res = f_open(&file, "weight.csv", FA_OPEN_ALWAYS | FA_WRITE);
+                        res = f_open(&file, "weight.csv",
+                                                    FA_OPEN_ALWAYS | FA_WRITE);
                         if (res)
-                            debug ("Err create file");
-#if 0
-                        /* Find on file the place where last weight value is */
-                        char
-                        unsigned long file_pointer = (file.fsize - 3);
-                        do
-                        {
-                            res = f_lseek(&file, file_pointer++);
-                                debug ("Err file seek");
+                            error = 1;
 
-                            f_read (&file, )
-                        while ()
-#endif
+                       /********************************************************
+                        * Read from the weight.csv file, the last weight value.
+                        *
+                        *******************************************************/
+                        if (file.fsize > 1 && !error)
+                        {
+                            char string [8];
+
+                            /* Close the file */
+                            res = f_close(&file);
+                            if (res)
+                                error = 1;
+
+                            /* Open source file */
+                            res = f_open(&file, "weight.csv",
+                                                    FA_OPEN_EXISTING | FA_READ);
+
+                            /* Seek to the last weight value on the file */
+                            res = f_lseek(&file, (file.fsize - 7));
+                            if (res)
+                                error = 1;
+
+                            /* Get the data from file */
+                            f_gets (&string[0], 7 + 1, &file);
+
+                            /* Close the file */
+                            res = f_close(&file);
+                            if (res)
+                                error = 1;
+
+                            last_weight = (string[0] - 48) * 100;
+                            last_weight += (string[1] - 48) * 10;
+                            last_weight += (string[2] - 48);
+                            last_weight += ((string[4] - 48) / 10);
+
+                            res = f_open(&file, "weight.csv",
+                                                   FA_OPEN_EXISTING | FA_WRITE);
+                            if (res)
+                                error = 1;
+                            /**************************************************/
+                        }
+
+                        /*******************************************************
+                         * Write on "weight.csv" file the time and weight value,
+                         * example: 12-8-2009 23:21:56,"092,1"
+                         *
+                         ******************************************************/
                         /* Move to end of the file to append data */
                         res = f_lseek(&file, file.fsize);
-                            debug ("Err file seek");
+                        if (res)
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the month day to the file */
                         res = f_printf(&file, "%d-", (int) rtc.mday);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the month number to the file */
                         res = f_printf(&file, "%d-", (int) rtc.month);
                         if (res == EOF)
-                            die ("Err f_printf");
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the year number to the file */
                         res = f_printf(&file, "%d ", (int) rtc.year);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
                         if (rtc.hour < 10)
                         {
-                            /* Write the weight value at end of file with a CSV */
+                            /* Write the hour value to the file */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                debug ("Err f_printf");
+                                error = 1;
                         }
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the hour value to the file */
                         res = f_printf(&file, "%d:", (int) rtc.hour);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
                         if (rtc.min < 10)
                         {
-                            /* Write the weight value at end of file with a CSV */
+                            /* Write the minute value to the file */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                debug ("Err f_printf");
+                                error = 1;
                         }
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the minute value to the file */
                         res = f_printf(&file, "%d:", (int) rtc.min);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
                         if (rtc.sec < 10)
                         {
-                            /* Write the weight value at end of file with a CSV */
+                            /* Write the second value to the file */
                             res = f_printf(&file, "0");
                             if (res == EOF)
-                                debug ("Err f_printf");
+                                error = 1;
                         }
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the second value to the file */
                         res = f_printf(&file, "%d,", (int) rtc.sec);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        /* Next, write the weight value, on the following
+                         * format: "123,4"\r
+                         */
+                        /* Write the char '"' to the file */
                         res = f_printf(&file, "%c", '"');
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        if (weight < 100)
+                        {
+                          /* Write the weight value to the file */
+                            res = f_printf(&file, "0");
+                            if (res == EOF)
+                                error = 1;
+                        }
+
+                        if (weight < 10)
+                        {
+                            /* Write the weight value to the file */
+                            res = f_printf(&file, "0");
+                            if (res == EOF)
+                                error = 1;
+                        }
+
+                        /* Write the weight value to the file */
                         res = f_printf(&file, "%d", (int) weight);
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
+                        /* Write the char ',' to the file */
                         res = f_printf(&file, "%c", ',');
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
-                        /* Write the weight value at end of file with a CSV */
+                        /* Write the weight value to the file */
                         res = f_printf(&file, "%d",
                                 ((int) ((weight - ((int) weight)) * 10)));
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
+                        /* Write the char '"' to the file */
                         res = f_printf(&file, "%c", '"');
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
+                        /* Write the char "end of line" to the file */
                         res = f_printf(&file, "%c", '\r');
                         if (res == EOF)
-                            debug ("Err f_printf");
+                            error = 1;
 
                         /* Close the file */
                         res = f_close(&file);
                         if (res)
-                            debug ("Err close file");
+                            error = 1;
 
                         /* Unregister a work area before discard it */
                         res = f_mount(0, NULL);
                         if (res)
-                            debug ("Err unmount fs");
+                            error = 1;
+                        /*******************************************************
+                         ******************************************************/
 
-                        lcd_send_command (DD_RAM_ADDR2); /* LCD set first row */
-                        lcd_send_string ("  Weight saved  ");
-                        weight = 0;
-                        timer1_counter = 20000; /* wait 2 seconds */
+                        /*******************************************************
+                         * Show the diference between last weight value.
+                         *
+                         ******************************************************/
+                        lcd_send_command (DD_RAM_ADDR2);
+                        if ((weight - last_weight) > 0.3)
+                        {
+                            lcd_send_string ("    +");
+                            lcd_send_float ((weight - last_weight), 3, 1);
+                            lcd_send_string ("kg");
+                            lcd_send_string ("    ");
+                        }
+
+                        else if ((last_weight - weight) > 0.3)
+                        {
+                            lcd_send_string ("    -");
+                            lcd_send_float ((last_weight - weight), 3, 1);
+                            lcd_send_string ("kg");
+                            lcd_send_string ("    ");
+                        }
+
+                        else
+                        {
+                            lcd_send_string (" No variations  ");
+                        }
+
+                        timer1_counter = 40000; /* wait 4 seconds */
                         while (timer1_counter) ;
+                        /*******************************************************
+                         ******************************************************/
+
+                        /*
+                         * If there was some error on saving on SD Card,
+                         * warning about it.
+                         */
+                        lcd_send_command (DD_RAM_ADDR);
+                        if (error)
+                            lcd_send_string ("Weight not saved");
+                        else
+                            lcd_send_string ("  Weight saved  ");
                     }
 
-                    lcd_send_command (CLR_DISP);
-                    lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-                    lcd_send_string ("turning off");
+                    lcd_send_command (DD_RAM_ADDR2); /* LCD set first row */
+                    lcd_send_string ("Power down now..");
 
-                    timer1_counter = 20000; /* wait 2 seconds */
+                    timer1_counter = 10000; /* wait 1 second */
                     while (timer1_counter) ;
 
-                    /* Power control switch io pin as input */
-                    IODIR |= (1 << 26);
-                    IOCLR = (1 << 26); /* Turning off the power for scale */
+                    /* Power switch OFF, the system shuts down himself */
+                    power_switch (OFF);
                     for (;;) ;/* Hang here but system should shut off himself */
                 }
                 break;
