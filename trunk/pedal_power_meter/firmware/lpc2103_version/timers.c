@@ -15,7 +15,8 @@
 
 extern double       wattage,
                     wattage_hour_user,
-                    wattage_hour_system;
+                    wattage_hour_system,
+                    user_time_wattage;
 
 extern long int     voltage,
                     current,
@@ -44,7 +45,7 @@ void timer1_int_handler (void)
     voltage += voltage_temp;
 
     /* Read current and accumulate it to the last values */
-    current_temp = adc_read (2);
+    current_temp = adc_read (7);
     current += current_temp;
 
     /* Keep the track of the number of ADC reads until we use them */
@@ -85,7 +86,10 @@ void timer1_int_handler (void)
     if (wattage_temp > 0)
     {
         /* Integrate the wattage "user" to have the wattage/hour "user" value */
-        wattage_hour_user += wattage_temp * WATTAGE_HOUR_DT;
+        wattage_temp = wattage_temp * WATTAGE_HOUR_DT;
+        wattage_hour_user += wattage_temp;
+
+        user_time_wattage += wattage_temp;
 
         /* Integrate the wattage "user" to have the wattage/hour "user" value */
         wattage_hour_system += wattage_temp * WATTAGE_HOUR_DT;
