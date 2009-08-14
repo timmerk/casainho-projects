@@ -5,7 +5,7 @@
 
 On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information on a comma separated values (CSV) file (weight.csv) so I can build a graph using OpenOffice.
 
-*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814820.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
+*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
 
 [http://casainho-projects.googlecode.com/svn-history/r65/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090814.jpg]
 
