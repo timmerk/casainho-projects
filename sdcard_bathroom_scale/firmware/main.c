@@ -153,6 +153,8 @@ int main (void)
         timer1_counter = 50000;
         while (timer1_counter) ;
     }
+    /***************************************************************************
+     **************************************************************************/
 
     for (;;)
     {
@@ -210,8 +212,9 @@ int main (void)
 
                 if (!timer1_counter)
                 {
-                   /* If weight are higher than 40kg... */
-                    if (weight > 40)
+                   /* If weight is at least 40kg and
+                    *  less then 140Kg(scale maximum limit)... */
+                    if (weight > 39 && weight < 141)
                     {
                         char error = 0;
                         /* Open source file */
@@ -224,9 +227,9 @@ int main (void)
                         * Read from the weight.csv file, the last weight value.
                         *
                         *******************************************************/
-                        if (file.fsize > 1 && !error)
+                        if (file.fsize > 20 && !error)
                         {
-                            char string [8];
+                            char string [5];
 
                             /* Close the file */
                             res = f_close(&file);
@@ -237,13 +240,23 @@ int main (void)
                             res = f_open(&file, "weight.csv",
                                                     FA_OPEN_EXISTING | FA_READ);
 
-                            /* Seek to the last weight value on the file */
+                            /* Seek to the place of the last weight value
+                             * on the file */
                             res = f_lseek(&file, (file.fsize - 7));
                             if (res)
                                 error = 1;
 
                             /* Get the data from file */
-                            f_gets (&string[0], 7 + 1, &file);
+                            unsigned int counter;
+                            f_read (&file, &string[0], 5, &counter);
+                            if (counter != 5)
+                            {
+                                /* Couldn't read the 7 bytes that holds the
+                                 * weight value. */
+                                last_weight = 0;
+                                break;
+                                break;
+                            }
 
                             /* Close the file */
                             res = f_close(&file);
@@ -389,30 +402,33 @@ int main (void)
                          * Show the diference between last weight value.
                          *
                          ******************************************************/
-                        lcd_send_command (DD_RAM_ADDR2);
-                        if ((weight - last_weight) > 0.3)
+                        if (last_weight > 39 && last_weight < 141)
                         {
-                            lcd_send_string ("    +");
-                            lcd_send_float ((weight - last_weight), 3, 1);
-                            lcd_send_string ("kg");
-                            lcd_send_string ("    ");
-                        }
+                            lcd_send_command (DD_RAM_ADDR2);
+                            if ((weight - last_weight) > 0.3)
+                            {
+                                lcd_send_string ("    +");
+                                lcd_send_float ((weight - last_weight), 3, 1);
+                                lcd_send_string ("kg");
+                                lcd_send_string ("    ");
+                            }
 
-                        else if ((last_weight - weight) > 0.3)
-                        {
-                            lcd_send_string ("    -");
-                            lcd_send_float ((last_weight - weight), 3, 1);
-                            lcd_send_string ("kg");
-                            lcd_send_string ("    ");
-                        }
+                            else if ((last_weight - weight) > 0.3)
+                            {
+                                lcd_send_string ("    -");
+                                lcd_send_float ((last_weight - weight), 3, 1);
+                                lcd_send_string ("kg");
+                                lcd_send_string ("    ");
+                            }
 
-                        else
-                        {
-                            lcd_send_string (" No variations  ");
-                        }
+                            else
+                            {
+                                lcd_send_string (" No variations  ");
+                            }
 
-                        timer1_counter = 40000; /* wait 4 seconds */
-                        while (timer1_counter) ;
+                            timer1_counter = 40000; /* wait 4 seconds */
+                            while (timer1_counter) ;
+                        }
                         /*******************************************************
                          ******************************************************/
 
@@ -425,9 +441,12 @@ int main (void)
                             lcd_send_string ("Weight not saved");
                         else
                             lcd_send_string ("  Weight saved  ");
+
+                        timer1_counter = 10000; /* wait 1 second */
+                        while (timer1_counter) ;
                     }
 
-                    lcd_send_command (DD_RAM_ADDR2); /* LCD set first row */
+                    lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
                     lcd_send_string ("Power down now..");
 
                     timer1_counter = 10000; /* wait 1 second */
@@ -441,11 +460,4 @@ int main (void)
             }
         }
     }
-
-        /* Go to idle mode to save power. System leaves idle mode on interrupt. */
-        /* UNCOMENT IN THE END - NOT POSSIBLE TO DEBUG WITH IDLE MODE */
-#if 0
-        system_go_idle ();
-    }
-#endif
 }
