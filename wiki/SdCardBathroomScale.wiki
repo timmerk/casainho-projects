@@ -3,7 +3,11 @@
 
 = Introduction =
 
-On this project I will hack a digital bathroom scale, for log my weight variations over time, on a memory SD Card. I want write the information on a comma separated values (CSV) file so then I can build a graph using OpenOffice.
+On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information on a comma separated values (CSV) file (weight.csv) so I can build a graph using OpenOffice.
+
+*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814820.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
+
+[http://casainho-projects.googlecode.com/svn-history/r65/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090814.jpg]
 
 Source code plus pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
@@ -11,17 +15,12 @@ Source code plus pictures of current work can be found on [http://code.google.co
 == The original scale ==
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-07.jpg
-
 == The prototype ==
 ===LCD module added to the scale===
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg
 
 ===Picture taken on 20090724, showing the SD Card added to the protype===
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090724-800x-02.jpg
-
-===Video showing the scale working after hacking it - now value appear on added LCD module===
-[http://blip.tv/file/get/Jpcasainho-sdcad_weight_scale20090718ogm635.ogg Video showing the last advances] -- now the system can show the weight as if it is the original scale.
 
 == Digital Scale LCD signals ==
 The next 2 pictures shows a backplane signal and 2 segments signals.
@@ -36,6 +35,8 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/o
 
 == Pin connections to the LPC2103 ==
 {{{
+!!! NOT UPDATED
+
 Scale LCD input
 Pin nr | LPC2103 pin
 ---------------------
@@ -75,4 +76,4 @@ P0.7 SSEL SPI bus
 
 == Fat file system drivers ==
 
-I will use [http://elm-chan.org/fsw/ff/00index_e.html FatFs] file system drivers which have a Free Software license. 
+I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs] file system drivers which have a Free Software license. 
