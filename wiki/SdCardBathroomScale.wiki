@@ -3,7 +3,7 @@
 
 = Introduction =
 
-On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information on a comma separated values (CSV) file (weight.csv) so I can build a graph using OpenOffice.
+On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time + weight) on a comma separated values (CSV) file (weight.csv) so I can build a graph using OpenOffice.
 
 *[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
 
@@ -16,6 +16,8 @@ Firmware source code, schematics sources and pictures of current work can be fou
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg
 
 == The prototype ==
+I used an Olime dev. board with an ARM7, the [http://www.olimex.com/dev/lpc-h2103.html LPC-H2103].
+
 ===LCD module added to the scale===
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg
 
@@ -23,6 +25,8 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/s
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090724-800x-02.jpg
 
 == Digital Scale LCD signals ==
+The original LCD have 15 pins, 3 backplanes and 12 segments. I did understand how the LCD signals works reading this [http://casainho-projects.googlecode.com/svn-history/r71/trunk/sdcard_bathroom_scale/docs/lcd-an0162.pdf application note].
+
 The next 2 pictures shows a backplane signal and 2 segments signals.
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-10.jpg
@@ -35,45 +39,62 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/o
 
 == Pin connections to the LPC2103 ==
 {{{
-!!! NOT UPDATED
+Input pins (from original scale LCD):
+ * Pin nr  | LPC2103 pin
+ * ---------------------
+ *  1  | P0.0
+ *  2  | P0.1
+ *  3  | P0.24
+ *  4  | P0.25
+ *  5  | P0.8
+ *  6  | P0.9
+ *  7  | P0.10
+ *  8  | P0.11
+ *  9  | P0.12
+ * 10  | P0.13
+ * 11  | P0.19
+ * 12  | P0.20
+ * 13  | P0.16 (EINT0 - external interrupt used. This is a signal from backplane 1)
 
-Scale LCD input
-Pin nr | LPC2103 pin
----------------------
- 1  | P0.0
- 2  | P0.1
- 3  | P0.2
- 4  | P0.3
- 5  | P0.8
- 6  | P0.9
- 7  | P0.10
- 8  | P0.11
- 9  | P0.12
-10  | P0.13
-11  | P0.14
-12  | P0.15
-13  | P0.16 (EINT0 - external interrupt used. This is a signal from backplane 1)
-
-LCD module output
+Output pins to the LCD module:
  * -LCD ------------------------|-connected to-----
  *  1  - GND                    | GND
- *  2  - Vcc                     | Vcc ~= + 5 volts
+ *  2  - Vcc                    | Vcc ~= + 5 volts
  *  3  - Contrast               | 0,91V
- *  4  - _RS                      | P0.3
+ *  4  - _RS                    | P0.3
  *  5  - _R/W                   | P0.2
- *  6  - E                         | P0.17
- *  11 - DB4                    | P0.18
+ *  6  - E                      | P0.17
+ *  11 - DB4                    | P0.28
  *  12 - DB5                    | P0.21
  *  13 - DB6                    | P0.22
  *  14 - DB7                    | P0.23
 
-SD Card
-P0.4 SCK  SPI bus
-P0.5 MISO SPI bus
-P0.6 MOSI SPI bus
-P0.7 SSEL SPI bus
+SPI bus pins to connect to SD Card
+ * P0.4     | SCK  SPI bus
+ * P0.5     | MISO SPI bus
+ * P0.6     | MOSI SPI bus
+ * P0.7     | SSEL SPI bus
 }}}
 
 == Fat file system drivers ==
 
-I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs] file system drivers which have a Free Software license. 
+I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs] file system drivers which have a Free Software license.
+
+== Data written to SD Card ==
+Here is some real data recorded on SD Card "weight.csv" file:
+
+{{{
+12-8-2009 23:48:28,"092,1"
+12-8-2009 23:48:55,"092,3"
+12-8-2009 23:57:46,"092,4"
+12-8-2009 23:58:14,"092,0"
+12-8-2009 23:58:40,"092,0"
+12-8-2009 23:59:05,"092,0"
+12-8-2009 23:59:44,"094,0"
+13-8-2009 07:15:57,"091,5"
+13-8-2009 07:36:54,"091,5"
+13-8-2009 07:37:44,"091,5"
+13-8-2009 20:15:02,"092,0"
+13-8-2009 20:15:28,"091,9"
+13-8-2009 21:22:53,"091,6"
+}}}
