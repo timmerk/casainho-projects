@@ -9,7 +9,7 @@ On this project I hacked a digital bathroom scale, for write (log) my weight var
 
 [http://casainho-projects.googlecode.com/svn-history/r65/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090814.jpg]
 
-Source code plus pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
+Firmware source code, schematics sources and pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
 = Details =
 == The original scale ==
