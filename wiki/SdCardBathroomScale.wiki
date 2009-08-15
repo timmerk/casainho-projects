@@ -11,33 +11,57 @@ On this project I hacked a digital bathroom scale, for write (log) my weight var
 
 Firmware source code, schematics sources and pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
-= Details =
-== The original scale ==
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg
+==Observations and things to improve==
+The system works almost perfectly. Although there are some things I would like to improve:
 
-== The prototype ==
-I used an Olime dev. board with an ARM7, the [http://www.olimex.com/dev/lpc-h2103.html LPC-H2103].
+ * Sometimes the system can't read correctly the last weight value from the SD Card, I believe that is a problem from physical connection, I can try to enable and use CRC when reading/writing to the SD Card (writing to SD Card seems to have no problem);
 
-===LCD module added to the scale===
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg
+ * The actual LCD don't have back light, I already bought one with it and soon I hope to change it. Back light is important to be able to read data on LCD or I simple can't when I have low light on bathroom;
 
-===Picture taken on 20090724, showing the SD Card added to the protype===
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090724-800x-02.jpg
+ * The size of the characters on LCD are very small for this application, since my eyes are far from it when I am weighting myself. Maybe I can find another LCD?
 
-== Digital Scale LCD signals ==
+ * Me and my girlfriend, we both need to lost weight, we both use the scale. Luckily our weight values are very different and I can differ them on system and have 2 different files on SD Card to register our weights separately. I would prefer to have some way to identify each person, so more people could use the scale if needed;
+
+ * I need to put all the wires and boards on the down side of the scale and try to make it more robust as possible.
+
+=Technical details=
+==The original cheap scale I bought on market== 
+I bought the cheapest digital bathroom scale I could found on market, it were 20€, Fagor model BB-90. Other scales just looks the same, because they have the same number of LCD digits and the system appears to behave in the same way.
+
+Picture:
+
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg]
+
+==How to get the weight value==
+First I thought that I could read the sensors and got an analog voltage relative to weight but I couldn't find a way to do it. Next a friend at work give me the idea to try read the signals that went to original LCD, and it was a simple and easy way to have what I need :-)
+
 The original LCD have 15 pins, 3 backplanes and 12 segments. I did understand how the LCD signals works reading this [http://casainho-projects.googlecode.com/svn-history/r71/trunk/sdcard_bathroom_scale/docs/lcd-an0162.pdf application note].
+
+The segments signals have voltage that can be read directly by the LPC2103. The backplanes signals can't be ready directly by the LPC2103 (I think) and then I made a very simple voltage detector using a LM258 opamp so I get a "trigger" signal every time the backplane signal get near is maximum value. Since all the signals are sequential and have the same period of time, I just look for one backplane signal (just one voltage detector circuit with the LM258 opamp).
 
 The next 2 pictures shows a backplane signal and 2 segments signals.
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-10.jpg
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-10.jpg]
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-11.jpg
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-11.jpg]
 
-The next picture shows a backplane signal and a digital signal used to sync system to the signals. I got that sync signal using an LM258 opamp working as a comparator, like a signal value detector.
+The next picture shows a backplane signal and a "trigger" signal I got using an LM258 opamp working as a comparator, like a signal value detector.
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090615-01.jpg
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090615-01.jpg]
 
-== Pin connections to the LPC2103 ==
+==Selection of microcontroller==
+Arduino/Atmel AVR, or ARM? - I really like Arduino, mainly because it's Open Hardware/Firmware and there is a lot of Open Hardware modules for it. I prefer to use ARM instead of Arduino/AVR because I have the same Free Software tools PLUS cheap, Open JTAG debugger! I don't really like the fact that Atmel have a closed, proprietary, debugger.
+
+I am being using ARM7 LPC2103 which is the cheaper on this times and have all the functionalities and working power that I need. I decided to use Olimex dev. board [http://www.olimex.com/dev/lpc-h2103.html LPC-H2103].
+
+==LCD module added==
+I needed to use another LCD since I couldn't maintain the original one. I decided to try the cheap ones based on [http://en.wikipedia.org/wiki/HD44780_Character_LCD HD44780], since I have experience with them and I got some with me. Luckily, this LCD just enters perfect in the place of the original :-)
+
+On the next picture we can see the LCD module and also the connections I made to original PCB using flat cable, on the pads that connected to original LCD.
+
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg]
+
+===Pin connections to the LPC2103===
 {{{
 Input pins (from original scale LCD):
  * Pin nr  | LPC2103 pin
@@ -56,7 +80,7 @@ Input pins (from original scale LCD):
  * 12  | P0.20
  * 13  | P0.16 (EINT0 - external interrupt used. This is a signal from backplane 1)
 
-Output pins to the LCD module:
+Output pins to the LCD HD44780 module:
  * -LCD ------------------------|-connected to-----
  *  1  - GND                    | GND
  *  2  - Vcc                    | Vcc ~= + 5 volts
@@ -68,21 +92,21 @@ Output pins to the LCD module:
  *  12 - DB5                    | P0.21
  *  13 - DB6                    | P0.22
  *  14 - DB7                    | P0.23
+}}}
 
+==SD Card and FAT library==
+== Pin connections to the LPC2103 ==
+{{{
 SPI bus pins to connect to SD Card
  * P0.4     | SCK  SPI bus
  * P0.5     | MISO SPI bus
  * P0.6     | MOSI SPI bus
  * P0.7     | SSEL SPI bus
 }}}
-
-== Fat file system drivers ==
-
+=== Fat file system library===
 I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs] file system drivers which have a Free Software license.
-
-== Data written to SD Card ==
+===Data written to SD Card===
 Here is some real data recorded on SD Card "weight.csv" file:
-
 {{{
 12-8-2009 23:48:28,"092,1"
 12-8-2009 23:48:55,"092,3"
@@ -98,3 +122,14 @@ Here is some real data recorded on SD Card "weight.csv" file:
 13-8-2009 20:15:28,"091,9"
 13-8-2009 21:22:53,"091,6"
 }}}
+==Real Time Clock==
+TODO
+==Power down the system== 
+TODO
+==Pictures taken on 2009.08.14==
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-01.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-02.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-03.jpg
+
