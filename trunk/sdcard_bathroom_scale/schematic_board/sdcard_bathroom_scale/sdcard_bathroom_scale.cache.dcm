@@ -1,19 +1,26 @@
-EESchema-DOCLIB  Version 2.0  Seg 06 Jul 2009 08:35:01 WEST
+EESchema-DOCLIB  Version 2.0  Seg 17 Ago 2009 23:55:18 WEST
 #
-$CMP CONN_14
-D Symbole general de connexion
-K CONN
+$CMP C
+D Condensateur non polarise
 $ENDCMP
 #
-$CMP CONN_17
-D Symbole general de connexion
-K CONN
+$CMP DIODE
+D Diode simple
+K DEV DIODE
 $ENDCMP
 #
 $CMP LM358
 D Dual Op amp (low power)
 K ampliop
 F ns/lm158.pdf
+$ENDCMP
+#
+$CMP MOS_N
+F transistors/mos/*.*
+$ENDCMP
+#
+$CMP MOS_P
+F transistors/mos/*.*
 $ENDCMP
 #
 $CMP R
