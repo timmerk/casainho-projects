@@ -16,13 +16,9 @@ The system works almost perfectly. Although there are some things I would like t
 
  * Sometimes the system can't read correctly the last weight value from the SD Card, I believe that is a problem from physical connection, I can try to enable and use CRC when reading/writing to the SD Card (writing to SD Card seems to have no problem);
 
- * The actual LCD don't have back light, I already bought one with it and soon I hope to change it. Back light is important to be able to read data on LCD or I simple can't when I have low light on bathroom;
-
  * The size of the characters on LCD are very small for this application, since my eyes are far from it when I am weighting myself. Maybe I can find another LCD?
 
  * Me and my girlfriend, we both need to lost weight, we both use the scale. Luckily our weight values are very different and I can differ them on system and have 2 different files on SD Card to register our weights separately. I would prefer to have some way to identify each person, so more people could use the scale if needed;
-
- * I need to put all the wires and boards on the down side of the scale and try to make it more robust as possible.
 
 =Technical details=
 ==The original cheap scale I bought on market== 
@@ -49,6 +45,9 @@ The next picture shows a backplane signal and a "trigger" signal I got using an 
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090615-01.jpg]
 
+===Schematic===
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-original_lcd.jpg]
+
 ==Selection of microcontroller==
 Arduino/Atmel AVR, or ARM? - I really like Arduino, mainly because it's Open Hardware/Firmware and there is a lot of Open Hardware modules for it. I prefer to use ARM instead of Arduino/AVR because I have the same Free Software tools PLUS cheap, Open JTAG debugger! I don't really like the fact that Atmel have a closed, proprietary, debugger.
 
@@ -61,45 +60,17 @@ On the next picture we can see the LCD module and also the connections I made to
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg]
 
-===Pin connections to the LPC2103===
-{{{
-Input pins (from original scale LCD):
- * Pin nr  | LPC2103 pin
- * ---------------------
- *  1  | P0.0
- *  2  | P0.1
- *  3  | P0.24
- *  4  | P0.25
- *  5  | P0.8
- *  6  | P0.9
- *  7  | P0.10
- *  8  | P0.11
- *  9  | P0.12
- * 10  | P0.13
- * 11  | P0.19
- * 12  | P0.20
- * 13  | P0.16 (EINT0 - external interrupt used. This is a signal from backplane 1)
-
-Output pins to the LCD HD44780 module:
- * -LCD ------------------------|-connected to-----
- *  1  - GND                    | GND
- *  2  - Vcc                    | Vcc ~= + 5 volts
- *  3  - Contrast               | 0,91V
- *  4  - _RS                    | P0.3
- *  5  - _R/W                   | P0.2
- *  6  - E                      | P0.17
- *  11 - DB4                    | P0.28
- *  12 - DB5                    | P0.21
- *  13 - DB6                    | P0.22
- *  14 - DB7                    | P0.23
-}}}
+===Schematic===
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-lcd_module.jpg]
 
 ==SD Card and FAT library==
 I decide to use SD Card memory to hold the data because I had good experiences in past with this kind of memory card, using SPI BUS. Also I can find relative cheap cards easily.
 
-Unfortunately I am getting sometimes errors when initializing the SD Card and I can't do better because I didn't make the hardware in a way that I can reset the card (mosfet on Vcc line). Also I am using a king of long wires between LPC2103 and SD Card :-(
-
 My reference page about SD Cards is this one: [http://elm-chan.org/docs/mmc/mmc_e.html How to Use MMC/SDC by ChaN].
+
+===Schematic===
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-sd_card.jpg]
+
 === Fat file system library===
 I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs by ChaN] file system drivers which have a Free Software license.
 ===Data written to SD Card===
@@ -119,18 +90,9 @@ Here is some real data recorded on SD Card "weight.csv" file:
 13-8-2009 20:15:28,"091,9"
 13-8-2009 21:22:53,"091,6"
 }}}
-===Pin connections to the LPC2103===
-{{{
-SPI bus pins to connect to SD Card
- * P0.4     | SCK  SPI bus
- * P0.5     | MISO SPI bus
- * P0.6     | MOSI SPI bus
- * P0.7     | SSEL SPI bus
-}}}
+
 ==Real Time Clock==
 Since I want to also register the time date, I need to have a Real Time Clock(RTC). LPC2103 have one RTC and the board I am using have it working.
-
-I am using 2 X AAA NiMh low discharge batteries to power the RTC, I hope it lasts at least 1 year.
 
 Since I need to setup the clock with correct time date and I do not want to add buttons to the system just for doing it. I implemented the following idea: If on root of SD Card there is a file called "time.txt", read the data from it and using it to setup the clock; finally, delete the file.
  
@@ -140,12 +102,20 @@ The time.txt file should have a string with the following format (without square
 Example: [2009][08][01][6][12][00][00]; string "200908016120000".
 }}}
 
+I am using 2 X AAA NiMh low discharge batteries to power the RTC, I hope it lasts at least 1 year.
+
+===Schematic===
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-power_rtc.jpg]
+
 ==Power down the system== 
 After finish the prototype, I verified that the LPC2103 board + LCD module HD44780 were using about 140mA.
 
 I worked to found a way to disable the circuit when the original scale circuits are not working. I verified that when original scale is off, there is no signals to the original LCD. I ended up by using a mosfet that is turned on when there a signal on the backplane 1 line.
 
-I used also another mosfet in parallel with the first one, controlled by the LPC2103, so the system can keep with power turned on and shut off himself when desired.
+I also control that mosfet with a signal from the LPC2103, so the system can keep with power turned on and shut off himself when desired.
+
+===Schematic===
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-power.jpg]
 
 ==Pictures taken on 2009.08.14==
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-01.jpg
