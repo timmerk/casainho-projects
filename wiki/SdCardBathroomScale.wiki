@@ -14,8 +14,6 @@ Firmware source code, schematics sources and pictures of current work can be fou
 ==Observations and things to improve==
 The system works almost perfectly. Although there are some things I would like to improve:
 
- * Sometimes the system can't read correctly the last weight value from the SD Card, I believe that is a problem from physical connection, I can try to enable and use CRC when reading/writing to the SD Card (writing to SD Card seems to have no problem);
-
  * The size of the characters on LCD are very small for this application, since my eyes are far from it when I am weighting myself. Maybe I can find another LCD?
 
  * Me and my girlfriend, we both need to lost weight, we both use the scale. Luckily our weight values are very different and I can differ them on system and have 2 different files on SD Card to register our weights separately. I would prefer to have some way to identify each person, so more people could use the scale if needed;
