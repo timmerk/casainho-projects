@@ -115,6 +115,10 @@ I also control that mosfet with a signal from the LPC2103, so the system can kee
 ===Schematic===
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-power.jpg]
 
+On the next image, we can see the signals before and after D1 BAS85. Yellow line is at point LCD_pin13 and blue at gate of Q1 BSS138.
+
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090818-power_module_oscilloscope_image.jpg]
+
 ==Pictures taken on 2009.08.14==
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-01.jpg
 
