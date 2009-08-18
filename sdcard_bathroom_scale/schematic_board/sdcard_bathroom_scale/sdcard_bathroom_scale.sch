@@ -1,14 +1,14 @@
-EESchema Schematic File Version 2  date Seg 17 Ago 2009 23:55:18 WEST
+EESchema Schematic File Version 2  date Ter 18 Ago 2009 10:47:36 WEST
 LIBS:power,device,conn,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,dsp,microchip,analog_switches,motorola,texas,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib,valves,./sdcard_bathroom_scale.cache
 EELAYER 24  0
 EELAYER END
 $Descr A4 11700 8267
 Sheet 1 1
-Title ""
+Title "SD Card Bathroom Scale"
 Date "17 aug 2009"
-Rev ""
-Comp ""
-Comment1 ""
+Rev "1.0"
+Comp "(c) Jorge Pinto"
+Comment1 "License Creative Commons BY-NC-SA 3.0"
 Comment2 ""
 Comment3 ""
 Comment4 ""
@@ -442,7 +442,7 @@ L DIODE D1
 U 1 1 4A89D1CC
 P 7400 4850
 F 0 "D1" H 7400 4950 40  0000 C CNN
-F 1 "DIODE" H 7400 4750 40  0000 C CNN
+F 1 "BAS85" H 7400 4750 40  0000 C CNN
 	1    7400 4850
 	1    0    0    -1  
 $EndComp
