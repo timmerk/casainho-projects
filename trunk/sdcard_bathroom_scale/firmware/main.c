@@ -213,8 +213,8 @@ int main (void)
                 if (!timer1_counter)
                 {
                    /* If weight is at least 40kg and
-                    *  less then 140Kg(scale maximum limit)... */
-                    if (weight > 39 && weight < 141)
+                    *  less then 150Kg(scale maximum limit)... */
+                    if (weight > 39 && weight < 151)
                     {
                         char error = 0;
                         /* Open source file */
@@ -266,7 +266,7 @@ int main (void)
                             last_weight = (string[0] - 48) * 100;
                             last_weight += (string[1] - 48) * 10;
                             last_weight += (string[2] - 48);
-                            last_weight += ((string[4] - 48) / 10);
+                            last_weight += (float) (((float) (string[4] - 48)) / ((float) 10));
 
                             res = f_open(&file, "weight.csv",
                                                    FA_OPEN_EXISTING | FA_WRITE);
