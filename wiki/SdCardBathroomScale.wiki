@@ -116,7 +116,7 @@ Example of number 6, all segments turned on except segment b.:
                g          z e d   <-- backplane c
              e   c
                d
-}
+}}}
 
 ===Schematic===
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-original_lcd.jpg]
