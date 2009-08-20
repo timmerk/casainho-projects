@@ -43,6 +43,81 @@ The next picture shows a backplane signal and a "trigger" signal I got using an 
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090615-01.jpg]
 
+===Understanding the logic of each signal=== 
+After I saw on oscilloscope each signal that went to the original LCD, I quickly understand that 3 were backplanes and 12 were segments, because backplanes have always the same shape while the others varies with the segments on/off, with the weight value.
+
+I had to understand which segments were turned on/off to represent each number on the original LCD, and not having the original LCD working any more, I had to make some tests to figure the information I were looking for.
+
+I decided to write on LCD module HD44780 the state of each segment (synchronized with each backplane signal) and then try a few different known weight, so I had a known digits:
+
+{{{
+             0.0 kg
+
+          backplane a:   0 0 0 . 0 0 0 . 0 1 1 . 0 1 1
+
+          backplane b:   0 0 0 . 0 0 0 . 1 0 1 . 1 0 1
+
+          backplane c:   0 0 0 . 1 0 0 . 0 1 1 . 1 1 1
+
+--------------------------------------------------
+
+             1xx.x kg
+
+          backplane a:   0 0 1 . x x x . x x x . x x x
+                                               
+          backplane b:   0 0 1 . x x x . x x x . x x x
+
+          backplane c:   0 0 0 . x x x . x x x . x x x
+
+--------------------------------------------------
+
+             2x.x kg
+
+          backplane a:   0 0 0 . 0 1 1 . x x x . x x x
+
+          backplane b:   0 0 0 . 0 1 0 . x x x . x x x
+
+          backplane c:   0 0 0 . 1 1 1 . x x x . x x x
+
+--------------------------------------------------
+
+             6x.x kg
+
+          backplane a:   0 0 0 . 0 1 0 . x x x . x x x
+
+          backplane b:   0 0 0 . 1 1 1 . x x x . x x x
+
+          backplane c:   0 0 0 . 1 1 1 . x x x . x x x
+}}}
+
+After reading about [http://en.wikipedia.org/wiki/Seven-segment_display 7 segments displays on wikipedia], turned out in my head that the segments are:
+
+{{{            
+               a          y a b   <-- backplane a
+             f   b        f g c   <-- backplane b
+               g          z e d   <-- backplane c
+             e   c
+               d
+}}}
+
+Example of number 6, all segments turned on except segment b.:
+
+{{{
+             6x.x kg
+
+          backplane a:   0 0 0 . 0 1 0 . x x x . x x x
+
+          backplane b:   0 0 0 . 1 1 1 . x x x . x x x
+
+          backplane c:   0 0 0 . 1 1 1 . x x x . x x x
+                  
+               a          y a b   <-- backplane a
+             f   b        f g c   <-- backplane b
+               g          z e d   <-- backplane c
+             e   c
+               d
+}
+
 ===Schematic===
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-original_lcd.jpg]
 
