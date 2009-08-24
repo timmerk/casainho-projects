@@ -41,7 +41,7 @@ crt.o: crt.s
 	$(AS) $(AFLAGS) crt.s > crt.lst
 
 main.o: main.c
-	$(CC) $(THUMB) $(CFLAGS) $(OS) main.c
+	$(CC) $(THUMB) $(CFLAGS) main.c
 	
 system.o: system.c
 	$(CC) $(THUMB) $(CFLAGS) $(OS) system.c
