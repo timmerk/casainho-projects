@@ -30,8 +30,11 @@
 
 /* Global variables */
 volatile unsigned long int           back_plane_a,
+                                last_back_plane_a,
                                      back_plane_b,
-                                     back_plane_c;
+                                last_back_plane_b,
+                                     back_plane_c,
+                                last_back_plane_c;
 
 volatile unsigned short int timer1_counter = 0;
 volatile unsigned char new_time = 0;
@@ -173,10 +176,18 @@ int main (void)
             back_plane_a = get_ios ();
 
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            weight = get_weight (back_plane_a, back_plane_b, back_plane_c);
+            weight = get_weight (   last_back_plane_a,
+                                    last_back_plane_b,
+                                    last_back_plane_c);
+
             lcd_send_string ("    ");
             lcd_send_float (weight, 3, 1);
             lcd_send_string (" Kg    ");
+
+            /* Save the backplanes */
+            last_back_plane_a = back_plane_a;
+            last_back_plane_b = back_plane_b;
+            last_back_plane_c = back_plane_c;
 
             state = 0;
         }
@@ -213,13 +224,29 @@ int main (void)
                 if (!timer1_counter)
                 {
                    /* If weight is at least 40kg and
-                    *  less then 150Kg(scale maximum limit)... */
-                    if (weight > 39 && weight < 151)
+                    *  less then 110Kg(scale maximum limit = 150kg)... */
+                    if (weight > 39 && weight < 111)
                     {
                         char error = 0;
                         /* Open source file */
-                        res = f_open(&file, "weight.csv",
+
+                        /* Max Ana = 72kg = Min Jorge */
+                        /* Identify by the interval of weight value, who is
+                         * on the scale. I should take between 72kg to 110kg.
+                         * My girlfriend Ana should take between 40kg and 72kg.
+                         */
+                        if (weight > 72)
+                        {
+                            res = f_open(&file, "w_jorge.csv",
                                                     FA_OPEN_ALWAYS | FA_WRITE);
+                        }
+
+                        else
+                        {
+                            res = f_open(&file, "w_ana.csv",
+                                                    FA_OPEN_ALWAYS | FA_WRITE);
+                        }
+
                         if (res)
                             error = 1;
 
@@ -237,8 +264,17 @@ int main (void)
                                 error = 1;
 
                             /* Open source file */
-                            res = f_open(&file, "weight.csv",
+                            if (weight > 72)
+                            {
+                                res = f_open(&file, "w_jorge.csv",
                                                     FA_OPEN_EXISTING | FA_READ);
+                            }
+
+                            else
+                            {
+                                res = f_open(&file, "w_ana.csv",
+                                                    FA_OPEN_EXISTING | FA_READ);
+                            }
 
                             /* Seek to the place of the last weight value
                              * on the file */
@@ -266,10 +302,21 @@ int main (void)
                             last_weight = (string[0] - 48) * 100;
                             last_weight += (string[1] - 48) * 10;
                             last_weight += (string[2] - 48);
-                            last_weight += (float) (((float) (string[4] - 48)) / ((float) 10));
+                            last_weight += (float) (((float) (string[4] - 48))
+                                                                / ((float) 10));
 
-                            res = f_open(&file, "weight.csv",
+                            if (weight > 72)
+                            {
+                                res = f_open(&file, "w_jorge.csv",
                                                    FA_OPEN_EXISTING | FA_WRITE);
+                            }
+
+                            else
+                            {
+                                res = f_open(&file, "w_ana.csv",
+                                                   FA_OPEN_EXISTING | FA_WRITE);
+                            }
+
                             if (res)
                                 error = 1;
                             /**************************************************/
@@ -426,7 +473,7 @@ int main (void)
                                 lcd_send_string (" No variations  ");
                             }
 
-                            timer1_counter = 40000; /* wait 4 seconds */
+                            timer1_counter = 30000; /* wait 3 seconds */
                             while (timer1_counter) ;
                         }
                         /*******************************************************
@@ -437,19 +484,25 @@ int main (void)
                          * warning about it.
                          */
                         lcd_send_command (DD_RAM_ADDR);
+                        if (weight > 72)
+                            lcd_send_string ("     Jorge      ");
+                        else
+                            lcd_send_string ("      Ana       ");
+
+                        lcd_send_command (DD_RAM_ADDR2);
                         if (error)
                             lcd_send_string ("Weight not saved");
                         else
                             lcd_send_string ("  Weight saved  ");
 
-                        timer1_counter = 10000; /* wait 1 second */
+                        timer1_counter = 15000; /* wait 1,5 second */
                         while (timer1_counter) ;
                     }
 
                     lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
                     lcd_send_string ("Power down now..");
 
-                    timer1_counter = 10000; /* wait 1 second */
+                    timer1_counter = 8000; /* wait 0,8 second */
                     while (timer1_counter) ;
 
                     /* Power switch OFF, the system shuts down himself */
