@@ -3,7 +3,11 @@
 
 = Introduction =
 
-On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time + weight) on a comma separated values (CSV) file (weight.csv) so I can build a graph using OpenOffice.
+On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time date + weight) on a comma separated values (CSV) file so I can quickly build a graph using OpenOffice.
+
+If anyone want to build a scale like this one, I can help, my e-mail is: casainho@gmail.com. I can also build a personalized system, please contact me for for price details.
+
+I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
 
 *[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
 
@@ -12,11 +16,18 @@ On this project I hacked a digital bathroom scale, for write (log) my weight var
 Firmware source code, schematics sources and pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
 ==Observations and things to improve==
-The system works almost perfectly. Although there are some things I would like to improve:
+The system works perfectly. Although there are some things I would like to improve:
 
  * The size of the characters on LCD are very small for this application, since my eyes are far from it when I am weighting myself. Maybe I can find another LCD?
 
  * Me and my girlfriend, we both need to lost weight, we both use the scale. Luckily our weight values are very different and I can differ them on system and have 2 different files on SD Card to register our weights separately. I would prefer to have some way to identify each person, so more people could use the scale if needed;
+
+===Ideas for a future version===
+I would like to have the bathroom scale sending by wireless the weight values. On a display console (running embedded GNU/linux) attached to bathroom wall, the wireless signal would be received and a graph would be shown to user with the last values of the last 2 weeks - on this way the user can have a clear picture of his weight progression.
+
+The display console would also be able to store the time date and weight values on a memory SD Card or any other media.
+
+The display console could also have a way to identify different users, maybe by using a biometric finger print (USB mouser with fingerprint ?).
 
 =Technical details=
 ==The original cheap scale I bought on market== 
