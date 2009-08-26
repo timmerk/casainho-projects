@@ -9,9 +9,9 @@ If anyone want to build a scale like this one, I can help, my e-mail is: casainh
 
 I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
 
-*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file:
+*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file (my own weight regist):
 
-[http://casainho-projects.googlecode.com/svn-history/r65/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090814.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090826.jpg]
 
 Firmware source code, schematics sources and pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
