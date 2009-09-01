@@ -3,17 +3,19 @@
 
 = Introduction =
 
-On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time date + weight) on a comma separated values (CSV) file so I can quickly build a graph using OpenOffice.
+On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time date + weight) on a comma separated values (.CSV) file so I can quickly build a graph using OpenOffice, Gnuplot or some other capable program.
 
-If anyone want to build a scale like this one, I can help, my e-mail is: casainho@gmail.com. I can also build a personalized system, please contact me for for price details.
+If anyone want to build a scale like this one, I can help, my e-mail is: casainho@gmail.com. I can also build a personalized system, please contact me for price and details. I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
 
-I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
-
-*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using the data written on "weight.csv" file (my own weight regist):
+*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using OpenOffice (my own weight log):
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090826.jpg]
 
-Firmware source code, schematics sources and pictures of current work can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
+And here is a picture of a graph made using Gnuplot (my own weight log):
+
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/weight_graph_gnuplot-20090902.jpg]
+
+Firmware source code, schematics sources, pictures of current work, Gnuplot scripts,  can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
 ==Observations and things to improve==
 The system works perfectly. Although there are some things I would like to improve:
