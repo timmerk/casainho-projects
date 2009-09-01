@@ -9,6 +9,7 @@
 #include "../spi.h"
 #include "diskio.h"
 #include "err.h"
+#include "timers.h"
 
 /* Definitions for MMC/SDC command */
 #define CMD0	(0x40+0)	/* GO_IDLE_STATE */
@@ -293,7 +294,10 @@ DSTATUS disk_initialize (
 		FCLK_FAST();
 	} else {			/* Initialization failed */
 		power_off();
-		die ("disk init fail");
+
+		debug ("SD Card error");
+        timer1_counter = 20000;
+        while (timer1_counter) ;
 	}
 
 	return Stat;
@@ -310,6 +314,7 @@ DSTATUS disk_status (
 )
 {
 	if (drv) return STA_NOINIT;		/* Supports only single drive */
+	Stat = 0;
 	return Stat;
 }
 
