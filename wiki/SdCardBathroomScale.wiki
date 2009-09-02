@@ -11,7 +11,9 @@ Here is a picture of me using the scale:
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-03.jpg]
 
-*[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using OpenOffice (my own weight log):
+*[http://blip.tv/file/get/Jpcasainho-sdcard_bathroom_scalefagor_bb_9020090902135.ogg See this video]* that shows the scale working.
+
+Here is a picture of a graph made using OpenOffice (my own weight log):
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090826.jpg]
 
