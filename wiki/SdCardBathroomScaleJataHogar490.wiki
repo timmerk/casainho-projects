@@ -1,0 +1,27 @@
+#summary About the bathroom scale Jata Hogar 490
+
+= Introduction =
+
+I bought another bathroom scale, which I hope to hack it and sell on Ebay. The model is "Jata Hogar 490", looks like it is from a [http://www.jata.es/ Spanish company].
+
+Here are some pictures:
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20090902-01.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20090902-02.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20090902-03.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20090902-04.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20090902-06.jpg
+
+Here the some images I took with the oscilloscope:
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20090902-02.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20090902-04.jpg
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20090902-10.jpg
+
+There is 13 pins for the original LCD. There is no backplanes signals. Looks to me that every line carries the information for each segment of each digit. Original LCD have 4 digits.
