@@ -7,6 +7,10 @@ On this project I hacked a digital bathroom scale, for write (log) my weight var
 
 If anyone want to build a scale like this one, I can help, my e-mail is: casainho@gmail.com. I can also build a personalized system, please contact me for price and details. I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
 
+Here is a picture of me using the scale:
+
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-03.jpg]
+
 *[http://blip.tv/file/get/Jpcasainho-SDCardBathroomScale20090814198.ogg See this video]* that shows the scale working. Here is a picture of a graph made using OpenOffice (my own weight log):
 
 [http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/weight_vs_time_graph-20090826.jpg]
@@ -31,13 +35,16 @@ The display console would also be able to store the time date and weight values 
 
 The display console could also have a way to identify different users, maybe by using a biometric finger print (USB mouser with fingerprint ?).
 
+==Another commercial bathroom scales==
+I bought recently another commercial bathroom scale that I hope to put it working and sell on Ebay. Here is a page dedicated to her: SdCardBathroomScaleJataHogar490 
+
 =Technical details=
 ==The original cheap scale I bought on market== 
 I bought the cheapest digital bathroom scale I could found on market, it were 20€, Fagor model BB-90. Other scales just looks the same, because they have the same number of LCD digits and the system appears to behave in the same way.
 
 Picture:
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-01.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090703-01.jpg]
 
 ==How to get the weight value==
 First I thought that I could read the sensors and got an analog voltage relative to weight but I couldn't find a way to do it. Next a friend at work give me the idea to try read the signals that went to original LCD, and it was a simple and easy way to have what I need :-)
@@ -48,13 +55,13 @@ The segments signals have voltage that can be read directly by the LPC2103. The 
 
 The next 2 pictures shows a backplane signal and 2 segments signals.
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-10.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/osci_image-20090605-10.jpg]
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090605-11.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/osci_image-20090605-11.jpg]
 
 The next picture shows a backplane signal and a "trigger" signal I got using an LM258 opamp working as a comparator, like a signal value detector.
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/osci_image-20090615-01.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/osci_image-20090615-01.jpg]
 
 ===Understanding the logic of each signal=== 
 After I saw on oscilloscope each signal that went to the original LCD, I quickly understand that 3 were backplanes and 12 were segments, because backplanes have always the same shape while the others varies with the segments on/off, with the weight value.
@@ -132,7 +139,7 @@ Example of number 6, all segments turned on except segment b.:
 }}}
 
 ===Schematic===
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-original_lcd.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090817-original_lcd.jpg]
 
 ==Selection of microcontroller==
 Arduino/Atmel AVR, or ARM? - I really like Arduino, mainly because it's Open Hardware/Firmware and there is a lot of Open Hardware modules for it. I prefer to use ARM instead of Arduino/AVR because I have the same Free Software tools PLUS cheap, Open JTAG debugger! I don't really like the fact that Atmel have a closed, proprietary, debugger.
@@ -144,10 +151,10 @@ I needed to use another LCD since I couldn't maintain the original one. I decide
 
 On the next picture we can see the LCD module and also the connections I made to original PCB using flat cable, on the pads that connected to original LCD.
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/sdcard_bathroom_scale-20090703-08.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090703-08.jpg]
 
 ===Schematic===
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-lcd_module.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090817-lcd_module.jpg]
 
 ==SD Card and FAT library==
 I decide to use SD Card memory to hold the data because I had good experiences in past with this kind of memory card, using SPI BUS. Also I can find relative cheap cards easily.
@@ -155,7 +162,7 @@ I decide to use SD Card memory to hold the data because I had good experiences i
 My reference page about SD Cards is this one: [http://elm-chan.org/docs/mmc/mmc_e.html How to Use MMC/SDC by ChaN].
 
 ===Schematic===
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-sd_card.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090817-sd_card.jpg]
 
 === Fat file system library===
 I use [http://elm-chan.org/fsw/ff/00index_e.html FatFs by ChaN] file system drivers which have a Free Software license, are very complete and have good documentation.
@@ -191,7 +198,7 @@ Example: [2009][08][01][6][12][00][00]; string "200908016120000".
 I am using 2 X AAA NiMh low discharge batteries to power the RTC, I hope it lasts at least 1 year.
 
 ===Schematic===
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-power_rtc.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090817-power_rtc.jpg]
 
 ==Power down the system== 
 After finish the prototype, I verified that the LPC2103 board + LCD module HD44780 were using about 140mA.
@@ -201,15 +208,15 @@ I worked to found a way to disable the circuit when the original scale circuits 
 I also control that mosfet with a signal from the LPC2103, so the system can keep with power turned on and shut off himself when desired.
 
 ===Schematic===
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090817-power.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090817-power.jpg]
 
 On the next image, we can see the signals before and after D1 BAS85. Yellow line is at point LCD_pin13 and blue at gate of Q1 BSS138.
 
-[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090818-power_module_oscilloscope_image.jpg]
+[http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/20090818-power_module_oscilloscope_image.jpg]
 
-==Pictures taken on 2009.08.14==
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-01.jpg
+==Pictures taken on 2009.09.02==
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-01.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-02.jpg
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-03.jpg
 
-http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/20090814-sdcard_bathroom_scale-03.jpg
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-02.jpg
