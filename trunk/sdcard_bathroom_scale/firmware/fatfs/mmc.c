@@ -5,8 +5,8 @@
 /* are platform dependent.                                               */
 /*-----------------------------------------------------------------------*/
 
-#include "../lpc210x.h"
-#include "../spi.h"
+#include "../../lpc210x.h"
+#include "../../spi.h"
 #include "diskio.h"
 #include "err.h"
 #include "timers.h"

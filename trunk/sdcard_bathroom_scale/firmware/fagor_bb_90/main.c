@@ -16,8 +16,8 @@
 #include "timers.h"
 #include "ios.h"
 #include "spi.h"
-#include "./fatfs/diskio.h"
-#include "./fatfs/ff.h"
+#include "../fatfs/diskio.h"
+#include "../fatfs/ff.h"
 #include "err.h"
 #include "rtc.h"
 
@@ -180,9 +180,13 @@ int main (void)
                                     last_back_plane_b,
                                     last_back_plane_c);
 
-            lcd_send_string ("    ");
-            lcd_send_float (weight, 3, 1);
-            lcd_send_string (" Kg    ");
+            /* Print on LCD the weight value if it were read correctly only */
+            if (weight >= 0)
+            {
+                lcd_send_string ("    ");
+                lcd_send_float (weight, 3, 1);
+                lcd_send_string (" Kg    ");
+            }
 
             /* Save the backplanes */
             last_back_plane_a = back_plane_a;

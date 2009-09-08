@@ -29,7 +29,6 @@ unsigned char io_is_set (unsigned char io_number)
         return 0;
 }
 
-//weight_value += (number_to_digit (temp));
 unsigned long int get_ios (void)
 {
     return IOPIN;
@@ -81,8 +80,9 @@ unsigned char number_to_digit (unsigned short int number)
         weight_value = 9;
         break;
 
+        /* Means an invalid value */
         default:
-        weight_value = 0;
+        weight_value = 10;
         break;
     }
 
@@ -160,7 +160,7 @@ double get_weight (unsigned long int back_plane_a,
         unsigned long int back_plane_b,
         unsigned long int back_plane_c)
 {
-    double weight_value = 0;
+    double weight_value = 0, temp1;
     volatile unsigned long int temp = 0;
 
     /* Put all the bits on a sequencial order */
@@ -173,28 +173,44 @@ double get_weight (unsigned long int back_plane_a,
             ((back_plane_b & mask_1st_digit_bpb) >> 6) +
             ((back_plane_c & mask_1st_digit_bpc) >> 9));
 
-    weight_value += (number_to_digit (temp)) * 100;
+    temp1 = number_to_digit (temp);
+    if (temp1 > 10)
+        return -1; /* Error reading digit */
+
+    weight_value += temp1 * 100;
 
     /* 2nd digit */
     temp = ((back_plane_a & mask_2nd_digit_bpa) +
             ((back_plane_b & mask_2nd_digit_bpb) >> 3) +
             ((back_plane_c & mask_2nd_digit_bpc) >> 6));
 
-    weight_value += (number_to_digit (temp)) * 10;
+    temp1 = number_to_digit (temp);
+    if (temp1 > 10)
+        return -1; /* Error reading digit */
+
+    weight_value += temp1 * 10;
 
     /* 3rd digit */
     temp =  (((back_plane_a & mask_3rd_digit_bpa) << 3) +
             (back_plane_b & mask_3rd_digit_bpb) +
             ((back_plane_c & mask_3rd_digit_bpc) >> 3));
 
-    weight_value += number_to_digit (temp);
+    temp1 = number_to_digit (temp);
+    if (temp1 > 10)
+        return -1; /* Error reading digit */
+
+    weight_value += temp1;
 
     /* 4th digit (on right side) */
     temp = (((back_plane_a & mask_4th_digit_bpa) << 6) +
             ((back_plane_b & mask_4th_digit_bpb) << 3) +
             (back_plane_c & mask_4th_digit_bpc));
 
-    weight_value += (number_to_digit (temp)) * 0.1;
+    temp1 = number_to_digit (temp);
+    if (temp1 > 10)
+        return -1; /* Error reading digit */
+
+    weight_value += temp1 * 0.1;
 
     return weight_value;
 }
