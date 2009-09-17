@@ -23,7 +23,8 @@ ODFLAGS	= -x --syms
 
 clean:
 	-rm crt.lst crt.o main.o main.out main.map main.dmp main.bin \
-	system.o timers.o lcd.o isrsupport.o lcd_input.o spi.o ../fatfs/mmc.o ../ff.o err.o rtc.o
+	system.o timers.o lcd.o isrsupport.o lcd_input.o spi.o err.o rtc.o adc.o \
+	mmc.o fatfs/ff.o
 
 all: main.out
 	@ echo "...copying"
@@ -31,11 +32,11 @@ all: main.out
 	$(OD) $(ODFLAGS) main.out > main.dmp
 	$(SIZE) main.out
 
-main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o lcd_input.o spi.o ../ff.o \
-	../fatfs/mmc.o err.o rtc.o linker_script-flash_memory.cmd
+main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o lcd_input.o spi.o  \
+	 err.o rtc.o adc.o fatfs/mmc.o fatfs/ff.o linker_script-flash_memory.cmd
 	@ echo "..linking"
 	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o lcd_input.o \
-	spi.o ../fatfs/mmc.o ff.o err.o isrsupport.o rtc.o libgcc.a
+	spi.o  err.o isrsupport.o rtc.o adc.o mmc.o ff.o libgcc.a
 
 crt.o: crt.s
 	$(AS) $(AFLAGS) crt.s > crt.lst
@@ -56,19 +57,22 @@ isrsupport.o: isrsupport.c
 	$(CC) $(CFLAGS) $(OS) isrsupport.c
 
 lcd_input.o: lcd_input.c
-	$(CC) $(THUMB) $(CFLAGS) lcd_input.c
+	$(CC) $(THUMB) $(CFLAGS) $(O0) lcd_input.c
 	
 spi.o: spi.c
 	$(CC) $(THUMB) $(CFLAGS) spi.c
 	
-../fatfs/mmc: ../fatfs/mmc.c
-	$(CC) $(THUMB) $(CFLAGS) $(OS) ../fatfs/mmc.c
+fatfs/mmc.o: fatfs/mmc.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/mmc.c
 	
-../ff.o: ../fatfs/ff.c
-	$(CC) $(THUMB) $(CFLAGS) $(OS) ../fatfs/ff.c
+fatfs/ff.o: fatfs/ff.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/ff.c
 
 err.o: err.c
 	$(CC) $(THUMB) $(CFLAGS) $(OS) err.c
 	
 rtc.o: rtc.c
 	$(CC) $(THUMB) $(CFLAGS) $(OS) rtc.c	
+
+adc.o: adc.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) adc.c

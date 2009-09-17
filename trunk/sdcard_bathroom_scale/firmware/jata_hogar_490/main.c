@@ -29,11 +29,6 @@
 #define OFF 0
 
 /* Global variables */
-volatile unsigned short int         lcd_input_digit_0,
-                                    lcd_input_digit_1,
-                                    lcd_input_digit_2,
-                                    lcd_input_digit_3;
-
 volatile unsigned short int timer1_counter = 0;
 volatile unsigned char new_time = 0;
 
@@ -104,7 +99,7 @@ int main (void)
     /* Initialize the Timer1 */
     timer1_init ();
     enableIRQ ();
-#if 0
+
     /*
      * Verify if time.txt file exist so system should update
      * RTC time with that info on the file.
@@ -156,91 +151,20 @@ int main (void)
     }
     /***************************************************************************
      **************************************************************************/
-#endif
+
     for (;;)
     {
-        /* Syncronize with LCD input pin 0. 465 on ADC should equal
-         *                                                       to 1,5 volts */
-        /* Wait for the end of sync impulse */
-        while (lcd_input_adc_value (0) > 465) ;
-
-        /* Wait for the start of sync impulse */
-        if (lcd_input_adc_value (0) > 465)
+    /* Syncronize with LCD input pin 10 (backplane 1). 775 on ADC should equal
+                                                             to 2,5 volts */
+        if (lcd_input_adc_value (10) > 775)
         {
-            unsigned char i;
-            lcd_input_digit_0 = 0;
-            for (i = 0; i < 13; i++)
-            {
-                /* Acquire the signals from the LCD input */
-                lcd_input_digit_0 |= ((lcd_input_is_set (i)) << i);
-            }
+            while (lcd_input_adc_value (10) < 775) ;
 
-            /* Make a delay to go for the middle of next data bit */
-            timer1_counter = 24; /* wait 2,4 ms */
-            while (timer1_counter) ;
-            lcd_input_digit_1 = 0;
-            for (i = 0; i < 13; i++)
-            {
-                /* Acquire the signals from the LCD input */
-                lcd_input_digit_1 |= ((lcd_input_is_set (i)) << i);
-            }
-
-            /* Make a delay to go for the middle of next data bit */
-            timer1_counter = 16; /* wait 1,6 ms */
-            while (timer1_counter) ;
-            lcd_input_digit_2 = 0;
-            for (i = 0; i < 13; i++)
-            {
-                /* Acquire the signals from the LCD input */
-                lcd_input_digit_2 |= ((lcd_input_is_set (i)) << i);
-            }
-
-            /* Make a delay to go for the middle of next data bit */
-            timer1_counter = 16; /* wait 1,6 ms */
-            while (timer1_counter) ;
-            lcd_input_digit_3 = 0;
-            for (i = 0; i < 13; i++)
-            {
-                /* Acquire the signals from the LCD input */
-                lcd_input_digit_3 |= ((lcd_input_is_set (i)) << i);
-            }
-
+            weight = get_weight ();
             lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            lcd_sent_int (lcd_input_digit_0, 8);
-            lcd_sent_int (lcd_input_digit_1, 8);
-            lcd_send_command (DD_RAM_ADDR2);
-            lcd_sent_int (lcd_input_digit_2, 8);
-            lcd_sent_int (lcd_input_digit_3, 8);
-        }
-
-        else
-        {
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            lcd_sent_string ("*");
-            lcd_send_command (DD_RAM_ADDR2);
-            lcd_sent_string ("*");
-        }
-    }
-}
-
-
-
-
-
-#if 0
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            weight = get_weight (   last_back_plane_a,
-                                    last_back_plane_b,
-                                    last_back_plane_c);
-
             lcd_send_string ("    ");
             lcd_send_float (weight, 3, 1);
             lcd_send_string (" Kg    ");
-
-            /* Save the backplanes */
-            last_back_plane_a = back_plane_a;
-            last_back_plane_b = back_plane_b;
-            last_back_plane_c = back_plane_c;
 
             state = 0;
         }
@@ -567,4 +491,3 @@ int main (void)
         }
     }
 }
-#endif

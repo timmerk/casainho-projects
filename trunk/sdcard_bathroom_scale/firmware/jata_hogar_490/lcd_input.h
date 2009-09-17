@@ -41,6 +41,23 @@
  *
  */
 
+/* LCD input signals */
+/*
+ *
+ * Number 0: 11010111
+ * Number 9: 10110111
+ * Number 6: 11110101
+ * Number 2: 11100011
+ * Number 1: 00000110
+ * Number
+ *  general: degfxcba
+ *
+ *             a
+ *           f   b
+ *             g
+ *           e   c
+ *             d   x
+ */
 
 #define LCD_INPUT_ADC_CHANNEL 6
 
@@ -52,3 +69,5 @@
 void lcd_input_init (void);
 unsigned char lcd_input_is_set (unsigned char io_number);
 unsigned short int lcd_input_adc_value (unsigned char io_number);
+char number_to_digit (char lcd_input_digit);
+double get_weight (void);
