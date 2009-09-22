@@ -34,59 +34,62 @@ unsigned long int get_ios (void)
     return IOPIN;
 }
 
-unsigned char number_to_digit (unsigned short int number)
+char number_to_digit (unsigned char *number, unsigned char *digit)
 {
-    char weight_value;
-
-    switch (number)
+    switch (*number)
     {
+        /* This case is when there is none segment ON */
+        case 251:
+        *digit = 0;
+        break;
+
+        /* This case is when 0 is lighted on original LCD  */
         case 16:
-        weight_value = 0;
+        *digit = 0;
         break;
 
         case 179:
-        weight_value = 1;
+        *digit = 1;
         break;
 
         case 40:
-        weight_value = 2;
+        *digit = 2;
         break;
 
         case 34:
-        weight_value = 3;
+        *digit = 3;
         break;
 
         case 131:
-        weight_value = 4;
+        *digit = 4;
         break;
 
         case 66:
-        weight_value = 5;
+        *digit = 5;
         break;
 
         case 64:
-        weight_value = 6;
+        *digit = 6;
         break;
 
         case 51:
-        weight_value = 7;
+        *digit = 7;
         break;
 
         case 0:
-        weight_value = 8;
+        *digit = 8;
         break;
 
         case 2:
-        weight_value = 9;
+        *digit = 9;
         break;
 
         /* Means an invalid value */
         default:
-        weight_value = 10;
-        break;
+        return 1;
     }
 
-    return weight_value;
+    return 0;
 }
 
 unsigned long int format_back_plane (unsigned long int back_plane)
@@ -156,12 +159,14 @@ unsigned long int format_back_plane (unsigned long int back_plane)
     return temp;
 }
 
-double get_weight (unsigned long int back_plane_a,
+char get_weight (unsigned long int back_plane_a,
         unsigned long int back_plane_b,
-        unsigned long int back_plane_c)
+        unsigned long int back_plane_c,
+        float *weight)
 {
-    double weight_value = 0, temp1;
-    volatile unsigned long int temp = 0;
+    float weight_bck = *weight;
+    unsigned char   lcd_input_digit,
+                    digit;
 
     /* Put all the bits on a sequencial order */
     back_plane_a = format_back_plane (back_plane_a);
@@ -169,49 +174,61 @@ double get_weight (unsigned long int back_plane_a,
     back_plane_c = format_back_plane (back_plane_c);
 
     /* 1st digit (on left side) */
-    temp =  (((back_plane_a & mask_1st_digit_bpa) >> 3) +
+    lcd_input_digit =
+            (((back_plane_a & mask_1st_digit_bpa) >> 3) +
             ((back_plane_b & mask_1st_digit_bpb) >> 6) +
             ((back_plane_c & mask_1st_digit_bpc) >> 9));
 
-    temp1 = number_to_digit (temp);
-    if (temp1 > 10)
-        return -1; /* Error reading digit */
+    if (number_to_digit (&lcd_input_digit, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    weight_value += temp1 * 100;
+    *weight = digit * 100;
 
     /* 2nd digit */
-    temp = ((back_plane_a & mask_2nd_digit_bpa) +
+    lcd_input_digit =
+            ((back_plane_a & mask_2nd_digit_bpa) +
             ((back_plane_b & mask_2nd_digit_bpb) >> 3) +
             ((back_plane_c & mask_2nd_digit_bpc) >> 6));
 
-    temp1 = number_to_digit (temp);
-    if (temp1 > 10)
-        return -1; /* Error reading digit */
+    if (number_to_digit (&lcd_input_digit, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    weight_value += temp1 * 10;
+    *weight += digit * 10;
 
     /* 3rd digit */
-    temp =  (((back_plane_a & mask_3rd_digit_bpa) << 3) +
+    lcd_input_digit =
+            (((back_plane_a & mask_3rd_digit_bpa) << 3) +
             (back_plane_b & mask_3rd_digit_bpb) +
             ((back_plane_c & mask_3rd_digit_bpc) >> 3));
 
-    temp1 = number_to_digit (temp);
-    if (temp1 > 10)
-        return -1; /* Error reading digit */
+    if (number_to_digit (&lcd_input_digit, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    weight_value += temp1;
+    *weight = digit;
 
     /* 4th digit (on right side) */
-    temp = (((back_plane_a & mask_4th_digit_bpa) << 6) +
+    lcd_input_digit =
+            (((back_plane_a & mask_4th_digit_bpa) << 6) +
             ((back_plane_b & mask_4th_digit_bpb) << 3) +
             (back_plane_c & mask_4th_digit_bpc));
 
-    temp1 = number_to_digit (temp);
-    if (temp1 > 10)
-        return -1; /* Error reading digit */
+    if (number_to_digit (&lcd_input_digit, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    weight_value += temp1 * 0.1;
+    *weight = digit * 0.1;
 
-    return weight_value;
+    return 0;
 }
 

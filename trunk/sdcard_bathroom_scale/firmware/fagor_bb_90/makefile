@@ -23,7 +23,7 @@ ODFLAGS	= -x --syms
 
 clean:
 	-rm crt.lst crt.o main.o main.out main.map main.dmp main.bin \
-	system.o timers.o lcd.o isrsupport.o ios.o spi.o ../fatfs/mmc.o ../ff.o err.o rtc.o
+	system.o timers.o lcd.o isrsupport.o ios.o spi.o fatfs/mmc.o ff.o err.o rtc.o
 
 all: main.out
 	@ echo "...copying"
@@ -31,11 +31,11 @@ all: main.out
 	$(OD) $(ODFLAGS) main.out > main.dmp
 	$(SIZE) main.out
 
-main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o ios.o spi.o ../ff.o \
-	../fatfs/mmc.o err.o rtc.o linker_script-flash_memory.cmd
+main.out: crt.o main.o system.o timers.o lcd.o isrsupport.o ios.o spi.o fatfs/ff.o \
+	fatfs/mmc.o err.o rtc.o linker_script-flash_memory.cmd
 	@ echo "..linking"
 	$(LD) $(LDFLAGS) -o main.out crt.o main.o system.o timers.o lcd.o ios.o spi.o \
-	../fatfs/mmc.o ff.o err.o isrsupport.o rtc.o libgcc.a
+	fatfs/mmc.o ff.o err.o isrsupport.o rtc.o libgcc.a
 
 crt.o: crt.s
 	$(AS) $(AFLAGS) crt.s > crt.lst
@@ -61,11 +61,11 @@ ios.o: ios.c
 spi.o: spi.c
 	$(CC) $(THUMB) $(CFLAGS) spi.c
 	
-../fatfs/mmc: ../fatfs/mmc.c
-	$(CC) $(THUMB) $(CFLAGS) $(OS) ../fatfs/mmc.c
+fatfs/mmc: fatfs/mmc.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/mmc.c
 	
-../ff.o: ../fatfs/ff.c
-	$(CC) $(THUMB) $(CFLAGS) $(OS) ../fatfs/ff.c
+fatfs/ff.o: fatfs/ff.c
+	$(CC) $(THUMB) $(CFLAGS) $(OS) fatfs/ff.c
 
 err.o: err.c
 	$(CC) $(THUMB) $(CFLAGS) $(OS) err.c

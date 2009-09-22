@@ -16,8 +16,8 @@
 #include "timers.h"
 #include "ios.h"
 #include "spi.h"
-#include "../fatfs/diskio.h"
-#include "../fatfs/ff.h"
+#include "fatfs/diskio.h"
+#include "fatfs/ff.h"
 #include "err.h"
 #include "rtc.h"
 
@@ -78,8 +78,8 @@ void power_switch (unsigned char state)
 int main (void)
 {
     /* Initialize variables */
-    volatile float weight = 0,
-                   last_weight = 0;
+    float   weight = 0,
+            last_weight = 0;
     unsigned char state = 0;
 
     FATFS fs;       /* Work area (file system object) for logical drive */
@@ -159,6 +159,9 @@ int main (void)
     /***************************************************************************
      **************************************************************************/
 
+    lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+    lcd_send_string ("    ----- Kg    ");
+
     for (;;)
     {
         if (io_is_set(LCD_PIN_13))
@@ -175,14 +178,15 @@ int main (void)
             while (timer1_counter) ;
             back_plane_a = get_ios ();
 
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            weight = get_weight (   last_back_plane_a,
-                                    last_back_plane_b,
-                                    last_back_plane_c);
-
-            /* Print on LCD the weight value if it were read correctly only */
-            if (weight >= 0)
+            /* Write weight value on LCD only if there was no error when
+             *                                                     reading it */
+            if (!(get_weight (
+                                last_back_plane_a,
+                                last_back_plane_b,
+                                last_back_plane_c,
+                                &weight)))
             {
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
                 lcd_send_string ("    ");
                 lcd_send_float (weight, 3, 1);
                 lcd_send_string (" Kg    ");
