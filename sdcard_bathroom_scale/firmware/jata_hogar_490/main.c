@@ -71,8 +71,8 @@ void power_switch (unsigned char state)
 int main (void)
 {
     /* Initialize variables */
-    volatile float weight = 0,
-                   last_weight = 0;
+    float   weight = 0,
+            last_weight = 0;
     unsigned char state = 0;
 
     FATFS fs;       /* Work area (file system object) for logical drive */
@@ -152,6 +152,9 @@ int main (void)
     /***************************************************************************
      **************************************************************************/
 
+    lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+    lcd_send_string ("    ----- Kg    ");
+
     for (;;)
     {
     /* Syncronize with LCD input pin 10 (backplane 1). 775 on ADC should equal
@@ -160,11 +163,15 @@ int main (void)
         {
             while (lcd_input_adc_value (10) < 775) ;
 
-            weight = get_weight ();
-            lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
-            lcd_send_string ("    ");
-            lcd_send_float (weight, 3, 1);
-            lcd_send_string (" Kg    ");
+            /* Write weight value on LCD only if there was no error when
+             *                                                     reading it */
+            if (!(get_weight (&weight)))
+            {
+                lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
+                lcd_send_string ("    ");
+                lcd_send_float (weight, 3, 1);
+                lcd_send_string (" Kg    ");
+            }
 
             state = 0;
         }
@@ -197,7 +204,7 @@ int main (void)
                     lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
                     lcd_send_string ("    ");
                 }
-
+#if 0
                 if (!timer1_counter)
                 {
                    /* If weight is at least 40kg and
@@ -487,6 +494,7 @@ int main (void)
                     for (;;) ;/* Hang here but system should shut off himself */
                 }
                 break;
+#endif
             }
         }
     }

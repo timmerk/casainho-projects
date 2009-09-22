@@ -69,5 +69,5 @@
 void lcd_input_init (void);
 unsigned char lcd_input_is_set (unsigned char io_number);
 unsigned short int lcd_input_adc_value (unsigned char io_number);
-char number_to_digit (char lcd_input_digit);
-double get_weight (void);
+char number_to_digit (unsigned char *number, unsigned char *digit);
+char get_weight (float *weight);

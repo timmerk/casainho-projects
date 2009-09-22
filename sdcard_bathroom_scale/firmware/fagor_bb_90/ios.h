@@ -80,6 +80,8 @@
 void ios_init (void);
 unsigned char io_is_set (unsigned char io_number);
 unsigned long int get_ios (void);
-double get_weight (unsigned long int back_plane_a,
+char number_to_digit (unsigned char *number, unsigned char *digit);
+char get_weight (unsigned long int back_plane_a,
         unsigned long int back_plane_b,
-        unsigned long int back_plane_c);
+        unsigned long int back_plane_c,
+        float *weight);

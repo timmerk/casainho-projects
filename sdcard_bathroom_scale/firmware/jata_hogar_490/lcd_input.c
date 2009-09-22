@@ -76,69 +76,74 @@ unsigned short int lcd_input_adc_value (unsigned char io_number)
 }
 
 
-char number_to_digit (char lcd_input_digit)
+char number_to_digit (unsigned char *number, unsigned char *digit)
 {
-    char digit;
-
-    switch (lcd_input_digit)
+    switch (*number)
     {
+        /* This case is when there is none segment ON */
+        case 0:
+        *digit = 0;
+        break;
+
+        /* This case is when 0 is lighted on original LCD  */
         case 215:
-        digit = 0;
+        *digit = 0;
         break;
 
+        /* This case is when 1 is lighted on original LCD  */
         case 6:
-        digit = 1;
+        *digit = 1;
         break;
 
+        /* This case is when 2 is lighted on original LCD  */
         case 235:
-        digit = 2;
+        *digit = 2;
         break;
 
         case 167:
-        digit = 3;
+        *digit = 3;
         break;
 
         case 54:
-        digit = 4;
+        *digit = 4;
         break;
 
         case 181:
-        digit = 5;
+        *digit = 5;
         break;
 
         case 245:
-        digit = 6;
+        *digit = 6;
         break;
 
         case 7:
-        digit = 7;
+        *digit = 7;
         break;
 
         case 247:
-        digit = 8;
+        *digit = 8;
         break;
 
         case 183:
-        digit = 9;
+        *digit = 9;
         break;
 
         /* Means an invalid value */
         default:
-        digit = 0;
-        break;
+        return 1;
     }
 
-    return digit;
+    return 0;
 }
 
-double get_weight (void)
+char get_weight (float *weight)
 {
-    char    lcd_input_digit_0,
-            lcd_input_digit_1,
-            lcd_input_digit_2,
-            lcd_input_digit_3;
-
-    double  weight_value, temp;
+    float weight_bck = *weight;
+    unsigned char   lcd_input_digit_0,
+                    lcd_input_digit_1,
+                    lcd_input_digit_2,
+                    lcd_input_digit_3,
+                    digit;
 
     /* Make a delay to go for the middle of next data bit */
     timer1_counter = 5; /* wait 0,5 ms */
@@ -189,20 +194,41 @@ double get_weight (void)
     lcd_input_digit_3 |= ((lcd_input_is_set (8)) << 7);
 
     /* Calculate the weight value */
-    temp = number_to_digit (lcd_input_digit_3);
-    weight_value += temp * 100;
+    /* 4th digit */
+    if (number_to_digit (&lcd_input_digit_3, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    /* 2nd digit */
-    temp = number_to_digit (lcd_input_digit_2);
-    weight_value += temp * 10;
+    *weight = digit * 100;
 
     /* 3rd digit */
-    temp = number_to_digit (lcd_input_digit_1);
-    weight_value += temp;
+    if (number_to_digit (&lcd_input_digit_2, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
 
-    /* 4th digit (on right side) */
-    temp = number_to_digit (lcd_input_digit_0);
-    weight_value += temp * 0.1;
+    *weight += digit * 10;
 
-    return weight_value;
+    /* 2nd digit */
+    if (number_to_digit (&lcd_input_digit_1, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
+
+    *weight += digit;
+
+    /* 1st digit (on right side) */
+    if (number_to_digit (&lcd_input_digit_0, &digit))
+    {
+        *weight = weight_bck;
+        return 1;
+    }
+
+    *weight += digit * 0.1;
+
+    return 0;
 }
