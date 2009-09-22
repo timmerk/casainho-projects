@@ -195,7 +195,7 @@ char get_weight (unsigned long int back_plane_a,
 
     if (number_to_digit (&lcd_input_digit, &digit))
     {
-        *weight = weight_bck;
+        *weight += weight_bck;
         return 1;
     }
 
@@ -209,11 +209,11 @@ char get_weight (unsigned long int back_plane_a,
 
     if (number_to_digit (&lcd_input_digit, &digit))
     {
-        *weight = weight_bck;
+        *weight += weight_bck;
         return 1;
     }
 
-    *weight = digit;
+    *weight += digit;
 
     /* 4th digit (on right side) */
     lcd_input_digit =
@@ -227,7 +227,7 @@ char get_weight (unsigned long int back_plane_a,
         return 1;
     }
 
-    *weight = digit * 0.1;
+    *weight += digit * 0.1;
 
     return 0;
 }
