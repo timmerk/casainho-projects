@@ -16,8 +16,8 @@
 #include "timers.h"
 #include "lcd_input.h"
 #include "spi.h"
-#include "../fatfs/diskio.h"
-#include "../fatfs/ff.h"
+#include "fatfs/diskio.h"
+#include "fatfs/ff.h"
 #include "err.h"
 #include "rtc.h"
 
@@ -204,7 +204,7 @@ int main (void)
                     lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
                     lcd_send_string ("    ");
                 }
-#if 0
+
                 if (!timer1_counter)
                 {
                    /* If weight is at least 40kg and
@@ -493,8 +493,8 @@ int main (void)
                     power_switch (OFF);
                     for (;;) ;/* Hang here but system should shut off himself */
                 }
+
                 break;
-#endif
             }
         }
     }

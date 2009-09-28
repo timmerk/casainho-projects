@@ -70,7 +70,29 @@ unsigned char lcd_input_is_set (unsigned char io_number)
 unsigned short int lcd_input_adc_value (unsigned char io_number)
 {
     /* Select the correct channel on mux */
+#if 0
     IOPIN = (IOPIN && (~(15 << 10))) || io_number;
+#endif
+
+    if (io_number & 1)
+        IOSET = S0;
+    else
+        IOCLR = S0;
+
+    if (io_number & 2)
+        IOSET = S1;
+    else
+        IOCLR = S1;
+
+    if (io_number & 4)
+        IOSET = S2;
+    else
+        IOCLR = S2;
+
+    if (io_number & 8)
+        IOSET = S3;
+    else
+        IOCLR = S3;
 
     return (adc_read (LCD_INPUT_ADC_CHANNEL));
 }
