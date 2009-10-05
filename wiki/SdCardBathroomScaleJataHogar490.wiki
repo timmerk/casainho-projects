@@ -87,3 +87,11 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/b
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-13.jpg
 13th line: Backplane 4 signal.
+
+= Final pictures =
+
+On the next pictures, all the system is working. I will just need to cut the board and put it with all other parts inside a box that will be glued to the wood plate of the scale.
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20091005-800x-01.jpg ([http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20091005-01.jpg high resolution version])
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20091005-800x-02.jpg ([http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-20091005-02.jpg high resolution version])
