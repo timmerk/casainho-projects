@@ -15,6 +15,9 @@
 #include "timers.h"
 #include "lcd.h"
 
+#define DEBUG_PIN_ON IOSET = (1 << 14)
+#define DEBUG_PIN_OFF IOCLR = (1 << 14)
+
 void lcd_input_init (void)
 {
     /* Define all lines as outputs */
@@ -27,29 +30,7 @@ void lcd_input_init (void)
 unsigned char lcd_input_is_set (unsigned char io_number)
 {
     /* Select the correct mux channel */
-#if 0
-    IOPIN = ((IOPIN && (~(15 << 10))) || io_number);
-#endif
-
-    if (io_number & 1)
-        IOSET = S0;
-    else
-        IOCLR = S0;
-
-    if (io_number & 2)
-        IOSET = S1;
-    else
-        IOCLR = S1;
-
-    if (io_number & 4)
-        IOSET = S2;
-    else
-        IOCLR = S2;
-
-    if (io_number & 8)
-        IOSET = S3;
-    else
-        IOCLR = S3;
+    IOPIN = ((IOPIN & (0xFFFFC3FF)) | (io_number << 10));
 
     /* The next delay must happen! It's used for analog multiplexer put
                                                   signal correctly on output. */
@@ -70,29 +51,7 @@ unsigned char lcd_input_is_set (unsigned char io_number)
 unsigned short int lcd_input_adc_value (unsigned char io_number)
 {
     /* Select the correct channel on mux */
-#if 0
-    IOPIN = (IOPIN && (~(15 << 10))) || io_number;
-#endif
-
-    if (io_number & 1)
-        IOSET = S0;
-    else
-        IOCLR = S0;
-
-    if (io_number & 2)
-        IOSET = S1;
-    else
-        IOCLR = S1;
-
-    if (io_number & 4)
-        IOSET = S2;
-    else
-        IOCLR = S2;
-
-    if (io_number & 8)
-        IOSET = S3;
-    else
-        IOCLR = S3;
+    IOPIN = ((IOPIN & (0xFFFFC3FF)) | (io_number << 10));
 
     return (adc_read (LCD_INPUT_ADC_CHANNEL));
 }
@@ -102,6 +61,11 @@ char number_to_digit (unsigned char *number, unsigned char *digit)
 {
     switch (*number)
     {
+        /* 166 = 0; 10100110 ??- 11010111
+         *   1 = 4; 00000100 ??- 00000110
+         * 102 = 9; 01100110 ??- 10110111
+         *  98 = 4; 01100010 ??- 00110110
+         */
         /* This case is when there is none segment ON */
         case 0:
         *digit = 0;

@@ -28,6 +28,9 @@
 #define ON 1
 #define OFF 0
 
+#define DEBUG_PIN_ON IOSET = (1 << 14)
+#define DEBUG_PIN_OFF IOCLR = (1 << 14)
+
 /* Global variables */
 volatile unsigned short int timer1_counter = 0;
 volatile unsigned char new_time = 0;
@@ -73,7 +76,7 @@ int main (void)
     /* Initialize variables */
     float   weight = 0,
             last_weight = 0;
-    unsigned char state = 0;
+    volatile unsigned char state = 0;
 
     FATFS fs;       /* Work area (file system object) for logical drive */
     FIL file;       /* file object */
@@ -95,6 +98,8 @@ int main (void)
     lcd_init ();
 
     spi_init ();
+
+    IODIR |= (1 << 14); /* Debug pin */
 
     /* Initialize the Timer1 */
     timer1_init ();
@@ -158,15 +163,16 @@ int main (void)
     for (;;)
     {
     /* Syncronize with LCD input pin 10 (backplane 1). 775 on ADC should equal
-                                                             to 2,5 volts */
-        if (lcd_input_adc_value (10) > 775)
+                                                                 to 2,5 volts */
+        if ((lcd_input_adc_value (9)) > 775)
         {
-            while (lcd_input_adc_value (10) < 775) ;
+            while ((lcd_input_adc_value (9)) > 775) ;
 
             /* Write weight value on LCD only if there was no error when
              *                                                     reading it */
             if (!(get_weight (&weight)))
             {
+
                 lcd_send_command (DD_RAM_ADDR); /* LCD set first row */
                 lcd_send_string ("    ");
                 lcd_send_float (weight, 3, 1);
@@ -181,7 +187,7 @@ int main (void)
             switch (state)
             {
                 case 0:
-                timer1_counter = 5000;
+                timer1_counter = 25000;
                 state = 1;
 
                 case 1:
