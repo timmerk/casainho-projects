@@ -6,7 +6,7 @@ I bought another bathroom scale. The model is "Jata Hogar 490", looks like it is
 
 = Status =
 
-Working correctly on 2009.10.05. Code is on [http://code.google.com/p/casainho-projects/source/browse/ SVN].
+Working correctly as on 2009.10.05. Firmware Open Source code is on [http://code.google.com/p/casainho-projects/source/browse/ SVN].
 
 = Some pictures from original scale =
 
@@ -75,13 +75,15 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/b
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-08.jpg
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-09.jpg
-10th line: Backplane 1 signal.
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-10.jpg
-11th line: Backplane 2 signal.
+10th line: Backplane 1 signal.
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-11.jpg
-12th line: Backplane 3 signal.
+11th line: Backplane 2 signal.
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-12.jpg
+12th line: Backplane 3 signal.
+
+http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-jata_hogar_490/jata_hogar_490-oscilloscope-20091005-13.jpg
 13th line: Backplane 4 signal.
