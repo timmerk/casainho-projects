@@ -1,0 +1,13 @@
+reset
+set title "Bathroom scale log"
+set xlabel "Date"
+set ylabel "Weight\n(kg)"
+set ytic 1
+set grid
+set timefmt "%d-%m-%Y %H:%M:%S"
+set xdata time
+set format y "%3.0f"
+set format x "%d-%m-%y"
+set datafile separator ";"
+plot [:] [45:70] "./scripts/weight.csv" using 1:2 with linespoints pointtype 13 lt rgb "red" title ""
+pause -1
