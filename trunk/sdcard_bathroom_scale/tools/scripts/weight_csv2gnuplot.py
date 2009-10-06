@@ -40,7 +40,7 @@ def main():
 
   #Open the file
   f = open(inputFileName, "rU")
-  fOutput = open("weight.csv", "w")
+  fOutput = open("./scripts/weight.csv", "w")
 
   #Replace line by line
   for row in f:

@@ -15,9 +15,6 @@
 #include "timers.h"
 #include "lcd.h"
 
-#define DEBUG_PIN_ON IOSET = (1 << 14)
-#define DEBUG_PIN_OFF IOCLR = (1 << 14)
-
 void lcd_input_init (void)
 {
     /* Define all lines as outputs */

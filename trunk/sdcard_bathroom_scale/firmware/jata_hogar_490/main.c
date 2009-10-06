@@ -28,9 +28,6 @@
 #define ON 1
 #define OFF 0
 
-#define DEBUG_PIN_ON IOSET = (1 << 14)
-#define DEBUG_PIN_OFF IOCLR = (1 << 14)
-
 /* Global variables */
 volatile unsigned short int timer1_counter = 0;
 volatile unsigned char new_time = 0;
@@ -98,8 +95,6 @@ int main (void)
     lcd_init ();
 
     spi_init ();
-
-    IODIR |= (1 << 14); /* Debug pin */
 
     /* Initialize the Timer1 */
     timer1_init ();

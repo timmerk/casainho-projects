@@ -526,7 +526,7 @@ DRESULT disk_ioctl (
 
 void disk_timerproc (void)
 {
-	BYTE n, s;
+	BYTE n, s = 0;
 
 	n = Timer1; /* 100Hz decrement timer */
 	if (n) Timer1 = --n;
