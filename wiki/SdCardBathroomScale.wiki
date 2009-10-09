@@ -25,6 +25,11 @@ And here is a picture of a graph made using Gnuplot (my own weight log):
 
 Firmware source code, schematics sources, pictures of current work, Gnuplot scripts,  can be found on [http://code.google.com/p/casainho-projects/source/browse/trunk/sdcard_bathroom_scale/ SVN].
 
+== Media coverage ==
+
+  * [http://hackaday.com/2009/08/14/logging-weight-changes/ Hackaday - "Logging weight changes" on 2009.08.14]
+  * [http://hackedgadgets.com/2009/10/08/weight-logging-bathroom-scale/ Hacked Gadgets - "Weight Logging Bathroom Scale" on 2009.10.08]
+
 ==Observations and things to improve==
 The system works perfectly. Although there are some things I would like to improve:
 
