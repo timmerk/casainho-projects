@@ -1,4 +1,5 @@
 #summary About the bathroom scale Jata Hogar 490
+#labels Deprecated
 
 = Introduction =
 
