@@ -1,0 +1,127 @@
+EESchema Schematic File Version 2  date Ter 10 Nov 2009 12:31:29 WET
+LIBS:device
+LIBS:conn
+LIBS:power
+LIBS:conn_sd
+EELAYER 24  0
+EELAYER END
+$Descr A4 11700 8267
+Sheet 1 1
+Title ""
+Date "10 nov 2009"
+Rev ""
+Comp ""
+Comment1 ""
+Comment2 ""
+Comment3 ""
+Comment4 ""
+$EndDescr
+Wire Wire Line
+	4050 3050 3900 3050
+Wire Wire Line
+	3900 3050 3900 2700
+Wire Wire Line
+	3900 2700 3650 2700
+Wire Wire Line
+	3650 2500 3850 2500
+Wire Wire Line
+	3850 2500 3850 2600
+Wire Wire Line
+	3850 2600 4050 2600
+Wire Wire Line
+	3300 3350 3300 3250
+Connection ~ 3100 3150
+Wire Wire Line
+	3300 3250 4050 3250
+Wire Wire Line
+	4750 2500 5000 2500
+Wire Wire Line
+	5000 2500 5000 2600
+Wire Wire Line
+	3100 3150 4050 3150
+Wire Wire Line
+	3650 2600 3800 2600
+Wire Wire Line
+	3800 2600 3800 2650
+Wire Wire Line
+	3800 2650 3950 2650
+Wire Wire Line
+	3950 2650 3950 2900
+Wire Wire Line
+	3950 2900 4050 2900
+Wire Wire Line
+	3650 2800 3850 2800
+Wire Wire Line
+	3850 2800 3850 3350
+Wire Wire Line
+	3850 3350 4050 3350
+Wire Wire Line
+	3100 3050 3100 3250
+Wire Wire Line
+	3100 3750 3100 3650
+$Comp
+L GND #PWR2
+U 1 1 4AF95CBC
+P 3100 3750
+F 0 "#PWR2" H 3100 3750 30  0001 C CNN
+F 1 "GND" H 3100 3680 30  0001 C CNN
+	1    3100 3750
+	1    0    0    -1  
+$EndComp
+$Comp
+L C C1
+U 1 1 4AF95C2E
+P 3100 3450
+F 0 "C1" H 3150 3550 50  0000 L CNN
+F 1 "100nF" H 3150 3350 50  0000 L CNN
+	1    3100 3450
+	1    0    0    -1  
+$EndComp
+$Comp
+L CONN_4 P1
+U 1 1 4AF44157
+P 3300 2650
+F 0 "P1" V 3250 2650 50  0000 C CNN
+F 1 "CONN_4" V 3350 2650 50  0000 C CNN
+	1    3300 2650
+	-1   0    0    1   
+$EndComp
+NoConn ~ 4050 2800
+NoConn ~ 4050 2700
+$Comp
+L CONN_SD sdcard_connector-4ucon_19607
+U 1 1 4AF43E7E
+P 4400 2800
+F 0 "sdcard_connector-4ucon_19607" H 4400 2100 40  0000 C CNN
+F 1 "CONN_SD" H 4400 3500 40  0000 C CNN
+	1    4400 2800
+	1    0    0    -1  
+$EndComp
+$Comp
+L +3.3V #PWR1
+U 1 1 4AF42EF3
+P 3100 3050
+F 0 "#PWR1" H 3100 3010 30  0001 C CNN
+F 1 "+3.3V" H 3100 3160 30  0000 C CNN
+	1    3100 3050
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR3
+U 1 1 4AF42EDB
+P 3300 3350
+F 0 "#PWR3" H 3300 3350 30  0001 C CNN
+F 1 "GND" H 3300 3280 30  0001 C CNN
+	1    3300 3350
+	1    0    0    -1  
+$EndComp
+$Comp
+L GND #PWR4
+U 1 1 4AF42EBE
+P 5000 2600
+F 0 "#PWR4" H 5000 2600 30  0001 C CNN
+F 1 "GND" H 5000 2530 30  0001 C CNN
+	1    5000 2600
+	1    0    0    -1  
+$EndComp
+$EndSCHEMATC

@@ -1,0 +1,25 @@
+# EESchema Netlist Version 1.1 created  Seg 09 Nov 2009 14:28:13 WET
+(
+ ( /4AF42F16 SM0805_Opendous C1 C_MINI
+  ( 1 +3.3V )
+  ( 2 GND )
+ )
+ ( /4AF44157 SIL-5-Blank P1 CONN_4
+  ( 1 N-000004 )
+  ( 2 N-000008 )
+  ( 3 N-000006 )
+  ( 4 N-000003 )
+ )
+ ( /4AF43E7E sdcard_con U1 CONN_SD
+  ( 1 N-000003 )
+  ( 2 N-000004 )
+  ( 3 GND )
+  ( 4 +3.3V )
+  ( 5 N-000008 )
+  ( 6 GND )
+  ( 7 N-000006 )
+  ( 8 ? )
+  ( 9 ? )
+ )
+)
+*
