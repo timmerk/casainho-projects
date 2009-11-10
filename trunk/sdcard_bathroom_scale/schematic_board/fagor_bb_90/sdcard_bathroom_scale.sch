@@ -1,5 +1,5 @@
-EESchema Schematic File Version 2  date Ter 18 Ago 2009 10:47:36 WEST
-LIBS:power,device,conn,linear,regul,74xx,cmos4000,adc-dac,memory,xilinx,special,microcontrollers,dsp,microchip,analog_switches,motorola,texas,intel,audio,interface,digital-audio,philips,display,cypress,siliconi,contrib,valves,./sdcard_bathroom_scale.cache
+EESchema Schematic File Version 2  date Seg 09 Nov 2009 18:51:00 WET
+LIBS:sdcard_bathroom_scale-cache
 EELAYER 24  0
 EELAYER END
 $Descr A4 11700 8267

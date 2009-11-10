@@ -1,0 +1,13 @@
+PCBNEW-LibDoc----V1  Fri 06 Nov 2009 15:05:30 WET
+#
+$MODULE U1
+Li U1
+Kw SD Memory Card Connector 3M SD-RSMT-2-MQ-WF Push-Push R/A SMD
+$EndMODULE
+#
+$MODULE SDCard
+Li SDCard
+Kw SDCard - 4UCON
+$EndMODULE
+#
+$EndLIBDOC

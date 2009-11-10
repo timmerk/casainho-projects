@@ -1,0 +1,24 @@
+Cmp-Mod V01 Created by Cvpcb (20091108 SVN-R2083) date = Seg 09 Nov 2009 14:28:13 WET
+
+BeginCmp
+TimeStamp = /4AF42F16;
+Reference = C1;
+ValeurCmp = C_MINI;
+IdModule  = SM0805_Opendous;
+EndCmp
+
+BeginCmp
+TimeStamp = /4AF44157;
+Reference = P1;
+ValeurCmp = CONN_4;
+IdModule  = SIL-5-Blank;
+EndCmp
+
+BeginCmp
+TimeStamp = /4AF43E7E;
+Reference = U1;
+ValeurCmp = CONN_SD;
+IdModule  = sdcard_con;
+EndCmp
+
+EndListe
