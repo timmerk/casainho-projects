@@ -179,33 +179,34 @@ int main (void)
 
         else
         {
+            if (new_time)
+            {
+                new_time = 0;
+                /*
+                 * Print current time on 2nd line of the LCD.
+                 */
+                rtc_gettime (&rtc);
+                lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
+                lcd_send_string ("    ");
+                lcd_send_char ((rtc.hour / 10) + 48);
+                lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
+                lcd_send_char (':');
+                lcd_send_char ((rtc.min / 10) + 48);
+                lcd_send_char ((rtc.min - ((rtc.min / 10) * 10)) + 48);
+                lcd_send_char (':');
+                lcd_send_char ((rtc.sec / 10) + 48);
+                lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
+                lcd_send_string ("    ");
+            }
+
             switch (state)
             {
                 case 0:
                 timer1_counter = 25000;
                 state = 1;
+                break;
 
                 case 1:
-                if (new_time)
-                {
-                    new_time = 0;
-                    /*
-                     * Print current time on 2nd line of the LCD.
-                     */
-                    rtc_gettime (&rtc);
-                    lcd_send_command (DD_RAM_ADDR2); /* LCD set 2nd row */
-                    lcd_send_string ("    ");
-                    lcd_send_char ((rtc.hour / 10) + 48);
-                    lcd_send_char ((rtc.hour - ((rtc.hour / 10) * 10)) + 48);
-                    lcd_send_char (':');
-                    lcd_send_char ((rtc.min / 10) + 48);
-                    lcd_send_char ((rtc.min - ((rtc.min / 10) * 10)) + 48);
-                    lcd_send_char (':');
-                    lcd_send_char ((rtc.sec / 10) + 48);
-                    lcd_send_char ((rtc.sec - ((rtc.sec / 10) * 10)) + 48);
-                    lcd_send_string ("    ");
-                }
-
                 if (!timer1_counter)
                 {
                    /* If weight is at least 40kg and
