@@ -1,0 +1,61 @@
+<pyvcp>
+<labelframe text="Status">
+    <table flexible_columns="[1]">
+        <tablesticky sticky="w" />
+        <tablerow/>
+            <label text="Connection" />
+            <led halpin="extruder-connection" on_color="green" off_color="red"/>        
+        <tablerow/>
+            <label text="Online" />
+            <led halpin="extruder-online" on_color="green" off_color="grey"/>
+        <tablerow/>
+            <label text="Communication link error" />
+            <led halpin="fault.communication" on_color="red" off_color="grey"/>
+    </table>
+</labelframe>
+<labelframe text="Heater">
+    <tabs>
+        <names>["Heater 1"]</names>        
+        <table flexible_columns="[1]">
+            <tablesticky sticky="nse" />
+            <tablerow/>
+                <label text="PV" />
+                <bar halpin="heater1.pv" min_="0" max_="300" bgcolor="grey" fillcolor="red"/>
+            <tablerow/>
+                <label text="SV" />
+                <bar halpin="heater1.sv" min_="0" max_="300" bgcolor="grey" fillcolor="green"/>
+            <tablerow/>
+                <tablesticky sticky="ew" />
+                <led halpin="heater1.on" on_color="red" off_color="grey"/>
+                <scale halpin="heater1.set-sv" min_="0" max_="300" orient="horizontal"/>
+        </table>
+    </tabs>
+</labelframe>
+<labelframe text="Motor">
+    <tabs>
+        <names>["Control"]</names>        
+        <vbox>
+            <table flexible_columns="[2]">
+                <tablesticky sticky="nse" />
+                <tablerow/>
+                    <label text="PV" />
+                    <u32 halpin="motor1.pv" format="05d">
+                        <font>("Helvetica", 24)</font>
+                    </u32>
+                <tablerow/>
+                    <label text="SV" />
+                    <u32 halpin="motor1.sv" format="05d">
+                        <font>("Helvetica", 24)</font>
+                    </u32>
+            </table>
+            <table flexible_columns="[1]">
+                <tablesticky sticky="nesw" />
+                <tablerow/>
+                    <scale halpin="motor1.speed" min_="0" max_="1000" resolution="1" orient="horizontal"/>
+                    <button halpin="motor1.speed.trigger" text="Speed" />
+            </table>
+        </vbox>
+    </tabs>
+</labelframe>
+</pyvcp>
+
