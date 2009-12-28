@@ -1,0 +1,23 @@
+#summary About my efforts to build a 3D printer based on RepRap project
+
+= Introduction =
+
+I started to build my own 3D printer on November 2009. My printer is based on [http://www.reprap.org/ RepRap project].
+
+= Details =
+
+Since I already own a CNC, I decided to use it and add the [http://reprap.org/bin/view/Main/ThermoplastExtruder_2_0 Thermoplastic Extruder].
+
+I use EMC2 on Linux Ubuntu to control my CNC and I need to use a set of scripts to let EMC2 "control" the Thermoplastic Extruder.
+I am sharing all the files I use [http://code.google.com/p/casainho-projects/source/browse/#svn/trunk/emcrepstrap here on SVN repository].
+
+The original files are from [http://www.hellosam.net/ Sam Wong] and I got a lot of help from him to get my files working :-)
+
+There is an [http://objects.reprap.org/wiki/Builders/EMCRepStrap wiki page at RepRap site for this EMCRepStrap project].
+
+== My setup ==
+
+I am using my Zenbot CNC machine, controlled by EMC2 on GNU/Linux Ubuntu.
+
+I did build my [http://reprap.org/bin/view/Main/ThermoplastExtruder_2_0 Thermoplastic Extruder] and used the [http://dev.www.reprap.org/bin/view/Main/Extruder_Controller_2_2 Extruder Controller V2.2 board].
+
