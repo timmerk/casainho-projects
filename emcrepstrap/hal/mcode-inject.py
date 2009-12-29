@@ -26,7 +26,7 @@ class Usage(Exception):
     def __init__(self, msg):
         self.msg = msg
 
-# List of M Code that requires sych, blocking operation
+# List of M Code that requires synch, blocking operation
 blocking_mcodes = {
     101: 1, # Extruder on
     150: 1  # Wait for set temperature
@@ -78,8 +78,6 @@ def main(argv=None):
                     if done == seqid:
                         break
                     time.sleep(0.005)
-            # if mcode == 101:
-            #     time.sleep(0.2)
             
         except Usage ,err:
             print >> sys.stderr, str(err.msg)
