@@ -324,14 +324,19 @@ class Extruder:
             # Read answer from slave.
             SlaveAnswer = self.comm.readback()
             if SlaveAnswer != None:
-                if SlaveAnswer.rc != SimplePacket.RC_OK:
+                if SlaveAnswer.rc != SimplePacket.RC_OK or SlaveAnswer.get_8(0) != 1:
                     # There was a CRC mismatch on slave and we send again the command, since
                     # slave do not execute the command if found a CRC mismatch.
                     sendFlag = True
                     RetryCounter = RetryCounter  + 1
                     #DEBUG
                     print >> sys.stderr, datetime.now()
-                    print >> sys.stderr, "Extruder communication error: RC: %d" % (SlaveAnswer.rc)
+                    if SlaveAnswer.rc != SimplePacket.RC_OK:
+                            print >> sys.stderr, "Slave -> Master communication error: RC: %d" % (SlaveAnswer.rc)
+
+                    if SlaveAnswer.get_8(0) != 1
+                            print >> sys.stderr, "Master -> Slave communication error: response_code: %d" % (SlaveAnswer.get_8(0))
+
                     print >> sys.stderr, " "
                     #end DEBUG
 
