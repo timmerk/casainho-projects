@@ -36,6 +36,8 @@ After I just put the 3D file to print and get this while in the process:
 
 [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-01-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-01_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-02-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-02_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-03-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/printing-03_small-20091230.jpg]
 
+Here is [http://blip.tv/file/get/Jpcasainho-reprap_3d_printer2009465.ogg a small video showing the printing process].
+
 And here the EMC2 GUI:
 
 [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/zenbot_as_emcrepstrap-04-20091228.png http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/zenbot_as_emcrepstrap-04_small-20091228.jpg]
@@ -43,3 +45,5 @@ And here the EMC2 GUI:
 And here the final piece:
 
 [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-01-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-01_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-02-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-02_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-03-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-03_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-04-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-04_small-20091230.jpg] [http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-05-20091230.jpg http://casainho-projects.googlecode.com/svn/trunk/emcrepstrap/images/object_printed-05_small-20091230.jpg]
+
+I [http://www.thingiverse.com/thing:1501 shared the 3D files for this piece on Thingiverse].
