@@ -24,27 +24,46 @@ import sys
 from RepRapSerialComm import *
 
 def sendPacket(self, p, CallBack):
-    RetryCounter = 0
+        RetryCounter = 0
+        sendFlag = True
 
-    while RetryCounter < 10:
-        # Send the Packet to slave.
-        self.comm.send(p)
-        
-        # Read answer from slave.
-        SlaveAnswer = self.comm.readback()
-        if SlaveAnswer != None:
-            if SlaveAnswer.rc != SimplePacket.RC_OK:
-                # There was a CRC mismatch on slave and we send again the command, since
-                # slave do not execute the command if found a CRC mismatch.
-                RetryCounter = RetryCounter  + 1
-                print >> sys.stderr, "CRC mismatch on slave"
+        while RetryCounter < 10:
+            # Send the Packet to slave.
+            if sendFlag:
+                self.comm.send(p)
+                sendFlag = False
 
-            else:
-                # Execute the call back if there was no CRC mismatch on slave...
-                (CallBack)(p)
-                return True
+            # Read answer from slave.
+            SlaveAnswer_Packet = self.comm.readback()
+            if SlaveAnswer_Packet != None:
+                if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id())
+                    # Execute the call back if there was no CRC mismatch on slave...
+                    (CallBack)(p)
+                    #DEBUG
+                    print >> sys.stderr, "Packet id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
+                    print >> sys.stderr, " "
+                    #DEBUG
+                    return True
 
-    # There was to much CRC errors and/or timeouts...
+                if SlaveAnswer_Packet.rc != SimplePacket.RC_OK:
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Slave -> Master communication error: RC: %d" %(SlaveAnswer_Packet.rc)
+                    print >> sys.stderr, " "
+
+                if SlaveAnswer_Packet.get_8(0) != 1:
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Master -> Slave communication error: response_code: %d" %(SlaveAnswer_Packet.get_8(0))
+                    print >> sys.stderr, " "
+
+                if SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id():
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Packet id error. id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
+                    print >> sys.stderr, " "
+
+            sendFlag = True
+            RetryCounter += 1
+
+    # There was to much errors...
     # Shut down system
     self.comm.reset()
     return None
@@ -62,20 +81,12 @@ def main(argv=None):
     p = SimplePacket()
     p.add_8(0)
     p.add_8(91)
-    comm.send(p)
+    sendPacket(p, print_temperature)
     
-    print "Reading back the response..."
-    p = comm.readback()
-    while p == None:
-        p = comm.readback()
-        
+def print_temperature(self):
+    print "Reading back the response..."        
     print "Readback result code (1 for success, anything else - failure): " + str(p.rc)
     if p.rc == SimplePacket.RC_OK: print "The current temperature is: " + str(p.get_16(1))
-    print str(p.get_8(0))
-    print str(p.get_8(1))
-    print str(p.get_8(2))
-    print str(p.get_8(3))
-
 
 if __name__ == "__main__":
     main()
