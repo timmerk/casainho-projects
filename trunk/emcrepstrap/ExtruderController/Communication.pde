@@ -77,8 +77,9 @@ void process_packets()
                 // take some action, if CRC is correct
                 handle_query();
 
-                // Echo the request code for verification
-                masterPacket.add_8(masterPacket.get_8(1));
+                /* Echo the packet id for verification -- packet id is the
+                 * last byte received and sent on payload. */
+                masterPacket.add_8(masterPacket.get_8(masterPacket.getLength()));
             }
 
             // send reply over RS485

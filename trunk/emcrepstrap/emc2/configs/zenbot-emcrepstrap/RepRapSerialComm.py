@@ -12,6 +12,8 @@ import serial
 from datetime import datetime, timedelta 
 from struct import *
 
+_packet_id = 0
+
 __author__ = "Saw Wong (sam@hellosam.net)"
 __date__ = "2009/11/12"
 __license__ = "GPL 3.0"
@@ -58,6 +60,11 @@ class RepRapSerialComm:
                 pass
              
     def send(self, packet):
+        # Append the Packet ID to packet payload (latest byte in packet payload).
+        packet.id_increment()
+        packet.add_8(packet.id())
+
+        # Send the final packet.
         self.ser.write(pack('B', SimplePacket.START_BYTE))
         self.ser.write(pack('B', len(packet.buf)))
         self.ser.write(packet.buf)
@@ -116,7 +123,15 @@ class RepRapSerialComm:
 
         # Content
         elif self._read_state == 2:
-            self._read_packet.add_8(b)
+
+            # Get the packet id.
+            if self._read_length_left == 1:
+                self._read_packet.id_received = b
+                
+            # Get all payload.
+            else:                                
+                self._read_packet.add_8(b)
+
             self._read_length_left -= 1
 
         # CRC
@@ -169,9 +184,16 @@ class SimplePacket:
         Create a new packet
         """
         self.buf = ""
+        self.id_received = 0
         self.crc = 0
         self.rc = SimplePacket.RC_OK
         self.tag = -1
+
+    def id(self):
+        return _packet_id
+
+    def id_increment(self):
+        _packet_id += 1
 
     def get_8(self, idx):
         """

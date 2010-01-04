@@ -322,29 +322,36 @@ class Extruder:
                 sendFlag = False
 
             # Read answer from slave.
-            SlaveAnswer = self.comm.readback()
-            if SlaveAnswer != None:
-                if SlaveAnswer.rc != SimplePacket.RC_OK or SlaveAnswer.get_8(0) != 1:
-                    # There was a CRC mismatch on slave and we send again the command, since
-                    # slave do not execute the command if found a CRC mismatch.
-                    sendFlag = True
-                    RetryCounter = RetryCounter  + 1
-                    #DEBUG
-                    print >> sys.stderr, datetime.now()
-                    if SlaveAnswer.rc != SimplePacket.RC_OK:
-                            print >> sys.stderr, "Slave -> Master communication error: RC: %d" % (SlaveAnswer.rc)
-
-                    if SlaveAnswer.get_8(0) != 1
-                            print >> sys.stderr, "Master -> Slave communication error: response_code: %d" % (SlaveAnswer.get_8(0))
-
-                    print >> sys.stderr, " "
-                    #end DEBUG
-
-                else:
+            SlaveAnswer_Packet = self.comm.readback()
+            if SlaveAnswer_Packet != None:
+                if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id())
                     # Execute the call back if there was no CRC mismatch on slave...
                     self.c['connection'] = 1 # Turn on connection.
-                    (CallBack)(SlaveAnswer)
+                    (CallBack)(SlaveAnswer_Packet)
+                    #DEBUG
+                    print >> sys.stderr, "Packet id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
+                    print >> sys.stderr, " "
+                    #DEBUG
                     return True
+
+                if SlaveAnswer_Packet.rc != SimplePacket.RC_OK:
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Slave -> Master communication error: RC: %d" %(SlaveAnswer_Packet.rc)
+                    print >> sys.stderr, " "
+
+                if SlaveAnswer_Packet.get_8(0) != 1:
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Master -> Slave communication error: response_code: %d" %(SlaveAnswer_Packet.get_8(0))
+                    print >> sys.stderr, " "
+
+                if SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id():
+                    print >> sys.stderr, datetime.now()
+                    print >> sys.stderr, "Packet id error. id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
+                    print >> sys.stderr, " "
+
+            sendFlag = True
+            RetryCounter += 1
+
 
         # There was to much CRC errors and/or timeouts...
         # Shut down system
@@ -368,7 +375,7 @@ class Extruder:
         #p = SimplePacket()
         #p.add_8(0)
         #p.add_8(82)
-        #self.sendPacket(p, self._rb_dummy)
+        #self.sendPacket(p, self._rb_dummy)     
         return None
 
 def main():
