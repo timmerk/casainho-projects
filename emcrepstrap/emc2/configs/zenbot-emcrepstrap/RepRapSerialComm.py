@@ -12,11 +12,12 @@ import serial
 from datetime import datetime, timedelta 
 from struct import *
 
-_packet_id = 0
-
 __author__ = "Saw Wong (sam@hellosam.net)"
 __date__ = "2009/11/12"
 __license__ = "GPL 3.0"
+
+# Global variables
+packet_id = 0
 
 class RepRapSerialComm:
     """
@@ -129,9 +130,7 @@ class RepRapSerialComm:
                 self._read_packet.id_received = b
                 
             # Get all payload.
-            else:                                
-                self._read_packet.add_8(b)
-
+            self._read_packet.add_8(b)
             self._read_length_left -= 1
 
         # CRC
@@ -190,10 +189,12 @@ class SimplePacket:
         self.tag = -1
 
     def id(self):
-        return _packet_id
+        global packet_id
+        return packet_id
 
     def id_increment(self):
-        _packet_id += 1
+        global packet_id
+        packet_id = (packet_id + 1) % 255
 
     def get_8(self, idx):
         """

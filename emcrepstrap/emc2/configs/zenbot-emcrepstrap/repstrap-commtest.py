@@ -23,49 +23,48 @@ COMM_BAUDRATE = 38400
 import sys
 from RepRapSerialComm import *
 
-def sendPacket(self, p, CallBack):
-        RetryCounter = 0
-        sendFlag = True
+def sendPacket(p, CallBack):
+    RetryCounter = 0
+    sendFlag = True
+    
+    comm = RepRapSerialComm(port = COMM_PORT, baudrate = COMM_BAUDRATE)
+    comm.reset()
 
-        while RetryCounter < 10:
-            # Send the Packet to slave.
-            if sendFlag:
-                self.comm.send(p)
-                sendFlag = False
+    while RetryCounter < 10:
+        # Send the Packet to slave.
+        if sendFlag:
+            comm.send(p)
+            sendFlag = False
 
-            # Read answer from slave.
-            SlaveAnswer_Packet = self.comm.readback()
-            if SlaveAnswer_Packet != None:
-                if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id())
-                    # Execute the call back if there was no CRC mismatch on slave...
-                    (CallBack)(p)
-                    #DEBUG
-                    print >> sys.stderr, "Packet id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
-                    print >> sys.stderr, " "
-                    #DEBUG
-                    return True
+        # Read answer from slave.
+        SlaveAnswer_Packet = comm.readback()
+        if SlaveAnswer_Packet != None:
+            if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id()):
+                # Execute the call back if there was no CRC mismatch on slave...
+                (CallBack)(SlaveAnswer_Packet)
+                return True
 
-                if SlaveAnswer_Packet.rc != SimplePacket.RC_OK:
-                    print >> sys.stderr, datetime.now()
-                    print >> sys.stderr, "Slave -> Master communication error: RC: %d" %(SlaveAnswer_Packet.rc)
-                    print >> sys.stderr, " "
+            if SlaveAnswer_Packet.rc != SimplePacket.RC_OK:
+                print >> sys.stderr, datetime.now()
+                print >> sys.stderr, "Slave -> Master communication error: RC: %d" %(SlaveAnswer_Packet.rc)
+                print >> sys.stderr, " "
 
-                if SlaveAnswer_Packet.get_8(0) != 1:
-                    print >> sys.stderr, datetime.now()
-                    print >> sys.stderr, "Master -> Slave communication error: response_code: %d" %(SlaveAnswer_Packet.get_8(0))
-                    print >> sys.stderr, " "
+            if SlaveAnswer_Packet.get_8(0) != 1:
+                print >> sys.stderr, datetime.now()
+                print >> sys.stderr, "Master -> Slave communication error: response_code: %d" %(SlaveAnswer_Packet.get_8(0))
+                print >> sys.stderr, " "
 
-                if SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id():
-                    print >> sys.stderr, datetime.now()
-                    print >> sys.stderr, "Packet id error. id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
-                    print >> sys.stderr, " "
+            if SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id():
+                print >> sys.stderr, datetime.now()
+                print >> sys.stderr, "Packet id error. id = %d; id_received = %d" % (SlaveAnswer_Packet.id(), SlaveAnswer_Packet.id_received)
+                print >> sys.stderr, " "
 
             sendFlag = True
             RetryCounter += 1
 
     # There was to much errors...
     # Shut down system
-    self.comm.reset()
+    comm.reset()
     return None
 
 def main(argv=None):
@@ -83,10 +82,11 @@ def main(argv=None):
     p.add_8(91)
     sendPacket(p, print_temperature)
     
-def print_temperature(self):
+def print_temperature(SlaveAnswer_Packet):
     print "Reading back the response..."        
-    print "Readback result code (1 for success, anything else - failure): " + str(p.rc)
-    if p.rc == SimplePacket.RC_OK: print "The current temperature is: " + str(p.get_16(1))
+    print "Readback result code (1 for success, anything else - failure): " + str(SlaveAnswer_Packet.rc)
+    if SlaveAnswer_Packet.rc == SimplePacket.RC_OK:
+        print "The current temperature is: " + str(SlaveAnswer_Packet.get_16(1))
 
 if __name__ == "__main__":
     main()
