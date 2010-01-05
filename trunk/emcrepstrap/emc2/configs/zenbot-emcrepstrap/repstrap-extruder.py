@@ -314,24 +314,20 @@ class Extruder:
         RetryCounter = 0
         sendFlag = True
         SlaveAnswer = None
-
+        
         while RetryCounter < 10:
             # Send the Packet to slave.
             if sendFlag:
                 self.comm.send(p)
                 sendFlag = False
-
+                
             # Read answer from slave.
             SlaveAnswer_Packet = self.comm.readback()
             if SlaveAnswer_Packet != None:
-                if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id())
+                if not(SlaveAnswer_Packet.rc != SimplePacket.RC_OK) and not(SlaveAnswer_Packet.get_8(0) != 1) and not(SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id()):
                     # Execute the call back if there was no CRC mismatch on slave...
                     self.c['connection'] = 1 # Turn on connection.
                     (CallBack)(SlaveAnswer_Packet)
-                    #DEBUG
-                    print >> sys.stderr, "Packet id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
-                    print >> sys.stderr, " "
-                    #DEBUG
                     return True
 
                 if SlaveAnswer_Packet.rc != SimplePacket.RC_OK:
@@ -346,12 +342,12 @@ class Extruder:
 
                 if SlaveAnswer_Packet.id_received != SlaveAnswer_Packet.id():
                     print >> sys.stderr, datetime.now()
-                    print >> sys.stderr, "Packet id error. id = %d; id_received = %d" %SlaveAnswer_Packet.id() %SlaveAnswer_Packet.id_Received
+                    print >> sys.stderr, "Packet id error. id = %d; id_received = %d" % (SlaveAnswer_Packet.id(), SlaveAnswer_Packet.id_received)
                     print >> sys.stderr, " "
 
-            sendFlag = True
-            RetryCounter += 1
-
+                sendFlag = True
+                RetryCounter += 1
+                
 
         # There was to much CRC errors and/or timeouts...
         # Shut down system
