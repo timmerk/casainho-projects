@@ -49,8 +49,8 @@ net charge-pump => parport.0.pin-17-out
 setp stepgen.0.position-scale [AXIS_0]SCALE
 setp stepgen.0.steplen 1
 setp stepgen.0.stepspace 0
-setp stepgen.0.dirhold 20700
-setp stepgen.0.dirsetup 20700
+setp stepgen.0.dirhold 50700
+setp stepgen.0.dirsetup 50700
 setp stepgen.0.maxaccel [AXIS_0]STEPGEN_MAXACCEL
 net xpos-cmd axis.0.motor-pos-cmd => stepgen.0.position-cmd
 net xpos-fb stepgen.0.position-fb => axis.0.motor-pos-fb
@@ -61,8 +61,8 @@ net xenable axis.0.amp-enable-out => stepgen.0.enable
 setp stepgen.1.position-scale [AXIS_1]SCALE
 setp stepgen.1.steplen 1
 setp stepgen.1.stepspace 0
-setp stepgen.1.dirhold 20700
-setp stepgen.1.dirsetup 20700
+setp stepgen.1.dirhold 50700
+setp stepgen.1.dirsetup 50700
 setp stepgen.1.maxaccel [AXIS_1]STEPGEN_MAXACCEL
 net ypos-cmd axis.1.motor-pos-cmd => stepgen.1.position-cmd
 net ypos-fb stepgen.1.position-fb => axis.1.motor-pos-fb
@@ -73,8 +73,8 @@ net yenable axis.1.amp-enable-out => stepgen.1.enable
 setp stepgen.2.position-scale [AXIS_2]SCALE
 setp stepgen.2.steplen 1
 setp stepgen.2.stepspace 0
-setp stepgen.2.dirhold 20700
-setp stepgen.2.dirsetup 20700
+setp stepgen.2.dirhold 50700
+setp stepgen.2.dirsetup 50700
 setp stepgen.2.maxaccel [AXIS_2]STEPGEN_MAXACCEL
 net zpos-cmd axis.2.motor-pos-cmd => stepgen.2.position-cmd
 net zpos-fb stepgen.2.position-fb => axis.2.motor-pos-fb
