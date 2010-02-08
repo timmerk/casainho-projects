@@ -33,7 +33,7 @@
   <property name="ladderconnect" type="bool" value="True"/>
   <property name="ladderhaltype" type="int" value="0"/>
   <property name="laddername" type="string" value="custom.clp"/>
-  <property name="latency" type="float" value="20000.0"/>
+  <property name="latency" type="float" value="28000.0"/>
   <property name="machinename" type="string" value="zenbot-emcrepstrap"/>
   <property name="manualtoolchange" type="bool" value="True"/>
   <property name="md5sums" type="eval" value="[('/home/cas/emc2/configs/zenbot-emcrepstrap/README', 'fd44675fec1b1adc0f16c8445f5b8203'), ('/home/cas/emc2/configs/zenbot-emcrepstrap/zenbot-emcrepstrap.ini', '151d08649bbf1241b5e130e90edba171'), ('/home/cas/emc2/configs/zenbot-emcrepstrap/zenbot-emcrepstrap.hal', '72ed56c901543d447e5b465486da11a2')]"/>

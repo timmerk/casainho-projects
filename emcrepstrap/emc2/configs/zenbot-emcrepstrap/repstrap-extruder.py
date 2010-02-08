@@ -217,7 +217,7 @@ class Extruder:
             self.mcode_motor1_speed = 0
         else:
             #self.mcode_motor1_speed = int(self.c['motor1.spindle'] * self.c['steps_per_mm_cube'] * 10)
-            self.mcode_motor1_speed = int(self.c['motor1.spindle'] * 10000) # self.mcode_motor1_speed = 10000 equals to 1 rotation per second.
+            self.mcode_motor1_speed = int(self.c['motor1.spindle']) # self.mcode_motor1_speed = 10000 equals to 1 rotation per second.
         
         p = SimplePacket()
         p.add_8(SLAVE_ADDRESS)
