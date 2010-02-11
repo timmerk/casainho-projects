@@ -7,4 +7,3 @@ ThermistorHeater heater1(3, 11);
 // motor1: Extruder Motor
 // Any StepperMotor class
 StepperMotor motor1;
-

@@ -1,7 +1,5 @@
-#define H1D 7
-#define H1E 5
-#define H2D 8
-#define H2E 6
+#define DIRECTION 7
+#define STEP 5
 
 void enableTimer1Interrupt(void)
 {
@@ -142,8 +140,6 @@ class StepperMotor
 
     public:
     
-    unsigned char direction;
-    
     StepperMotor(void)
     {
         speed = 0;
@@ -152,26 +148,23 @@ class StepperMotor
     /* Do whatever necessary to init the pin mode. */
     virtual void init()
     {
-        pinMode(H1D, OUTPUT);
-        pinMode(H2D, OUTPUT);
+        pinMode(DIRECTION, OUTPUT);
+        pinMode(STEP, OUTPUT);
+        
+        disableTimer1Interrupt();
         setupTimer1Interrupt();
     }
 
     /* De-energize the motor. Also get called in E-Stop and such. */
     virtual void turnOff()
     {
-        digitalWrite(H1D, 0);
-        analogWrite(H1E, 0);
-        digitalWrite(H2D, 0);
-        analogWrite(H2E, 0);
-
-        disableTimer1Interrupt();
+      this->setSpeed(0); /* Setting speed = 0 stops the motor. There is now way to fully turn off the motor. */
     }
 
     /* Energize the motor. Get called in Turn-On in EMC2. */
     virtual void turnOn()
     {
-        this->setSpeed(0); /* Start with motor stopped */
+      /* Do nothing here. Motor is turned on everytime speed is changed. */
     }
 
     /* returns the Current Value (The current step) */
@@ -186,15 +179,14 @@ class StepperMotor
         return sv;
     }
 
-    /* Set number of steps in one second */
+    /* Set number of steps in one secound */
     void setSpeed(int _speed)
     {
         if ((status & MachineOff)) return;
-
-        /* Expect no more than 2RPM. */
+        
         pv = sv = speed = _speed;
 
-        /* My stepper motor is working in full-step mode, which are 200 steps for each
+        /* My stepper motor is working in 1/16 step mode, which are 200 * 16 steps for each
          * revolution.
          */
         if (speed == 0)
@@ -202,17 +194,23 @@ class StepperMotor
           disableTimer1Interrupt(); /* This stop the steppers impulses for motor */
           return;
         }
+        else
+        {
+          enableTimer1Interrupt(); /* This starts the steppers impulses for motor */
+        }
 
+        /* Set direction pin for Stepper motor controller */
         if (speed > 0)
         {
-          direction = 1;  
+          digitalWrite(DIRECTION, 1);
         }
         else
         {
-          direction = 0;            
+          digitalWrite(DIRECTION, 0);
         }
         
-        setTimer1Ticks((long) ((80000 * 10000) / abs(speed))); /* Speed = 10000 means 1 revolution per second. */
+        /* Speed = 10000 means 1 revolution per second. */
+        setTimer1Ticks((unsigned long) ((50000000) / ((unsigned long) abs(speed))));
         enableTimer1Interrupt(); /* This starts the steppers impulses for motor */
     }
 };
