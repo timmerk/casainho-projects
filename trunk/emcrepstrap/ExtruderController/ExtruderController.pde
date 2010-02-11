@@ -14,10 +14,6 @@
  *
  *********************************************************************************************************/
 
-#ifndef __AVR_ATmega168__
-#error Oops!  Make sure you have 'Arduino' selected from the boards menu.
-#endif
-
 #include <WProgram.h>
 #include <stdint.h>
 #include <avr/wdt.h>
@@ -27,52 +23,23 @@
 #include "Heater.h"
 #include "Hardware.h"
 
+#define DIRECTION 7
+#define STEP 5
+
 char machine_on = 0;
 unsigned long last_packet = 0;
 unsigned char status[6];
-static unsigned char coilPosition = 0;
 
 /* This handles the Timer1 interrupt event.
  * On each event we must provide a new "step impulse" or stepper motor.
- * The stepper motor is a Nema 17 and is running at full steps: 200 steps per revolution.
+ * The stepper motor is a Nema 17 and is running at 200 * 16 steps: 3200 steps per revolution.
  */
 SIGNAL(TIMER1_COMPA_vect)
-{  
-  if (motor1.direction)
-    coilPosition++;
-  else
-    coilPosition--;
-    
-  coilPosition &= 3;
-
-  switch(coilPosition)
-  {
-    case 3:
-    digitalWrite(H1D, 1);
-    digitalWrite(H2D, 1);
-    break;
-
-    case 2:
-    digitalWrite(H1D, 1);
-    digitalWrite(H2D, 0);
-    break;
-
-    case 1:
-    digitalWrite(H1D, 0);
-    digitalWrite(H2D, 0);
-    break;
-
-    case 0:
-    digitalWrite(H1D, 0);
-    digitalWrite(H2D, 1);
-    break;
-    
-  default:
-    break;
-  }
-
-  analogWrite(H1E, 255);
-  analogWrite(H2E, 255);
+{
+  /* Do a step */
+  digitalWrite(STEP, 1);
+  delayMicroseconds(50);   
+  digitalWrite(STEP, 0);    
 }
 
 void setup()

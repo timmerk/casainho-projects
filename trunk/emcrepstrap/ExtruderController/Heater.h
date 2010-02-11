@@ -48,12 +48,12 @@ class Heater
 
             if (temp_pv < temp_sv)
             {
-                analogWrite(heater_pin, 255);
+                analogWrite(heater_pin, 180);
                 heater_state = HEATER_HEATING;
             }
             else
             {
-                analogWrite(heater_pin, 75);
+                analogWrite(heater_pin, 30);
                 heater_state = HEATER_IDLE;
             }
         }
