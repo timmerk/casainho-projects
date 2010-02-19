@@ -229,7 +229,7 @@ http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/b
 
 http://casainho-projects.googlecode.com/svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-fagor_bb_90/sdcard_bathroom_scale-20090902-02.jpg
 
-= Technical details -- Scale Fagor BB-90 =
+= Technical details -- Scale Jata Hogar 490 =
 
 I bought another bathroom scale. The model is "Jata Hogar 490", looks like it is from a [http://www.jata.es/ Spanish company].
 
