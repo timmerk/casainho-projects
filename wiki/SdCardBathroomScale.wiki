@@ -5,6 +5,27 @@
 
 = Introduction =
 
+*NEW!!*
+
+On 2010.03.17 I bought on local Decatlhon shop the [http://www.beurer.com/ Beurer BG 16] bathroom scale for 20€ that measures weight, percentage of fat, percentage of water and percentage of muscle.
+
+I hope to hack this scale and do the same as I did for the others ;-)
+
+Pictures of the scale:
+
+[http://casainho-projects.googlecode.com/svn-history/r147/trunk/sdcard_bathroom_scale/images/bathroom_scale-beurer_bg_16/beurer-bg_16-02_800x-20100317.jpg]
+
+[http://casainho-projects.googlecode.com/svn-history/r147/trunk/sdcard_bathroom_scale/images/bathroom_scale-beurer_bg_16/beurer-bg_16-05_800x-20100317.jpg]
+
+[http://casainho-projects.googlecode.com/svn-history/r147/trunk/sdcard_bathroom_scale/images/bathroom_scale-beurer_bg_16/beurer-bg_16-07_800x-20100317.jpg]
+
+[http://casainho-projects.googlecode.com/svn-history/r147/trunk/sdcard_bathroom_scale/images/bathroom_scale-beurer_bg_16/beurer-bg_16-08_800x-20100317.jpg]
+
+More pictures on [http://code.google.com/p/casainho-projects/source/browse/#svn/trunk/sdcard_bathroom_scale/images/bathroom_scale-beurer_bg_16 here].
+
+
+----
+
 On this project I hacked a digital bathroom scale, for write (log) my weight variations over time, on a memory SD Card. I write the information (time date + weight) on a comma separated values (.CSV) file so I can quickly build a graph using OpenOffice, Gnuplot or some other capable program.
 
 If anyone want to build a scale like this one, I can help, my e-mail is: casainho@gmail.com. I can also build a personalized system, please contact me for price and details. I would like to see this project grow, I would like to be able to buy on the market an Open Hardware and Open Source scale like this one - please contact me if you ave any ideas.
