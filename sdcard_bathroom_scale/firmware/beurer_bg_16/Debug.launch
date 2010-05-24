@@ -2,7 +2,7 @@
 <launchConfiguration type="com.zylin.embeddedcdt.idleNative">
 <booleanAttribute key="com.zylin.embeddedcdt.debugger_app_console" value="false"/>
 <stringAttribute key="com.zylin.embeddedcdt.debugger_init_commands" value="target remote localhost:3333"/>
-<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor halt&#10;monitor flash write_image erase unlock main.hex&#10;monitor gdb_breakpoint_override hard&#10;monitor reset&#10;continue"/>
+<stringAttribute key="com.zylin.embeddedcdt.debugger_run_commands" value="monitor halt&#10;monitor flash write_image erase unlock Blinky.hex&#10;monitor gdb_breakpoint_override hard&#10;monitor reset&#10;continue"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.DEBUG_NAME" value="/home/cas/Documentos/06_software/arm_toolchain/codesourcery_arm_toolchain/bin/arm-none-eabi-gdb"/>
 <stringAttribute key="org.eclipse.cdt.debug.mi.core.GDB_INIT" value=""/>
 <booleanAttribute key="org.eclipse.cdt.debug.mi.core.breakpointsFullPath" value="false"/>

@@ -1,150 +1,243 @@
-ARM GAS  startup_LPC17xx.s 			page 1
+/*****************************************************************************/
+/* startup_LPC17xx.s: Startup file for LPC17xx device series                 */
+/*****************************************************************************/
+/* Version: CodeSourcery Sourcery G++ Lite (with CS3)                        */
+/*****************************************************************************/
 
 
-   1              	...
-   1              	> .weak WDT_IRQHandler
-   1              	> .set WDT_IRQHandler,Default_Handler
-   1              	> .weak TIMER0_IRQHandler
-   1              	> .set TIMER0_IRQHandler,Default_Handler
-   1              	> .weak TIMER1_IRQHandler
-   1              	> .set TIMER1_IRQHandler,Default_Handler
-   1              	> .weak TIMER2_IRQHandler
-   1              	> .set TIMER2_IRQHandler,Default_Handler
-   1              	> .weak TIMER3_IRQHandler
-   1              	> .set TIMER3_IRQHandler,Default_Handler
-   1              	> .weak UART0_IRQHandler
-   1              	> .set UART0_IRQHandler,Default_Handler
-   1              	> .weak UART1_IRQHandler
-   1              	> .set UART1_IRQHandler,Default_Handler
-   1              	> .weak UART2_IRQHandler
-   1              	> .set UART2_IRQHandler,Default_Handler
-   1              	> .weak UART3_IRQHandler
-   1              	> .set UART3_IRQHandler,Default_Handler
-   1              	> .weak PWM1_IRQHandler
-   1              	> .set PWM1_IRQHandler,Default_Handler
-   1              	> .weak I2C0_IRQHandler
-   1              	> .set I2C0_IRQHandler,Default_Handler
-   1              	> .weak I2C1_IRQHandler
-   1              	> .set I2C1_IRQHandler,Default_Handler
-   1              	> .weak I2C2_IRQHandler
-   1              	> .set I2C2_IRQHandler,Default_Handler
-   1              	> .weak SPI_IRQHandler
-   1              	> .set SPI_IRQHandler,Default_Handler
-   1              	> .weak SSP0_IRQHandler
-   1              	> .set SSP0_IRQHandler,Default_Handler
-   1              	> .weak SSP1_IRQHandler
-   1              	> .set SSP1_IRQHandler,Default_Handler
-   1              	> .weak PLL0_IRQHandler
-   1              	> .set PLL0_IRQHandler,Default_Handler
-   1              	> .weak RTC_IRQHandler
-   1              	> .set RTC_IRQHandler,Default_Handler
-   1              	> .weak EINT0_IRQHandler
-   1              	> .set EINT0_IRQHandler,Default_Handler
-   1              	> .weak EINT1_IRQHandler
-   1              	> .set EINT1_IRQHandler,Default_Handler
-   1              	> .weak EINT2_IRQHandler
-   1              	> .set EINT2_IRQHandler,Default_Handler
-   1              	> .weak EINT3_IRQHandler
-   1              	> .set EINT3_IRQHandler,Default_Handler
-   1              	> .weak ADC_IRQHandler
-   1              	> .set ADC_IRQHandler,Default_Handler
-   1              	> .weak BOD_IRQHandler
-   1              	> .set BOD_IRQHandler,Default_Handler
-   1              	> .weak USB_IRQHandler
-   1              	> .set USB_IRQHandler,Default_Handler
-   1              	> .weak CAN_IRQHandler
-   1              	> .set CAN_IRQHandler,Default_Handler
-   1              	> .weak DMA_IRQHandler
-   1              	> .set DMA_IRQHandler,Default_Handler
-   1              	> .weak I2S_IRQHandler
-   1              	> .set I2S_IRQHandler,Default_Handler
-ARM GAS  startup_LPC17xx.s 			page 2
+/*
+//*** <<< Use Configuration Wizard in Context Menu >>> ***
+*/
 
 
-   1              	> .weak ENET_IRQHandler
-   1              	> .set ENET_IRQHandler,Default_Handler
-   1              	> .weak RIT_IRQHandler
-   1              	> .set RIT_IRQHandler,Default_Handler
-   1              	> .weak MCPWM_IRQHandler
-   1              	> .set MCPWM_IRQHandler,Default_Handler
-   1              	> .weak QEI_IRQHandler
-   1              	> .set QEI_IRQHandler,Default_Handler
-   1              	> .weak PLL1_IRQHandler
-   1              	> .set PLL1_IRQHandler,Default_Handler
-   1              	> .weak USBActivity_IRQHandler
-   1              	> .set USBActivity_IRQHandler,Default_Handler
-   1              	> .weak CANActivity_IRQHandler
-   1              	> .set CANActivity_IRQHandler,Default_Handler
-ARM GAS  startup_LPC17xx.s 			page 3
+/*
+// <h> Stack Configuration
+//   <o> Stack Size (in Bytes) <0x0-0xFFFFFFFF:8>
+// </h>
+*/
+
+    .equ    Stack_Size, 0x00000100
+    .section ".stack", "w"
+    .align  3
+    .globl  __cs3_stack_mem
+    .globl  __cs3_stack_size
+__cs3_stack_mem:
+    .if     Stack_Size
+    .space  Stack_Size
+    .endif
+    .size   __cs3_stack_mem,  . - __cs3_stack_mem
+    .set    __cs3_stack_size, . - __cs3_stack_mem
 
 
-DEFINED SYMBOLS
-   startup_LPC17xx.s:19     *ABS*:00000100 Stack_Size
-   startup_LPC17xx.s:21     .stack:00000000 $d
-   startup_LPC17xx.s:24     .stack:00000000 __cs3_stack_mem
-                            *ABS*:00000100 __cs3_stack_size
-   startup_LPC17xx.s:38     *ABS*:00001000 Heap_Size
-   startup_LPC17xx.s:41     .heap:00000000 $d
-   startup_LPC17xx.s:44     .heap:00000000 __cs3_heap_start
-   startup_LPC17xx.s:48     .heap:00001000 __cs3_heap_end
-   startup_LPC17xx.s:57     .cs3.interrupt_vector:00000000 __cs3_interrupt_vector_cortex_m
-   startup_LPC17xx.s:141    .text:00000000 NMI_Handler
-   startup_LPC17xx.s:147    .text:00000002 HardFault_Handler
-   startup_LPC17xx.s:153    .text:00000004 MemManage_Handler
-   startup_LPC17xx.s:159    .text:00000006 BusFault_Handler
-   startup_LPC17xx.s:165    .text:00000008 UsageFault_Handler
-   startup_LPC17xx.s:171    .text:0000000a SVC_Handler
-   startup_LPC17xx.s:177    .text:0000000c DebugMon_Handler
-   startup_LPC17xx.s:183    .text:0000000e PendSV_Handler
-   startup_LPC17xx.s:189    .text:00000010 SysTick_Handler
-   startup_LPC17xx.s:198    .text:00000012 WDT_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 TIMER0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 TIMER1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 TIMER2_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 TIMER3_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 UART0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 UART1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 UART2_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 UART3_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 PWM1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 I2C0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 I2C1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 I2C2_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 SPI_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 SSP0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 SSP1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 PLL0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 RTC_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 EINT0_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 EINT1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 EINT2_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 EINT3_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 ADC_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 BOD_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 USB_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 CAN_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 DMA_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 I2S_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 ENET_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 RIT_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 MCPWM_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 QEI_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 PLL1_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 USBActivity_IRQHandler
-   startup_LPC17xx.s:198    .text:00000012 CANActivity_IRQHandler
-   startup_LPC17xx.s:124    .cs3.reset:00000000 __cs3_reset_cortex_m
-   startup_LPC17xx.s:126    .cs3.reset:00000000 $t
-   startup_LPC17xx.s:130    .cs3.reset:00000008 $d
-ARM GAS  startup_LPC17xx.s 			page 4
+/*
+// <h> Heap Configuration
+//   <o>  Heap Size (in Bytes) <0x0-0xFFFFFFFF:8>
+// </h>
+*/
+
+    .equ    Heap_Size,  0x00001000
+
+    .section ".heap", "w"
+    .align  3
+    .globl  __cs3_heap_start
+    .globl  __cs3_heap_end
+__cs3_heap_start:
+    .if     Heap_Size
+    .space  Heap_Size
+    .endif
+__cs3_heap_end:
 
 
-             .ARM.exidx.cs3.reset:00000000 $d
-   startup_LPC17xx.s:142    .text:00000000 $t
-   startup_LPC17xx.s:198    .text:00000012 Default_Handler
-                   .debug_aranges:0000000c $d
+/* Vector Table */
 
-UNDEFINED SYMBOLS
-__cs3_stack
-__cs3_reset
-SystemInit
-_start
+    .section ".cs3.interrupt_vector"
+    .globl  __cs3_interrupt_vector_cortex_m
+    .type   __cs3_interrupt_vector_cortex_m, %object
+
+__cs3_interrupt_vector_cortex_m:
+    .long   __cs3_stack                 /* Top of Stack                 */
+    .long   __cs3_reset                 /* Reset Handler                */
+    .long   NMI_Handler                 /* NMI Handler                  */
+    .long   HardFault_Handler           /* Hard Fault Handler           */
+    .long   MemManage_Handler           /* MPU Fault Handler            */
+    .long   BusFault_Handler            /* Bus Fault Handler            */
+    .long   UsageFault_Handler          /* Usage Fault Handler          */
+    .long   0                           /* Reserved                     */
+    .long   0                           /* Reserved                     */
+    .long   0                           /* Reserved                     */
+    .long   0                           /* Reserved                     */
+    .long   SVC_Handler                 /* SVCall Handler               */
+    .long   DebugMon_Handler            /* Debug Monitor Handler        */
+    .long   0                           /* Reserved                     */
+    .long   PendSV_Handler              /* PendSV Handler               */
+    .long   SysTick_Handler             /* SysTick Handler              */
+
+    /* External Interrupts */
+    .long   WDT_IRQHandler              /* 16: Watchdog Timer               */
+    .long   TIMER0_IRQHandler           /* 17: Timer0                       */
+    .long   TIMER1_IRQHandler           /* 18: Timer1                       */
+    .long   TIMER2_IRQHandler           /* 19: Timer2                       */
+    .long   TIMER3_IRQHandler           /* 20: Timer3                       */
+    .long   UART0_IRQHandler            /* 21: UART0                        */
+    .long   UART1_IRQHandler            /* 22: UART1                        */
+    .long   UART2_IRQHandler            /* 23: UART2                        */
+    .long   UART3_IRQHandler            /* 24: UART3                        */
+    .long   PWM1_IRQHandler             /* 25: PWM1                         */
+    .long   I2C0_IRQHandler             /* 26: I2C0                         */
+    .long   I2C1_IRQHandler             /* 27: I2C1                         */
+    .long   I2C2_IRQHandler             /* 28: I2C2                         */
+    .long   SPI_IRQHandler              /* 29: SPI                          */
+    .long   SSP0_IRQHandler             /* 30: SSP0                         */
+    .long   SSP1_IRQHandler             /* 31: SSP1                         */
+    .long   PLL0_IRQHandler             /* 32: PLL0 Lock (Main PLL)         */
+    .long   RTC_IRQHandler              /* 33: Real Time Clock              */
+    .long   EINT0_IRQHandler            /* 34: External Interrupt 0         */
+    .long   EINT1_IRQHandler            /* 35: External Interrupt 1         */
+    .long   EINT2_IRQHandler            /* 36: External Interrupt 2         */
+    .long   EINT3_IRQHandler            /* 37: External Interrupt 3         */
+    .long   ADC_IRQHandler              /* 38: A/D Converter                */
+    .long   BOD_IRQHandler              /* 39: Brown-Out Detect             */
+    .long   USB_IRQHandler              /* 40: USB                          */
+    .long   CAN_IRQHandler              /* 41: CAN                          */
+    .long   DMA_IRQHandler              /* 42: General Purpose DMA          */
+    .long   I2S_IRQHandler              /* 43: I2S                          */
+    .long   ENET_IRQHandler             /* 44: Ethernet                     */
+    .long   RIT_IRQHandler              /* 45: Repetitive Interrupt Timer   */
+    .long   MCPWM_IRQHandler            /* 46: Motor Control PWM            */
+    .long   QEI_IRQHandler              /* 47: Quadrature Encoder Interface */
+    .long   PLL1_IRQHandler             /* 48: PLL1 Lock (USB PLL)          */
+    .long   USBActivity_IRQHandler      /* 49: USB Activity                 */
+    .long   CANActivity_IRQHandler      /* 50: CAN Activity                 */
+
+    .size   __cs3_interrupt_vector_cortex_m, . - __cs3_interrupt_vector_cortex_m
+
+
+    .thumb
+
+
+/* Reset Handler */
+
+    .section .cs3.reset,"x",%progbits
+    .thumb_func
+    .globl  __cs3_reset_cortex_m
+    .type   __cs3_reset_cortex_m, %function
+__cs3_reset_cortex_m:
+    .fnstart
+    LDR     R0, =SystemInit
+    BLX     R0
+    LDR     R0,=_start
+    BX      R0
+    .pool
+    .cantunwind
+    .fnend
+    .size   __cs3_reset_cortex_m,.-__cs3_reset_cortex_m
+
+    .section ".text"
+
+/* Exception Handlers */
+
+    .weak   NMI_Handler
+    .type   NMI_Handler, %function
+NMI_Handler:
+    B       .
+    .size   NMI_Handler, . - NMI_Handler
+
+    .weak   HardFault_Handler
+    .type   HardFault_Handler, %function
+HardFault_Handler:
+    B       .
+    .size   HardFault_Handler, . - HardFault_Handler
+
+    .weak   MemManage_Handler
+    .type   MemManage_Handler, %function
+MemManage_Handler:
+    B       .
+    .size   MemManage_Handler, . - MemManage_Handler
+
+    .weak   BusFault_Handler
+    .type   BusFault_Handler, %function
+BusFault_Handler:
+    B       .
+    .size   BusFault_Handler, . - BusFault_Handler
+
+    .weak   UsageFault_Handler
+    .type   UsageFault_Handler, %function
+UsageFault_Handler:
+    B       .
+    .size   UsageFault_Handler, . - UsageFault_Handler
+
+    .weak   SVC_Handler
+    .type   SVC_Handler, %function
+SVC_Handler:
+    B       .
+    .size   SVC_Handler, . - SVC_Handler
+
+    .weak   DebugMon_Handler
+    .type   DebugMon_Handler, %function
+DebugMon_Handler:
+    B       .
+    .size   DebugMon_Handler, . - DebugMon_Handler
+
+    .weak   PendSV_Handler
+    .type   PendSV_Handler, %function
+PendSV_Handler:
+    B       .
+    .size   PendSV_Handler, . - PendSV_Handler
+
+    .weak   SysTick_Handler
+    .type   SysTick_Handler, %function
+SysTick_Handler:
+    B       .
+    .size   SysTick_Handler, . - SysTick_Handler
+
+
+/* IRQ Handlers */
+
+    .globl  Default_Handler
+    .type   Default_Handler, %function
+Default_Handler:
+    B       .
+    .size   Default_Handler, . - Default_Handler
+
+    .macro  IRQ handler
+    .weak   \handler
+    .set    \handler, Default_Handler
+    .endm
+
+    IRQ     WDT_IRQHandler
+    IRQ     TIMER0_IRQHandler
+    IRQ     TIMER1_IRQHandler
+    IRQ     TIMER2_IRQHandler
+    IRQ     TIMER3_IRQHandler
+    IRQ     UART0_IRQHandler
+    IRQ     UART1_IRQHandler
+    IRQ     UART2_IRQHandler
+    IRQ     UART3_IRQHandler
+    IRQ     PWM1_IRQHandler
+    IRQ     I2C0_IRQHandler
+    IRQ     I2C1_IRQHandler
+    IRQ     I2C2_IRQHandler
+    IRQ     SPI_IRQHandler
+    IRQ     SSP0_IRQHandler
+    IRQ     SSP1_IRQHandler
+    IRQ     PLL0_IRQHandler
+    IRQ     RTC_IRQHandler
+    IRQ     EINT0_IRQHandler
+    IRQ     EINT1_IRQHandler
+    IRQ     EINT2_IRQHandler
+    IRQ     EINT3_IRQHandler
+    IRQ     ADC_IRQHandler
+    IRQ     BOD_IRQHandler
+    IRQ     USB_IRQHandler
+    IRQ     CAN_IRQHandler
+    IRQ     DMA_IRQHandler
+    IRQ     I2S_IRQHandler
+    IRQ     ENET_IRQHandler
+    IRQ     RIT_IRQHandler
+    IRQ     MCPWM_IRQHandler
+    IRQ     QEI_IRQHandler
+    IRQ     PLL1_IRQHandler
+    IRQ     USBActivity_IRQHandler
+    IRQ     CANActivity_IRQHandler
+
+    .end
