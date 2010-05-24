@@ -12,10 +12,10 @@ THUMB_IW =
 CFLAGS = -Wall -Wcast-align -Wcast-qual -Wimplicit
 CFLAGS += -Wpointer-arith -Wswitch
 CFLAGS += -Wredundant-decls -Wreturn-type -Wshadow -Wunused 
-CFLAGS  += -mcpu=arm7tdmi $(THUMB_IW) -I./ -c -fno-common -g
+CFLAGS  += -mcpu=cortex-m3 -mthumb -mapcs-frame -I./ -c -fno-common -g
 O0 = -O0
 OS = -Os
-AFLAGS  = -ahls -mapcs-32 -g -o crt.o
+AFLAGS  = -mcpu=cortex-m3 -mthumb -mthumb-interwork -g -o crt.o
 LDFLAGS  = -Map main.map -T linker_script-flash_memory.cmd
 CPFLAGS = -O binary
 ODFLAGS	= -x --syms
