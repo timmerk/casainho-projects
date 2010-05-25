@@ -394,14 +394,15 @@
 
 
 /* F_cco0 = (2 * M * F_in) / N  */
-#define __M               (((PLL0CFG_Val      ) & 0x7FFF) + 1)
-#define __N               (((PLL0CFG_Val >> 16) & 0x00FF) + 1)
-#define __FCCO(__F_IN)    ((2 * __M * __F_IN) / __N) 
-#define __CCLK_DIV        (((CCLKCFG_Val      ) & 0x00FF) + 1)
+#define __M               (((PLL0CFG_Val      ) & 0x7FFF) + 1) /* 100 */
+#define __N               (((PLL0CFG_Val >> 16) & 0x00FF) + 1) /* 6 */
+#define __FCCO(__F_IN)    ((2 * __M * __F_IN) / __N) /* (2*100*12*10^6)/6= 400*10^6 */
+#define __CCLK_DIV        (((CCLKCFG_Val      ) & 0x00FF) + 1) /* 4 */
 
 /* Determine core clock frequency according to settings */
  #if (PLL0_SETUP)
     #if   ((CLKSRCSEL_Val & 0x03) == 1)
+        /* 400*10^6 / 4 = 100MHz */
         #define __CORE_CLK (__FCCO(OSC_CLK) / __CCLK_DIV)
     #elif ((CLKSRCSEL_Val & 0x03) == 2)
         #define __CORE_CLK (__FCCO(RTC_CLK) / __CCLK_DIV)
