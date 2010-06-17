@@ -9,9 +9,9 @@
 
 // Temperature measurement
 // Uncomment ONE of the next three
-//#define USE_THERMISTOR
+#define USE_THERMISTOR
 //#define AD595_THERMOCOUPLE
-#define MAX6675_THERMOCOUPLE
+//#define MAX6675_THERMOCOUPLE
 
 
 // I am using Pololu drivers: http://www.pololu.com/catalog/product/1201

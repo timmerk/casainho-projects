@@ -5,10 +5,15 @@
 
 extruder::extruder()
 {
-  pinMode(H1D, OUTPUT);
-  pinMode(H1E, OUTPUT);  
-  pinMode(H2D, OUTPUT);
-  pinMode(H2E, OUTPUT);
+  //pinMode(H1D, OUTPUT);
+  //pinMode(H1E, OUTPUT);  
+  //pinMode(H2D, OUTPUT);
+  //pinMode(H2E, OUTPUT);
+  
+  pinMode(STEPPER_EN, OUTPUT);
+  pinMode(STEPPER_DIR, OUTPUT);
+  pinMode(STEPPER_STEP, OUTPUT);
+  
   pinMode(OUTPUT_A, OUTPUT);
   //pinMode(OUTPUT_B, OUTPUT);
   //pinMode(OUTPUT_C, OUTPUT);
@@ -210,10 +215,13 @@ int extruder::internalTemperature()
 
 
   digitalWrite(TC_0, 0); // Enable device
+  error_tc = digitalRead(SO); // Read data
 
   /* Cycle the clock for dummy bit 15 */
   digitalWrite(SCK,1);
+  delayMicroseconds(10);
   digitalWrite(SCK,0);
+  delayMicroseconds(10);
 
   /* Read bits 14-3 from MAX6675 for the Temp
    	 Loop for each bit reading the value 
@@ -221,14 +229,18 @@ int extruder::internalTemperature()
   for (int i=11; i>=0; i--)
   {
     digitalWrite(SCK,1);  // Set Clock to HIGH
-    value += digitalRead(SO) << i;  // Read data and add it to our variable
+    delayMicroseconds(10);
     digitalWrite(SCK,0);  // Set Clock to LOW
+    delayMicroseconds(10);
+    value += digitalRead(SO) << i;  // Read data and add it to our variable
   }
 
   /* Read the TC Input inp to check for TC Errors */
   digitalWrite(SCK,1); // Set Clock to HIGH
-  error_tc = digitalRead(SO); // Read data
+  delayMicroseconds(10);
   digitalWrite(SCK,0);  // Set Clock to LOW
+  delayMicroseconds(10);
+  error_tc = digitalRead(SO); // Read data
 
   digitalWrite(TC_0, 1); //Disable Device
 
@@ -277,12 +289,13 @@ int extruder::getTemperature()
 void extruder::sStep(byte dir)
 {
     // Change stpper direction pin
-    if (dir)
+    if (digitalRead(E_DIR_PIN))
         digitalWrite(STEPPER_DIR, HIGH);
     else
         digitalWrite(STEPPER_DIR, LOW);
 
     // Make a step
+    enableStep();
     digitalWrite(STEPPER_STEP, HIGH);
     delayMicroseconds(5);
     digitalWrite(STEPPER_STEP, LOW);
