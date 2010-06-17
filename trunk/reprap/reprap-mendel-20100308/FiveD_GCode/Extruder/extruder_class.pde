@@ -84,6 +84,10 @@ byte extruder::pidCalculation(int dt)
   int error;
   float pTerm, iTerm, dTerm;
 
+  /* finish without make any math */
+  if (targetTemperature == 0)
+      return 0;
+
   error = targetTemperature - currentTemperature;
 
   pTerm = pGain * error;
