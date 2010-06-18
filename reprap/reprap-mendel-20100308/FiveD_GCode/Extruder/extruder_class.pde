@@ -113,6 +113,12 @@ void extruder::controlTemperature()
     
 #ifdef PID_CONTROL
 
+  if(targetTemperature == 0)
+  {
+     analogWrite(OUTPUT_A, 0);
+     return;
+  }
+
   int dt;
   unsigned long time = millis()/MILLI_CORRECTION;  // Correct for fast clock
   dt = time - previousTime;
@@ -122,8 +128,13 @@ void extruder::controlTemperature()
 
 #else
 
-  // Simple bang-bang temperature control
+  if(targetTemperature == 0)
+  {
+     digitalWrite(OUTPUT_A, 0);
+     return;
+  }
 
+  // Simple bang-bang temperature control
   if(targetTemperature > currentTemperature)
     digitalWrite(OUTPUT_A, 1);
   else
