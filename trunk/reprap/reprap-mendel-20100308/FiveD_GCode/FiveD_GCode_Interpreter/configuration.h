@@ -58,15 +58,18 @@
 
 // define the XYZ parameters of Mendel
 
-#define X_STEPS_PER_MM   10.047
+//#define X_STEPS_PER_MM   10.047
+#define X_STEPS_PER_MM   78.8
 #define X_STEPS_PER_INCH (X_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define INVERT_X_DIR 0
 
-#define Y_STEPS_PER_MM   10.047
+//#define Y_STEPS_PER_MM   10.047
+#define Y_STEPS_PER_MM   78.8
 #define Y_STEPS_PER_INCH (Y_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define INVERT_Y_DIR 0
 
-#define Z_STEPS_PER_MM   833.398
+//#define Z_STEPS_PER_MM   833.398
+#define Z_STEPS_PER_MM   6481,984
 #define Z_STEPS_PER_INCH (Z_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define INVERT_Z_DIR 0
 
@@ -92,15 +95,15 @@
 // E_STEPS_PER_MM is the number of steps needed to 
 // extrude 1mm out of the nozzle.
 
-#define E_STEPS_PER_MM   0.706   // NEMA 17 extruder 5mm diameter drive - empirically adjusted
-
+//#define E_STEPS_PER_MM   0.706   // NEMA 17 extruder 5mm diameter drive - empirically adjusted
 //#define E_STEPS_PER_MM   2.2       // NEMA 14 geared extruder 8mm diameter drive
+#define E_STEPS_PER_MM   0.05   // Wade extruder - empirically adjusted
 
 #define E_STEPS_PER_INCH (E_STEPS_PER_MM*INCHES_TO_MM) // *RO
 
 //our maximum feedrates
-#define FAST_XY_FEEDRATE 3000.0
-#define FAST_Z_FEEDRATE  50.0
+#define FAST_XY_FEEDRATE 10000.0
+#define FAST_Z_FEEDRATE  200.0
 
 // Data for acceleration calculations
 // Comment out the next line to turn accelerations off
