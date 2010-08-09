@@ -69,10 +69,9 @@
 #define INVERT_Y_DIR 0
 
 //#define Z_STEPS_PER_MM   833.398
-#define Z_STEPS_PER_MM   6481,984
+#define Z_STEPS_PER_MM   6696.264
 #define Z_STEPS_PER_INCH (Z_STEPS_PER_MM*INCHES_TO_MM) // *RO
 #define INVERT_Z_DIR 0
-
 #else
 
 // This is for Darwin.
@@ -97,13 +96,13 @@
 
 //#define E_STEPS_PER_MM   0.706   // NEMA 17 extruder 5mm diameter drive - empirically adjusted
 //#define E_STEPS_PER_MM   2.2       // NEMA 14 geared extruder 8mm diameter drive
-#define E_STEPS_PER_MM   0.05   // Wade extruder - empirically adjusted
+#define E_STEPS_PER_MM   35.8   // Wades extruder, NEMA 17 geared extruder (1/39 * 6.5mm)
 
 #define E_STEPS_PER_INCH (E_STEPS_PER_MM*INCHES_TO_MM) // *RO
 
 //our maximum feedrates
-#define FAST_XY_FEEDRATE 10000.0
-#define FAST_Z_FEEDRATE  200.0
+#define FAST_XY_FEEDRATE 3000.0
+#define FAST_Z_FEEDRATE  50.0
 
 // Data for acceleration calculations
 // Comment out the next line to turn accelerations off
@@ -232,3 +231,4 @@ inline void resetTimer()
 #define INVERT_Z_DIR 0
 
 #endif
+

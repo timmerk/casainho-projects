@@ -94,112 +94,110 @@ void cartesian_dda::set_units(bool using_mm)
 
 void cartesian_dda::set_target(const FloatPoint& p)
 {
-        target_position = p;
-        nullmove = false;
-        
-	//figure our deltas.
+    target_position = p;
+    nullmove = false;
 
-        delta_position = fabsv(target_position - where_i_am);
-        
-        // The feedrate values refer to distance in (X, Y, Z) space, so ignore e and f
-        // values unless they're the only thing there.
+    //figure our deltas.
+    delta_position = fabsv(target_position - where_i_am);
 
-        FloatPoint squares = delta_position*delta_position;
-        distance = squares.x + squares.y + squares.z;
-        // If we are 0, only thing changing is e
-        if(distance < SMALL_DISTANCE2)
-          distance = squares.e;
-        // If we are still 0, only thing changing is f
-        if(distance < SMALL_DISTANCE2)
-          distance = squares.f;
-        distance = sqrt(distance);          
+    // The feedrate values refer to distance in (X, Y, Z) space, so ignore e and f
+    // values unless they're the only thing there.
+    FloatPoint squares = delta_position*delta_position;
+    distance = squares.x + squares.y + squares.z;
+    // If we are 0, only thing changing is e
+    if(distance < SMALL_DISTANCE2)
+      distance = squares.e;
+    // If we are still 0, only thing changing is f
+    if(distance < SMALL_DISTANCE2)
+      distance = squares.f;
+    distance = sqrt(distance);
                                                                                    			
 	//set our steps current, target, and delta
-
-        current_steps = to_steps(units, where_i_am);
+    current_steps = to_steps(units, where_i_am);
 	target_steps = to_steps(units, target_position);
 	delta_steps = absv(target_steps - current_steps);
 
 	// find the dominant axis.
-        // NB we ignore the f values here, as it takes no time to take a step in time :-)
+    // NB we ignore the f values here, as it takes no time to take a step in time :-)
+    total_steps = max(delta_steps.x, delta_steps.y);
+    total_steps = max(total_steps, delta_steps.z);
+    total_steps = max(total_steps, delta_steps.e);
 
-        total_steps = max(delta_steps.x, delta_steps.y);
-        total_steps = max(total_steps, delta_steps.z);
-        total_steps = max(total_steps, delta_steps.e);
-  
-        // If we're not going anywhere, flag the fact
-        
-        if(total_steps == 0)
-        {
-          nullmove = true;
-          where_i_am = p;
-          return;
-        }    
+    // If we're not going anywhere, flag the fact
+    /* But f may have some value... */
+    if(total_steps == 0)
+    {
+      nullmove = true;
+      where_i_am = p; /* f have some value, the only changed value */
+      return;
+    }
 
 #ifndef ACCELERATION_ON
-        current_steps.f = target_steps.f;
+    current_steps.f = target_steps.f;
 #endif
 
-        delta_steps.f = abs(target_steps.f - current_steps.f);
-        
-        // Rescale the feedrate so it doesn't take lots of steps to do
-        
-        t_scale = 1;
-        if(delta_steps.f > total_steps)
+    delta_steps.f = abs(target_steps.f - current_steps.f);
+
+    // Rescale the feedrate so it doesn't take lots of steps to do
+    t_scale = 1;
+    if(delta_steps.f > total_steps)
+    {
+        t_scale = delta_steps.f/total_steps;
+        if(t_scale >= 3)
         {
-            t_scale = delta_steps.f/total_steps;
-            if(t_scale >= 3)
-            {
-              target_steps.f = target_steps.f/t_scale;
-              current_steps.f = current_steps.f/t_scale;
-              delta_steps.f = abs(target_steps.f - current_steps.f);
-              if(delta_steps.f > total_steps)
-                total_steps =  delta_steps.f;
-            } else
-            {
-              t_scale = 1;
-              total_steps =  delta_steps.f;
-            }
-        } 
-        	
+          target_steps.f = target_steps.f/t_scale;
+          current_steps.f = current_steps.f/t_scale;
+          delta_steps.f = abs(target_steps.f - current_steps.f);
+          if(delta_steps.f > total_steps)
+            total_steps =  delta_steps.f;
+        } else
+        {
+          t_scale = 1;
+          total_steps =  delta_steps.f;
+        }
+    }
+
 	//what is our direction?
-        
 	x_direction = (target_position.x >= where_i_am.x);
 	y_direction = (target_position.y >= where_i_am.y);
 	z_direction = (target_position.z >= where_i_am.z);
-        e_direction = (target_position.e >= where_i_am.e);
+    e_direction = (target_position.e >= where_i_am.e);
 	f_direction = (target_position.f >= where_i_am.f);
-
 
 	dda_counter.x = -total_steps/2;
 	dda_counter.y = dda_counter.x;
 	dda_counter.z = dda_counter.x;
-        dda_counter.e = dda_counter.x;
-        dda_counter.f = dda_counter.x;
+    dda_counter.e = dda_counter.x;
+    dda_counter.f = dda_counter.x;
   
-        where_i_am = p;
+    where_i_am = p;
 
-        //sprintf(debugstring, "%d %d %d", (int)current_steps.e, (int)target_steps.e, (int)delta_steps.e);
+    //sprintf(debugstring, "%d %d %d", (int)current_steps.e, (int)target_steps.e, (int)delta_steps.e);
         
-        return;        
+    return;
 }
 
 
 void cartesian_dda::dda_step()
-{  
-  if(!live)
-   return;
+{
+    //digitalWrite(DEBUG_PIN, 1); /* DEBUG */
 
-  do
-  {
+    /* There are no more steps to do... return */
+    if(!live)
+        return;
+
+    do
+    {
+        /* Verify if any of the axis should step */
 		x_can_step = can_step(X_MIN_PIN, X_MAX_PIN, current_steps.x, target_steps.x, x_direction);
 		y_can_step = can_step(Y_MIN_PIN, Y_MAX_PIN, current_steps.y, target_steps.y, y_direction);
 		z_can_step = can_step(Z_MIN_PIN, Z_MAX_PIN, current_steps.z, target_steps.z, z_direction);
-                e_can_step = can_step(-1, -1, current_steps.e, target_steps.e, e_direction);
-                f_can_step = can_step(-1, -1, current_steps.f, target_steps.f, f_direction);
+        e_can_step = can_step(-1, -1, current_steps.e, target_steps.e, e_direction);
+        f_can_step = can_step(-1, -1, current_steps.f, target_steps.f, f_direction);
                 
-                real_move = false;
+        real_move = false;
                 
+
 		if (x_can_step)
 		{
 			dda_counter.x += delta_steps.x;
@@ -207,7 +205,7 @@ void cartesian_dda::dda_step()
 			if (dda_counter.x > 0)
 			{
 				do_x_step();
-                                real_move = true;
+                real_move = true;
 				dda_counter.x -= total_steps;
 				
 				if (x_direction)
@@ -217,6 +215,7 @@ void cartesian_dda::dda_step()
 			}
 		}
 
+
 		if (y_can_step)
 		{
 			dda_counter.y += delta_steps.y;
@@ -224,7 +223,7 @@ void cartesian_dda::dda_step()
 			if (dda_counter.y > 0)
 			{
 				do_y_step();
-                                real_move = true;
+                real_move = true;
 				dda_counter.y -= total_steps;
 
 				if (y_direction)
@@ -234,6 +233,7 @@ void cartesian_dda::dda_step()
 			}
 		}
 		
+
 		if (z_can_step)
 		{
 			dda_counter.z += delta_steps.z;
@@ -241,7 +241,7 @@ void cartesian_dda::dda_step()
 			if (dda_counter.z > 0)
 			{
 				do_z_step();
-                                real_move = true;
+                real_move = true;
 				dda_counter.z -= total_steps;
 				
 				if (z_direction)
@@ -251,6 +251,7 @@ void cartesian_dda::dda_step()
 			}
 		}
 
+
 		if (e_can_step)
 		{
 			dda_counter.e += delta_steps.e;
@@ -259,7 +260,7 @@ void cartesian_dda::dda_step()
 			{
                                 
 				do_e_step();
-                                real_move = true;
+                real_move = true;
 				dda_counter.e -= total_steps;
 				
 				if (e_direction)
@@ -269,46 +270,58 @@ void cartesian_dda::dda_step()
 			}
 		}
 		
+
 		if (f_can_step)
 		{
+		    //digitalWrite(DEBUG_PIN, 1); /* DEBUG */
+
 			dda_counter.f += delta_steps.f;
 			
 			if (dda_counter.f > 0)
 			{
+			    //digitalWrite(DEBUG_PIN, 1); /* DEBUG */
+
 				dda_counter.f -= total_steps;
 				if (f_direction)
 					current_steps.f++;
 				else
 					current_steps.f--;
+
+				//digitalWrite(DEBUG_PIN, 0); /* DEBUG */
 			}
+
+            //digitalWrite(DEBUG_PIN, 0); /* DEBUG */
 		}
 
 				
-      // wait for next step.
-      // Use milli- or micro-seconds, as appropriate
-      // If the only thing that changed was f keep looping
-  
-                if(real_move)
-                {
-                  //if(t_scale > 1)
-                    timestep = t_scale*current_steps.f;
-                  //else
-                    //timestep = current_steps.f;
-                  timestep = calculate_feedrate_delay((float) timestep);
-                  setTimer(timestep);
-                }
+    // wait for next step.
+    // Use milli- or micro-seconds, as appropriate
+    if(real_move)
+    {
+        timestep = t_scale*current_steps.f;
+
+        // (distance * 60000000.0) / (timestep * (float)total_steps)
+        timestep = calculate_feedrate_delay((float) timestep);
+        setTimer(timestep);
+        //setTimer(80);
+    }
+
+  // If the only thing that changed was f keep looping
   } while (!real_move && f_can_step);
   
+
+  /* Is there any more steps to do? */
   live = (x_can_step || y_can_step || z_can_step  || e_can_step || f_can_step);
 
-// Wrap up at the end of a line
-
+  /* The end of movement on any X, Y, Z, E axis and F (velocity) */
+  /* disable motors and set the Timer Interrupt to 1ms */
   if(!live)
   {
       disable_steppers();
       setTimer(DEFAULT_TICK);
-  }    
-  
+  }
+
+  //digitalWrite(DEBUG_PIN, 0); /* DEBUG */
 }
 
 
@@ -375,9 +388,8 @@ bool cartesian_dda::can_step(int min_pin, int max_pin, long current, long target
 {
 
   //stop us if we're on target
-
-	if (target == current)
-		return false;
+  if (target == current)
+    return false;
 
 #if ENDSTOPS_MIN_ENABLED == 1
 
