@@ -139,8 +139,8 @@ GcodeParser gc;	/* string parse result */
 //init our string processing
 inline void init_process_string()
 {
-	serial_count = 0;
-  comment = false;
+    serial_count = 0;
+    comment = false;
 }
 
 // Get a command and process it
@@ -151,61 +151,67 @@ void get_and_do_command()
 	if (Serial.available())
 	{
 		c = Serial.read();
-                blink();
-                if(c == '\r')
-                  c = '\n';
-                // Throw away control chars except \n
-                if(c >= ' ' || c == '\n')
-                {
+        blink();
 
+        if(c == '\r')
+          c = '\n';
+
+        // Throw away control chars except \n
+        if(c >= ' ' || c == '\n')
+        {
 		  //newlines are ends of commands.
 		  if (c != '\n')
 		  {
 			// Start of comment - ignore any bytes received from now on
 			if (c == ';')
-				comment = true;
+			    comment = true;
 				
 			// If we're not in comment mode, add it to our array.
 			if (!comment)
 				cmdbuffer[serial_count++] = c;
 		  }
 
-                }
+        }
 	}
 
-        // Data runaway?
-        if(serial_count >= COMMAND_SIZE)
-          init_process_string();
+    // Data runaway?
+    if(serial_count >= COMMAND_SIZE)
+        init_process_string();
 
 	//if we've got a real command, do it
 	if (serial_count && c == '\n')
 	{
-                // Terminate string
-                cmdbuffer[serial_count] = 0;
-                
-                 if(SendDebug & DEBUG_ECHO)
-                 {
-                 Serial.print("Echo:");
-                 Serial.println(&cmdbuffer[0]);
-                 }                
+        // Terminate string
+        cmdbuffer[serial_count] = 0;
+
+        if(SendDebug & DEBUG_ECHO)
+        {
+            Serial.print("Echo:");
+            Serial.println(&cmdbuffer[0]);
+        }
+
 		//process our command!
 		process_string(cmdbuffer, serial_count);
 
 		//clear command.
 		init_process_string();
 
-                // Say we're ready for the next one
-                
-                if(debugstring[0] != 0 && (SendDebug & DEBUG_INFO))
-                {
-                  Serial.print("ok ");
-                  Serial.println(debugstring);
-                  debugstring[0] = 0;
-                } else
-                  Serial.println("ok");
+        // Say we're ready for the next one
+        if(debugstring[0] != 0 && (SendDebug & DEBUG_INFO))
+        {
+          Serial.print("ok ");
+          Serial.println(debugstring);
+          debugstring[0] = 0;
+        }
+
+        else
+          Serial.println("ok");
+
+
+        /* HACK */
+        Serial.println("Echo: command done");
 	}
 }
-
 
 
 int parse_string(struct GcodeParser * gc, char instruction[ ], int size)
@@ -224,9 +230,9 @@ int parse_string(struct GcodeParser * gc, char instruction[ ], int size)
 		len = 0;
 		switch (instruction[ind])
 		{
-			  PARSE_INT('G', &instruction[ind+1], len, gc->G, gc->seen, GCODE_G);
-			  PARSE_INT('M', &instruction[ind+1], len, gc->M, gc->seen, GCODE_M);
-			  PARSE_INT('T', &instruction[ind+1], len, gc->T, gc->seen, GCODE_T);
+			PARSE_INT('G', &instruction[ind+1], len, gc->G, gc->seen, GCODE_G);
+			PARSE_INT('M', &instruction[ind+1], len, gc->M, gc->seen, GCODE_M);
+			PARSE_INT('T', &instruction[ind+1], len, gc->T, gc->seen, GCODE_T);
 			PARSE_FLOAT('S', &instruction[ind+1], len, gc->S, gc->seen, GCODE_S);
 			PARSE_FLOAT('P', &instruction[ind+1], len, gc->P, gc->seen, GCODE_P);
 			PARSE_FLOAT('X', &instruction[ind+1], len, gc->X, gc->seen, GCODE_X);
@@ -240,7 +246,8 @@ int parse_string(struct GcodeParser * gc, char instruction[ ], int size)
 			PARSE_FLOAT('E', &instruction[ind+1], len, gc->E, gc->seen, GCODE_E);
 			PARSE_LONG('N', &instruction[ind+1], len, gc->N, gc->seen, GCODE_N);
 			PARSE_INT('*', &instruction[ind+1], len, gc->Checksum, gc->seen, GCODE_CHECKSUM);
-                        default:
+
+            default:
 			  break;
 		}
 	}
@@ -252,60 +259,63 @@ void process_string(char instruction[], int size)
 {
 	//the character / means delete block... used for comments and stuff.
 	if (instruction[0] == '/')	
-		return;
+	    return;
 
-        float fr;
+    float fr;
         
 	fp.x = 0.0;
 	fp.y = 0.0;
 	fp.z = 0.0;
-        fp.e = 0.0;
-        fp.f = 0.0;
+    fp.e = 0.0;
+    fp.f = 0.0;
 
 	//get all our parameters!
 	parse_string(&gc, instruction, size);
   
-  
-        // Do we have lineNr and checksums in this gcode?
-        if((bool)(gc.seen & GCODE_CHECKSUM) | (bool)(gc.seen & GCODE_N))
+    // Do we have lineNr and checksums in this gcode?
+    if((bool)(gc.seen & GCODE_CHECKSUM) | (bool)(gc.seen & GCODE_N))
+    {
+      // Check that if recieved a L code, we also got a C code. If not, one of them has been lost, and we have to reset queue
+      if( (bool)(gc.seen & GCODE_CHECKSUM) != (bool)(gc.seen & GCODE_N) )
+      {
+       if(SendDebug & DEBUG_ERRORS)
+         Serial.println("Serial Error:Recieved a LineNr code without a Checksum code or Checksum without LineNr");
+       FlushSerialRequestResend();
+       return;
+      }
+
+      // Check checksum of this string. Flush buffers and re-request line of error is found
+      if(gc.seen & GCODE_CHECKSUM)  // if we recieved a line nr, we know we also recieved a Checksum, so check it
+      {
+        // Calc checksum.
+        byte checksum = 0;
+        byte count=0;
+        while(instruction[count] != '*')
+          checksum = checksum^instruction[count++];
+
+        // Check checksum.
+        if(gc.Checksum != (int)checksum)
         {
-          // Check that if recieved a L code, we also got a C code. If not, one of them has been lost, and we have to reset queue
-          if( (bool)(gc.seen & GCODE_CHECKSUM) != (bool)(gc.seen & GCODE_N) )
-          {
-           if(SendDebug & DEBUG_ERRORS)
-             Serial.println("Serial Error:Recieved a LineNr code without a Checksum code or Checksum without LineNr");
-           FlushSerialRequestResend();
-           return;
-          }
-          // Check checksum of this string. Flush buffers and re-request line of error is found
-          if(gc.seen & GCODE_CHECKSUM)  // if we recieved a line nr, we know we also recieved a Checksum, so check it
-            {
-            // Calc checksum.
-            byte checksum = 0;
-            byte count=0;
-            while(instruction[count] != '*')
-              checksum = checksum^instruction[count++];
-            // Check checksum.
-            if(gc.Checksum != (int)checksum)
-              {
-              if(SendDebug & DEBUG_ERRORS)
-                Serial.println("Serial Error: checksum mismatch");
-              FlushSerialRequestResend();
-              return;
-              }
-          // Check that this lineNr is LastLineNrRecieved+1. If not, flush
-          if(!( (bool)(gc.seen & GCODE_M) && gc.M == 110)) // unless this is a reset-lineNr command
+          if(SendDebug & DEBUG_ERRORS)
+            Serial.println("Serial Error: checksum mismatch");
+          FlushSerialRequestResend();
+          return;
+        }
+
+        // Check that this lineNr is LastLineNrRecieved+1. If not, flush
+        if(!( (bool)(gc.seen & GCODE_M) && gc.M == 110)) // unless this is a reset-lineNr command
             if(gc.N != gc.LastLineNrRecieved+1)
-                {
+            {
                 if(SendDebug & DEBUG_ERRORS)
                   Serial.println("Serial Error: LineNr is not the last lineNr+1");
                 FlushSerialRequestResend();
                 return;
-                }
-           //If we reach this point, communication is a succes, update our "last good line nr" and continue
-           gc.LastLineNrRecieved = gc.N;
-          }
-        }
+            }
+
+        //If we reach this point, communication is a succes, update our "last good line nr" and continue
+        gc.LastLineNrRecieved = gc.N;
+      }
+    }
 
 
 	/* if no command was seen, but parameters were, then use the last G code as 
@@ -317,6 +327,7 @@ void process_string(char instruction[], int size)
 		gc.G = last_gcode_g;
 		gc.seen |= GCODE_G;
 	}
+
 	//did we get a gcode?
 	if (gc.seen & GCODE_G)
   	{
@@ -595,17 +606,14 @@ void process_string(char instruction[], int size)
                                                                 
 
 			default:
-				if(SendDebug & DEBUG_ERRORS)
-                                  {
-                                  Serial.print("Huh? M");
-				  Serial.println(gc.M, DEC);
-                                  FlushSerialRequestResend();
-                                  }
-		}
-
-                
-
-	}
+			    if(SendDebug & DEBUG_ERRORS)
+			    {
+                    Serial.print("Huh? M");
+                    Serial.println(gc.M, DEC);
+                    FlushSerialRequestResend();
+                }
+            }
+        }
 
 // Tool (i.e. extruder) change?
                 

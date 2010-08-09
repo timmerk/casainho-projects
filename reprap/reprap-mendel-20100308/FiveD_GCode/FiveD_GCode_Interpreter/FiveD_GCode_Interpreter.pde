@@ -103,10 +103,12 @@ ISR(TIMER1_COMPA_vect)
 {
   disableTimerInterrupt();
   
+  //digitalWrite(DEBUG_PIN, 1); /* DEBUG */
+
   interruptBlink++;
   if(interruptBlink == 0x280)
   {
-     blink();
+     //blink();
      interruptBlink = 0; 
   }
 
@@ -115,6 +117,8 @@ ISR(TIMER1_COMPA_vect)
       cdda[tail]->dda_step();
   else
       dQMove();
+
+  //digitalWrite(DEBUG_PIN, 0); /* DEBUG */
  
   enableTimerInterrupt();
 }
