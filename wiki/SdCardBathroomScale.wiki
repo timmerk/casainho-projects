@@ -5,7 +5,17 @@
 
 = Introduction =
 
-*NEW!!*
+*2012 January*
+
+I am now near 100kg, I really need to put this project working. I can buy a ready scale but I prefer to invest on an Open Source system.
+
+I use my Android smartphone a LOT and now I have cheap and accessible "technology" to connect the scale by bluetooth to Android.
+
+Here is an Open Source Android software ready to be used on this project:
+
+https://launchpad.net/weightchart/
+
+*2010.03.17*
 
 On 2010.03.17 I bought on local Decatlhon shop the [http://www.beurer.com/ Beurer BG 16] bathroom scale for 20€ that measures weight, percentage of fat, percentage of water and percentage of muscle.
 
