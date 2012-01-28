@@ -33,6 +33,12 @@ Later I hacked the [http://code.google.com/p/weight-chart/ Weight Chart] softwar
 
 I shared the software and the firmware on my github account: [https://github.com/casainho/Smart-Scale]
 
+I also found a [http://www.keyboardmods.com/2010/05/bluetooth-wireless-bathroom-scale-with.html blog message of a hacker that decided as me, to use a bluetooth module and an Android]. The big difference is that he only uses the original load cells, then he uses and ADC to read them and almost the same hardware as me.
+
+Maybe soon we will be able to buy on the market the load cells, make our electronic board and use a square piece of wood, then we will have our own fully OpenSource bathroom scale :-)
+
+-----------------------------------
+
 *2010.03.17*
 
 On 2010.03.17 I bought on local Decatlhon shop the [http://www.beurer.com/ Beurer BG 16] bathroom scale for 20€ that measures weight, percentage of fat, percentage of water and percentage of muscle.
