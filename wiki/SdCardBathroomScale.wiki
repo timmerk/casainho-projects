@@ -13,9 +13,25 @@ On this days I use my Android Smartphone a lot and I always wanted to have the w
 
 I went to the market and found "wifi" scales for about 150€. Since I will probably need to use the scale all over my life, I prefer to build my own OpenSource scale instead of buying and stay limited with a proprietary one.
 
-I have now experience with Android and cheap ($6) bluetooth serial modules and I found 2 OpenSource softwares for Android for logging user's weight - 
+I have now experience with Android and cheap ($6) bluetooth serial modules and I found two OpenSource softwares for Android for logging user's weight: [http://code.google.com/p/weight-chart/ Weight Chart] and [http://code.google.com/p/droidweight/ Droid Weight].
 
-https://launchpad.net/weightchart/
+I decided to change/upgrade my Fagor BB-90 bathroom scale, by removing the SDCard and the batteries for the Real Time Clock (RTC). I added a cheap ($6) bluetooth serial module to send the weight value data to my Android Smart Phone. I also added a 5V voltage regulator since I am now using only two Lithium batteries instead of the "old" four NiMh batteries.
+
+Here some pictures (high resolution [https://github.com/casainho/Smart-Scale/tree/master/pictures here]):
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-01.redimensionado.jpg]
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-02.redimensionado.jpg]
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-05.redimensionado.jpg]
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-03.redimensionado.jpg]
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-04.redimensionado.jpg]
+
+Later I hacked the [http://code.google.com/p/weight-chart/ Weight Chart] software on Android and added the functionality for receiving the weight data coming from the scale, show it and finally save it.
+
+I shared the software and the firmware on my github account: [https://github.com/casainho/Smart-Scale]
 
 *2010.03.17*
 
