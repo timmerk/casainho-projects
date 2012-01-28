@@ -7,11 +7,13 @@
 
 *2012 January*
 
-I am now near 100kg, I really need to put this project working. I can buy a ready scale but I prefer to invest on an Open Source system.
+I am now near 100kg :-( I really need to go down on that value...
 
-I use my Android smartphone a LOT and now I have cheap and accessible "technology" to connect the scale by bluetooth to Android.
+On this days I use my Android Smartphone a lot and I always wanted to have the weight data on the Android instead on the SDCard on the scale.
 
-Here is an Open Source Android software ready to be used on this project:
+I went to the market and found "wifi" scales for about 150€. Since I will probably need to use the scale all over my life, I prefer to build my own OpenSource scale instead of buying and stay limited with a proprietary one.
+
+I have now experience with Android and cheap ($6) bluetooth serial modules and I found 2 OpenSource softwares for Android for logging user's weight - 
 
 https://launchpad.net/weightchart/
 
