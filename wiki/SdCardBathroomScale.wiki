@@ -46,9 +46,11 @@ TOTAL: ~$75.
 
 Later I hacked the [http://code.google.com/p/weight-chart/ Weight Chart] software on Android and added the functionality for receiving the weight data coming from the scale, show it and finally save it.
 
-I shared the software and the firmware on my github account: [https://github.com/casainho/Smart-Scale]
+*I am sharing  the firmware, software and pictures on my github account: [https://github.com/casainho/Smart-Scale]*
 
 I also found a [http://www.keyboardmods.com/2010/05/bluetooth-wireless-bathroom-scale-with.html blog message of a hacker that decided as me, to use a bluetooth module and an Android]. The big difference is that he only uses the original load cells, then he uses and ADC to read them and almost the same hardware as me.
+
+Also Sparkfun is selling the load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments: [http://www.sparkfun.com/products/10245]
 
 Maybe soon we will be able to buy on the market the load cells, make our electronic board and use a square piece of wood, then we will have our own fully OpenSource bathroom scale :-)
 
