@@ -1,18 +1,24 @@
 #summary A Open Source bathroom scale with bluetooth communication to Android Smart Phones.
 
+<wiki:toc max_depth="3" />
+
 = Introduction =
 
-I hacked a cheap bathroom scale(20€) and added to it Bluetooth communications(55€) so I can track my weight on my Android SmartPhone. I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data coming from the bathroom scale, show it and finally save it.
+I hacked a cheap bathroom scale(20€) and added to it Bluetooth communications(55€) so I can track my weight on my Android Smart Phone.
 
-Here some pictures:
+I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data coming from the bathroom scale, show it and finally save it.
+
+== Some pictures ==
 
 The enclosure and the inside the DIY circuit I did:
 
 [https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-04.redimensionado.jpg]
 
-And a picture of my little son using the scale :-)
+And a picture of my little son using the scale:
 
 [https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-06.redimensionado.jpg]
+
+== Costs ==
 
 All were done quick and with cheap price on mind. Total cost in materials were only about $75.
 
@@ -25,10 +31,15 @@ Material list and costs:
  * batteries and support: $5
  * various, like wires, etc: $12.5
 
-I started to hack my bathroom scale on Jun 2009 and on that time I added to it a SDCard and a Real Time Clock. The scale always logged my weight on a CSV file on SDCard, later on my PC I could draw a graph using Open Office or Gnu Plot. Please see here the page for the [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale SdCardBathroomScale] project were all this begun.
+== Open Source: the sources ==
 
+*I am sharing  the firmware, software and pictures on my github account for this project: [https://github.com/casainho/Smart-Scale]*
 
-In future I would like to develop and build a fully (as possible) Open Source bathroom scale. Sparkfun is selling load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments: [http://www.sparkfun.com/products/10245]
+== History ==
+I started to hack my bathroom scale on Jun 2009 and on that time I added to it a SDCard and a Real Time Clock. The scale always logged my weight and the data/time on a CSV file on SDCard, later on my PC I could draw a graph using Open Office or Gnu Plot. Please see here the page for the [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale SdCardBathroomScale] project were all this begun.
+
+== Future ==
+In future I would like to develop and build a fully (as possible) Open Source bathroom scale. [http://www.sparkfun.com/products/10245 Sparkfun is selling load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments].
 
 = News = 
 
