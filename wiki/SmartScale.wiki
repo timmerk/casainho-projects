@@ -1,4 +1,4 @@
-#summary A Open Source bathroom scale with bluetooth communication to Android Smart Phones.
+#summary A Open Source bathroom scale with Bluetooth communication to Android Smart Phones.
 
 <wiki:toc max_depth="3" />
 
@@ -6,7 +6,7 @@
 
 I hacked a cheap bathroom scale($20) and added to it Bluetooth communications($55) so I can track my weight on my Android Smart Phone.
 
-I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data coming from the bathroom scale.
+I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data from the bathroom scale.
 
 == Some pictures ==
 
@@ -66,9 +66,9 @@ On this days I use my Android Smartphone a lot and I always wanted to have the w
 
 I went to the market and found "wifi" scales for about 150€. Since I will probably need to use the scale all over my life, I prefer to build my own OpenSource scale instead of buying and stay limited with a proprietary one.
 
-I have now experience with Android and cheap ($6) bluetooth serial modules and I found two OpenSource softwares for Android for logging user's weight: [http://code.google.com/p/weight-chart/ Weight Chart] and [http://code.google.com/p/droidweight/ Droid Weight].
+I have now experience with Android and cheap ($6) Bluetooth serial modules and I found two OpenSource softwares for Android for logging user's weight: [http://code.google.com/p/weight-chart/ Weight Chart] and [http://code.google.com/p/droidweight/ Droid Weight].
 
-I decided to change/upgrade my Fagor BB-90 bathroom scale, by removing the SDCard and the batteries for the Real Time Clock (RTC). I added a cheap ($6.6) bluetooth serial module to send the weight value data to my Android Smart Phone. I also added a 5V voltage regulator since I am now using only two Lithium batteries instead of the "old" four NiMh batteries.
+I decided to change/upgrade my Fagor BB-90 bathroom scale, by removing the SDCard and the batteries for the Real Time Clock (RTC). I added a cheap ($6.6) Bluetooth serial module to send the weight value data to my Android Smart Phone. I also added a 5V voltage regulator since I am now using only two Lithium batteries instead of the "old" four NiMh batteries.
 
 Here some pictures (high resolution [https://github.com/casainho/Smart-Scale/tree/master/pictures here]):
 
@@ -101,7 +101,7 @@ Later I hacked the [http://code.google.com/p/weight-chart/ Weight Chart] softwar
 
 *I am sharing  the firmware, software and pictures on my github account: [https://github.com/casainho/Smart-Scale]*
 
-I also found a [http://www.keyboardmods.com/2010/05/bluetooth-wireless-bathroom-scale-with.html blog message of a hacker that decided as me, to use a bluetooth module and an Android]. The big difference is that he only uses the original load cells, then he uses and ADC to read them and almost the same hardware as me.
+I also found a [http://www.keyboardmods.com/2010/05/bluetooth-wireless-bathroom-scale-with.html blog message of a hacker that decided as me, to use a Bluetooth module and an Android]. The big difference is that he only uses the original load cells, then he uses and ADC to read them and almost the same hardware as me.
 
 Also Sparkfun is selling the load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments: [http://www.sparkfun.com/products/10245]
 
