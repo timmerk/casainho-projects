@@ -10,13 +10,25 @@ I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source 
 
 == Some pictures ==
 
+Showing the graph of my weight variation over time:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-02.resized.png]
+
+The options menu:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-03.resized.png]
+
+After clicking on "Scale" option, software starts looking for the Smart Scale to connect to it:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-05.resized.png]
+
+A picture of my little son using the scale:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-06.redimensionado.jpg]
+
 The enclosure and inside the DIY circuit I did:
 
 [https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-04.redimensionado.jpg]
-
-And a picture of my little son using the scale:
-
-[https://github.com/casainho/Smart-Scale/raw/master/pictures/smart_scale-06.redimensionado.jpg]
 
 == Costs ==
 
