@@ -31,17 +31,19 @@ Material list and costs:
  * batteries and support: $5
  * various, like wires, etc: $12.5
 
-== Open Source: the sources ==
-
-*I am sharing  the firmware, software and pictures on my github account for this project: [https://github.com/casainho/Smart-Scale]*
-
 == History ==
 I started to hack my bathroom scale on Jun 2009 and on that time I added to it a SDCard and a Real Time Clock. The scale always logged my weight and the data/time on a CSV file on SDCard, later on my PC I could draw a graph using Open Office or Gnu Plot. Please see here the page for the [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale SdCardBathroomScale] project were all this begun.
 
 == Future ==
 In future I would like to develop and build a fully (as possible) Open Source bathroom scale. [http://www.sparkfun.com/products/10245 Sparkfun is selling load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments].
 
-= News = 
+== Open Source: the sources ==
+
+I am sharing  the firmware, software and pictures on my github account for this project: [https://github.com/casainho/Smart-Scale]
+
+Please note that I re-used most of the hardware and firmware from my initial [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale Fagor BB-90 SdCardBathroomScale].
+
+= News / Tecnhical info / Archive = 
 
 *2012 January*
 
