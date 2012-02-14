@@ -8,7 +8,7 @@ I hacked a cheap bathroom scale($20) and added to it Bluetooth communications($5
 
 I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data from the bathroom scale.
 
-In future I would like to develop and build a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - contact me if you are motivated to participate: casainho@gmail.com
+In future I would like to develop and build a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - if you are motivated, contact me on the *[http://groups.google.com/group/casainho-projects discussion group]* (preferable) or by e-mail: casainho@gmail.com
 
 == Some pictures ==
 
