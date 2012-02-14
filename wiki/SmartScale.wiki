@@ -8,6 +8,8 @@ I hacked a cheap bathroom scale($20) and added to it Bluetooth communications($5
 
 I also hacked [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android and added the functionality for receiving the weight data from the bathroom scale.
 
+In future I would like to develop and build a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - contact me if you are motivated to participate: casainho@gmail.com
+
 == Some pictures ==
 
 Showing the graph of my weight variation over time:
@@ -44,11 +46,14 @@ Material list and costs:
  * various, like wires, etc: $12.5
 
 == History ==
+
 I started to hack my bathroom scale on Jun 2009 and on that time I added to it a SDCard and a Real Time Clock. The scale always logged my weight and the data/time on a CSV file on SDCard, later on my PC I could draw a graph using Open Office or Gnu Plot. Please see [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale SdCardBathroomScale] project page were all this begun.
 
 == Future ==
 
-In future I would like to develop and build a fully (as possible) Open Source bathroom scale. [http://www.sparkfun.com/products/10245 Sparkfun is selling load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments].
+In future I would like to develop and build a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - contact me if you are motivated to participate: casainho@gmail.com
+
+[http://www.sparkfun.com/products/10245 Sparkfun is selling load cells used on bathroom scales and there is a lot of information on how to make the scale on the comments].
 
 == Open Source: the sources ==
 
@@ -57,6 +62,10 @@ I am sharing  the firmware, software and pictures on my github account for this 
 Please note that I re-used most of the hardware and firmware from my initial [http://code.google.com/p/casainho-projects/wiki/SdCardBathroomScale Fagor BB-90 SdCardBathroomScale].
 
 = News / Tecnhical info / Archive = 
+
+*2012 February*
+
+This project were featured on Hack a Day: [http://hackaday.com/2012/02/13/connecting-a-dumb-scale-to-your-smartphone/|Connecting a dumb scale to your smartphone].
 
 *2012 January*
 
