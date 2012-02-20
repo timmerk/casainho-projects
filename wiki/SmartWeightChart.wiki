@@ -1,0 +1,23 @@
+#summary Track your weight and visualize it in a graph on your Android device
+
+= Introduction =
+
+*Smart Weight Chart* Android software helps you tracking your weight by logging it and show in a graph. It also communicate wireless with the Smart Scale so it automatically logs the weight value or you can simple enter it manually.
+
+[https://market.android.com/details?id=net.casainho.smartweightchart Smart Weight Chart is available here on Android Market] - it's Free and Open Source.
+
+= Details =
+
+Showing the graph of weight variation over time:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-02.resized.png]
+
+The options menu:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-03.resized.png]
+
+After clicking on "Scale" option, software starts looking for the Smart Scale to connect to it:
+
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-05.resized.png]
+
+Smart Weight Chart were started from the [http://code.google.com/p/weight-chart/ Weight Chart v2] Open Source software for Android.
