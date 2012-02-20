@@ -6,6 +6,8 @@
 
 [https://market.android.com/details?id=net.casainho.smartweightchart Smart Weight Chart is available here on Android Market] - it's Free and Open Source.
 
+In future I would like to continue develop Smart Weight Chart. I would prefer to do it in group with other developers and/or users - if you are motivated, contact me on the *[http://groups.google.com/group/smart_scale_weight_chart discussion group]* (preferable) or by e-mail: casainho@gmail.com
+
 = Details =
 
 Showing the graph of weight variation over time:
