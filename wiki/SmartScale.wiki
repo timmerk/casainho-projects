@@ -31,8 +31,8 @@ All were done quick and with cheap price on mind. Total cost in materials were o
 Material list and costs:
 
  * digital bathroom scale: $20
- * ARM LPC2103 microcontroller board: $15.6
- * Bluetooth serial module: $6.6
+ * [http://www.wayengineer.com/index.php?main_page=product_info&products_id=129 ARM LPC2103 microcontroller board: $15.6]
+ * [http://www.dealextreme.com/p/wireless-bluetooth-rs232-ttl-transceiver-module-80711 Bluetooth serial module: $6.6]
  * 16x2 LCD: $15
  * batteries and support: $5
  * various, like wires, etc: $12.5
