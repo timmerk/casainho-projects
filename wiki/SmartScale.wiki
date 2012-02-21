@@ -4,11 +4,11 @@
 
 = Introduction =
 
-I hacked a cheap bathroom scale($20) and added to it Bluetooth communications($55) so I can track my weight on my Android Smart Phone.
+*Smart Scale* is a cheap ($75) and Open Source bathroom scale with wireless Bluetooth communications. It works just like a usual bathroom scale, where the user can use it and read the weight value on the LCD or the user can receive automatically the weight value on their Android Smart Phone (which sent by scale wireless).
 
-I created *[http://code.google.com/p/casainho-projects/wiki/SmartWeightChart Smart Weight Chart]* Android software that is available on [https://market.android.com/details?id=net.casainho.smartweightchart Android Market]. I started to hack [http://code.google.com/p/weight-chart/ Weight Chart] Open Source software on Android for adding the functionality for receiving the weight data from the bathroom scale.
+*[http://code.google.com/p/casainho-projects/wiki/SmartWeightChart Smart Weight Chart]* is the Android software that receives the weight value from the scale and shows it in a graph. *[http://code.google.com/p/casainho-projects/wiki/SmartWeightChart Smart Weight Chart]* is Free and Open Source software and is available [https://market.android.com/details?id=net.casainho.smartweightchart here on Android Market].
 
-In future I would like to develop and build a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - if you are motivated, contact me on the *[http://groups.google.com/group/smart_scale_weight_chart discussion group]* (preferable) or by e-mail: casainho@gmail.com
+In future I would like continue developing and building a fully (as possible) Open Source bathroom scale. I would prefer to do it in group with other developers and/or users - if you are motivated, contact me on the *[http://groups.google.com/group/smart_scale_weight_chart discussion group]* (preferable) or by e-mail: casainho@gmail.com
 
 == Some pictures ==
 
