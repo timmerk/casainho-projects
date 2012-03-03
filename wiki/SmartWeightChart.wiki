@@ -12,11 +12,11 @@ In future I would like to continue develop Smart Weight Chart. I would prefer to
 
 Showing the graph of weight variation over time:
 
-[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-02.resized.png]
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-09.resized.png]
 
 The options menu:
 
-[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-03.resized.png]
+[https://github.com/casainho/Smart-Scale/raw/master/pictures/android_app-10.resized.png]
 
 After clicking on "Scale" option, software starts looking for the Smart Scale to connect to it:
 
